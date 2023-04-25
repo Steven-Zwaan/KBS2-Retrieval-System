@@ -1,5 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        MainScreen scherm = new MainScreen();
+        ArduinoConnection arduino = new ArduinoConnection("COM3");
     }
 }
