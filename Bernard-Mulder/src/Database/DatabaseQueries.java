@@ -62,4 +62,24 @@ public class DatabaseQueries {
         }
         return products;
     }
+    public ArrayList<Product> getProduct(String name){
+        products = new ArrayList<>();
+        String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID WHERE stockitems.StockItemName LIKE ? ";
+        try {
+            PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
+            statement.setString(1, "%" + name + "%");
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()){
+                this.products.add(new Product(resultSet.getInt("StockItemID"), resultSet.getString("StockItemName"), resultSet.getInt("QuantityOnHand")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            databaseConnector.disconnect();
+        }
+        for (Product p: products){
+            System.out.println(p.toString());
+        }
+        return products;
+    }
 }
