@@ -1,8 +1,9 @@
 #include <ezButton.h>
 
-#define VRX_PIN  A4 // Arduino pin connected to VRX pin
-#define VRY_PIN  A5 // Arduino pin connected to VRY pin
-#define SW_PIN   A2  // Arduino pin connected to SW  pin
+#define VRX_PIN  A2 // Arduino pin connected to VRX pin
+#define VRY_PIN  A3 // Arduino pin connected to VRY pin
+#define SW_PIN   A0  // Arduino pin connected to SW  pin
+
 
 #define LEFT_THRESHOLD  200
 #define RIGHT_THRESHOLD 700
