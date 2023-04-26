@@ -1,13 +1,12 @@
-import Database.DatabaseConnector;
-import Database.DatabaseQueries;
+import Database.Database;
 
 public class Main {
     public static void main(String[] args) {
         MainScreen scherm = new MainScreen();
         ArduinoConnection arduino = new ArduinoConnection("COM3");
-    DatabaseQueries databaseQueries = new DatabaseQueries();
+    Database database = new Database();
 //        databaseQueries.getProducts();
-        databaseQueries.getProduct(77);
-        databaseQueries.getProduct("USB");
+        database.getProduct(77);
+        database.getProduct("USB");
     }
 }

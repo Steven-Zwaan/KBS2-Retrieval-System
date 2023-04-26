@@ -3,19 +3,6 @@ package Database;
 import java.sql.*;
 import java.util.Properties;
 public class DatabaseConnector {
-    /*public static void main(String[] args) {
-        Connection conn = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/","root","");
-            System.out.println("Xampp Mysql Connected!");
-            Statement stat = conn.createStatement();
-            stat.execute();
-        } catch(Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }*/
     // init database constants
     private static final String DATABASE_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/nerdygadgets";
@@ -62,9 +49,5 @@ public class DatabaseConnector {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void getOrders() {
-
     }
 }

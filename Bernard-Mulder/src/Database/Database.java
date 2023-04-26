@@ -1,12 +1,11 @@
 package Database;
 
-import Database.DatabaseConnector;
 import Entities.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class DatabaseQueries {
+public class Database {
     // Init for database
     DatabaseConnector databaseConnector = new DatabaseConnector();
     private ArrayList<Product> products;
