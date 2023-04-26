@@ -67,7 +67,7 @@ public class MainScreen extends JFrame {
 		menuBar.add(menuButtonHelp);
 
 		Order orderScherm = new Order("Teddybear", 10, 69);
-		Order orderScherm2 = new Order("Dildos", 1, 420);
+		Order orderScherm2 = new Order("sokken", 1, 420);
 
 		this.add(orderScherm);
 		this.add(orderScherm2);
