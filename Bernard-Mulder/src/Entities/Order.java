@@ -41,6 +41,6 @@ public class Order {
 
     @Override
     public String toString() {
-        return "id: " + id + " order date: " + date + " picked when: " + pickingCompletedWhen;
+        return "id: " + id + " order date: " + date + " picked when: " + pickingCompletedWhen + " " + customer;
     }
 }
