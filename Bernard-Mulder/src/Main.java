@@ -6,7 +6,7 @@ public class Main {
         MainScreen scherm = new MainScreen();
         ArduinoConnection arduino = new ArduinoConnection("COM3");
     Database database = new Database();
-    database.getOrders();
+    database.getOrderLines(32616);
 //        System.out.println(database.getOrders());
 
 //        databaseQueries.getProducts();
