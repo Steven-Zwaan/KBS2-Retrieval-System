@@ -2,14 +2,14 @@ package Entities;
 
 public class Customer {
     private int id;
-    private int name;
+    private String name;
     private String city;
     private String state;
     private String addressLine1;
     private String addressLine2;
     private String postalCode;
 
-    public Customer(int id, int name, String city, String state, String addressLine1, String addressLine2, String postalCode) {
+    public Customer(int id, String name, String city, String state, String addressLine1, String addressLine2, String postalCode) {
         this.id = id;
         this.name = name;
         this.city = city;
@@ -23,7 +23,7 @@ public class Customer {
         return id;
     }
 
-    public int getName() {
+    public String getName() {
         return name;
     }
 
@@ -45,5 +45,18 @@ public class Customer {
 
     public String getPostalCode() {
         return postalCode;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", addressLine1='" + addressLine1 + '\'' +
+                ", addressLine2='" + addressLine2 + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                '}';
     }
 }
