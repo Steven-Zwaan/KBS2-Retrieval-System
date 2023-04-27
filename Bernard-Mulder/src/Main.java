@@ -1,16 +1,27 @@
-import Database.Database;
+import Database.*;
+import Entities.Order;
+import Entities.Orders;
 import Entities.Product;
+import Entities.Products;
 
 public class Main {
     public static void main(String[] args) {
         MainScreen scherm = new MainScreen();
         ArduinoConnection arduino = new ArduinoConnection("COM3");
-    Database database = new Database();
-    database.getOrderLines(32616);
-//        System.out.println(database.getOrders());
 
-//        databaseQueries.getProducts();
-//        database.getProduct(77);
-//        database.getProduct("USB");
+//        Products products = new Products();
+//        products.storeProductsFromDatabase();
+//        products.storeProductFromDatabase("USB");
+//        for (Product p: products.getProducts()){
+//            System.out.println(p.toString());
+//        }
+
+//        Orders orders = new Orders();
+//        orders.storeOrdersFromDatabase();
+//        orders.storeOrderFromDatabase(71668);
+//        for (Order o: orders.getOrders()){
+//            System.out.println(o.toString());
+//            o.getOrderLines();
+//        }
     }
 }
