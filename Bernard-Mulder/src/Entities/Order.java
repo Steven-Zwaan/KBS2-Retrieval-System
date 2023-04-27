@@ -58,9 +58,6 @@ public class Order {
         } finally {
             databaseConnector.disconnect();
         }
-        for (OrderLine o: orderLines){
-            System.out.println(o.toString());
-        }
         return orderLines;
     }
 

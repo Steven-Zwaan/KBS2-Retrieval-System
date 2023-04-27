@@ -1,8 +1,6 @@
 import Database.*;
+import Entities.*;
 import Entities.Order;
-import Entities.Orders;
-import Entities.Product;
-import Entities.Products;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,7 +19,9 @@ public class Main {
 //        orders.storeOrderFromDatabase(71668);
 //        for (Order o: orders.getOrders()){
 //            System.out.println(o.toString());
-//            o.getOrderLines();
+//            for (OrderLine ol: o.getOrderLines()){
+//                System.out.println(ol.toString());
+//            }
 //        }
     }
 }
