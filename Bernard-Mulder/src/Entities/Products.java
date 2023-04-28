@@ -29,10 +29,10 @@ public class Products {
     }
 
     public void storeProductFromDatabase(int id){
-        String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID WHERE stockitems.StockItemID LIKE ? ";
+        String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID WHERE stockitems.StockItemID = ? ";
         try {
             PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
-            statement.setString(1, "%" + id + "%");
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             this.products.clear();
             while(resultSet.next()){

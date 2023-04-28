@@ -9,7 +9,20 @@ public class Main {
 
 //        Products products = new Products();
 //        products.storeProductsFromDatabase();
-//        products.storeProductFromDatabase("USB");
+//        products.storeProductFromDatabase(98);
+//        for (Product p: products.getProducts()){
+//            p.setStock(30);
+//        }
+//        products.storeProductFromDatabase(198);
+//        for (Product p: products.getProducts()){
+//            System.out.println(p.toString());
+//        }
+//        products.storeProductFromDatabase(98);
+//        for (Product p: products.getProducts()){
+//            System.out.println(p.toString());
+//            p.setStock(25);
+//        }
+//        products.storeProductFromDatabase(98);
 //        for (Product p: products.getProducts()){
 //            System.out.println(p.toString());
 //        }

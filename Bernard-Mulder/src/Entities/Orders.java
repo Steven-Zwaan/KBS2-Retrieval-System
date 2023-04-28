@@ -38,10 +38,10 @@ public class Orders {
                 "cities.CityName, stateprovinces.StateProvinceName, customers.DeliveryAddressLine1, customers.DeliveryAddressLine2, " +
                 "customers.DeliveryPostalCode FROM `orders` JOIN `customers` ON orders.CustomerID = customers.CustomerID JOIN `cities` " +
                 "ON customers.DeliveryCityID = cities.CityID JOIN `stateprovinces` ON cities.StateProvinceID = stateprovinces.StateProvinceID " +
-                "WHERE `PickingCompletedWhen` IS NULL AND orders.OrderID LIKE ? ";
+                "WHERE `PickingCompletedWhen` IS NULL AND orders.OrderID = ? ";
         try {
             PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
-            statement.setString(1, "%" + id + "%");
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             this.orders.clear();
             while(resultSet.next()){
