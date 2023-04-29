@@ -1,7 +1,6 @@
 package Entities;
 
 import Database.DatabaseConnector;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,7 +26,7 @@ public class Product {
         return stock;
     }
     public void setStock(int stock) {
-        String sql = "UPDATE stockitemholdings SET QuantityOnHand =  ? WHERE StockItemID = ?";
+        String sql = "UPDATE stockitemholdings SET QuantityOnHand = ? WHERE StockItemID = ?";
         try {
             PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
             statement.setInt(1, stock);
