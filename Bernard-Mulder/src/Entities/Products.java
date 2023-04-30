@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class Products {
     private ArrayList<Product> products = new ArrayList<>();
-
     DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public void storeProductsFromDatabase(){
@@ -27,7 +26,6 @@ public class Products {
             databaseConnector.disconnect();
         }
     }
-
     public void storeProductFromDatabase(int id){
         String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID WHERE stockitems.StockItemID = ? ";
         try {

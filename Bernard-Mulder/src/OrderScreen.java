@@ -1,8 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
-public class Order extends JPanel { ;
+public class OrderScreen extends JPanel { ;
 	JLabel naam;
 	JSpinner aantal;
 	InfoCard card;
@@ -12,7 +11,7 @@ public class Order extends JPanel { ;
 	int productVoorraad;
 	int productArtikelnummer;
 
-	public Order(String productNaam, int productVoorraad, int productArtikelnummer){
+	public OrderScreen(String productNaam, int productVoorraad, int productArtikelnummer){
 		// Panel setup
 		this.setSize(600,50);
 		this.setLayout(new FlowLayout(FlowLayout.RIGHT, 60,10));
@@ -42,7 +41,5 @@ public class Order extends JPanel { ;
 		this.add(aanpassen);
 
 		setVisible(true);
-
-
 	}
 }

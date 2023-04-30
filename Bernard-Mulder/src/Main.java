@@ -1,4 +1,3 @@
-import Database.*;
 import Entities.*;
 
 public class Main {
@@ -26,14 +25,15 @@ public class Main {
 //            System.out.println(p.toString());
 //        }
 
-//        Orders orders = new Orders();
-//        orders.storeOrdersFromDatabase();
-//        orders.storeOrderFromDatabase(71668);
-//        for (Order o: orders.getOrders()){
-//            System.out.println(o.toString());
-//            for (OrderLine ol: o.getOrderLines()){
-//                System.out.println(ol.toString());
-//            }
-//        }
+        Orders orders = new Orders();
+        orders.storeOrdersFromDatabase();
+        orders.storeOrderFromDatabase(694);
+        for (Order o: orders.getOrders()){
+            System.out.println(o.toString());
+            for (OrderLine ol: o.getOrderLines()){
+                System.out.println(ol.toString());
+            }
+            System.out.println(o.toString());
+        }
     }
 }

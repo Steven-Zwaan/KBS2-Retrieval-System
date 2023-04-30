@@ -1,6 +1,4 @@
-import java.awt.*;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -66,11 +64,11 @@ public class MainScreen extends JFrame {
 		menuBar.add(menuButton2);
 		menuBar.add(menuButtonHelp);
 
-		Order orderScherm = new Order("Teddybear", 10, 69);
-		Order orderScherm2 = new Order("sokken", 1, 420);
+		OrderScreen orderScreenScherm = new OrderScreen("Teddybear", 10, 69);
+		OrderScreen orderScreenScherm2 = new OrderScreen("sokken", 1, 420);
 
-		this.add(orderScherm);
-		this.add(orderScherm2);
+		this.add(orderScreenScherm);
+		this.add(orderScreenScherm2);
 
 		setVisible(true);
 	}

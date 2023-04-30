@@ -78,8 +78,68 @@ public class OrderLine {
         return pickedQuantity;
     }
 
+    public void setPickedQuantity(int pickedQuantity) {
+        String sql = "UPDATE orderlines SET PickedQuantity = ? WHERE StockItemID = ? AND OrderLineID = ?";
+        try {
+            PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
+            statement.setInt(1, pickedQuantity);
+            statement.setInt(2, this.product.getId());
+            statement.setInt(3, id);
+            int resultSet = statement.executeUpdate();
+            if(resultSet > 0){
+                this.pickedQuantity = pickedQuantity;
+                if (this.pickedQuantity == this.quantity){
+                    setPickingCompletedWhen();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            databaseConnector.disconnect();
+        }
+    }
+
+    public void increasePickedQuantity() {
+        String sql = "UPDATE orderlines SET PickedQuantity = ? WHERE StockItemID = ? AND OrderLineID = ?";
+        try {
+            PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
+            statement.setInt(1, this.pickedQuantity + 1);
+            statement.setInt(2, this.product.getId());
+            statement.setInt(3, id);
+            int resultSet = statement.executeUpdate();
+            if(resultSet > 0){
+                this.pickedQuantity = this.pickedQuantity + 1;
+                if (this.pickedQuantity == this.quantity){
+                    setPickingCompletedWhen();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            databaseConnector.disconnect();
+        }
+    }
+
     public Timestamp getPickingCompletedWhen() {
         return pickingCompletedWhen;
+    }
+
+    public void setPickingCompletedWhen() {
+        String sql = "UPDATE orderlines SET PickingCompletedWhen = ? WHERE StockItemID = ? AND OrderLineID = ?";
+        try {
+            PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
+            statement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+            statement.setInt(2, this.product.getId());
+            statement.setInt(3, id);
+            int resultSet = statement.executeUpdate();
+            if(resultSet > 0){
+                this.pickingCompletedWhen = new Timestamp(System.currentTimeMillis());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            databaseConnector.disconnect();
+        }
     }
 
     @Override

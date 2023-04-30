@@ -14,12 +14,6 @@ public class Order {
     private ArrayList<OrderLine> orderLines = new ArrayList<>();
     DatabaseConnector databaseConnector = new DatabaseConnector();
 
-//    public Order(int id, Customer customer, Timestamp date) {
-//        this.id = id;
-//        this.customer = customer;
-//        this.date = date;
-//        this.pickingCompletedWhen = null;
-//    }
     public Order(int id, Customer customer, Timestamp date, Timestamp pickingCompletedWhen) {
         this.id = id;
         this.customer = customer;
@@ -63,6 +57,6 @@ public class Order {
 
     @Override
     public String toString() {
-        return "id: " + id + " order date: " + date + " picked when: " + pickingCompletedWhen + " " + customer;
+        return "id: " + id + " order date: " + date + " picking completed when: " + pickingCompletedWhen + " " + customer;
     }
 }
