@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Orders {
     private ArrayList<Order> orders = new ArrayList<>();
-    DatabaseConnector databaseConnector = new DatabaseConnector();
+    private DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public void storeOrdersFromDatabase(){
         String sql = "SELECT orders.OrderID, orders.OrderDate, orders.PickingCompletedWhen, customers.CustomerID, customers.CustomerName, " +

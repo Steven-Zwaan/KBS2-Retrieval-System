@@ -12,7 +12,7 @@ public class Order {
     private Timestamp date;
     private Timestamp pickingCompletedWhen;
     private ArrayList<OrderLine> orderLines = new ArrayList<>();
-    DatabaseConnector databaseConnector = new DatabaseConnector();
+    private DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public Order(int id, Customer customer, Timestamp date, Timestamp pickingCompletedWhen) {
         this.id = id;

@@ -11,7 +11,7 @@ public class OrderLine {
     private int quantity;
     private int pickedQuantity;
     private Timestamp pickingCompletedWhen;
-    DatabaseConnector databaseConnector = new DatabaseConnector();
+    private DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public OrderLine(int id, Product product, int quantity, int pickedQuantity, Timestamp pickingCompletedWhen) {
         this.id = id;

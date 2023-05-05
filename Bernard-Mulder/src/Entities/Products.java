@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Products {
     private ArrayList<Product> products = new ArrayList<>();
-    DatabaseConnector databaseConnector = new DatabaseConnector();
+    private DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public void storeProductsFromDatabase(){
         String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID";

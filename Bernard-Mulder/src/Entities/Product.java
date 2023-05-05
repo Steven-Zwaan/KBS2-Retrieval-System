@@ -9,7 +9,7 @@ public class Product {
     private int id;
     private String name;
     private int stock;
-    DatabaseConnector databaseConnector = new DatabaseConnector();
+    private DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public Product(int id, String name, int stock) {
         this.id = id;
