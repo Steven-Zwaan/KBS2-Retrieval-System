@@ -1,12 +1,6 @@
 import java.io.IOException;
-import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.*;
 
-/**
- * Simple application that is part of an tutorial. 
- * The tutorial shows how to establish a serial connection between a Java and Arduino program.
- * @author Michael Schoeffler (www.mschoeffler.de)
- *
- */
 public class ArduinoConnection {
 
     private String port;
@@ -33,6 +27,4 @@ public class ArduinoConnection {
             }
         }
     }
-
-
 }

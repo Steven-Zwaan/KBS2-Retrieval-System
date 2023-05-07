@@ -1,0 +1,49 @@
+package Entities;
+
+import Database.DatabaseConnector;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Product {
+    private int id;
+    private String name;
+    private int stock;
+    private DatabaseConnector databaseConnector = new DatabaseConnector();
+
+    public Product(int id, String name, int stock) {
+        this.id = id;
+        this.name = name;
+        this.stock = stock;
+    }
+    public int getId() {
+        return id;
+    }
+    public String getName() {
+        return name;
+    }
+    public int getStock() {
+        return stock;
+    }
+    public void setStock(int stock) {
+        String sql = "UPDATE stockitemholdings SET QuantityOnHand = ? WHERE StockItemID = ?";
+        try {
+            PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
+            statement.setInt(1, stock);
+            statement.setInt(2, id);
+            int resultSet = statement.executeUpdate();
+            if(resultSet > 0){
+                this.stock = stock;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            databaseConnector.disconnect();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "id: " + id + " name: " + name + " stock: " + stock;
+    }
+}
