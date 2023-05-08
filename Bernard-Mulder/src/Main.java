@@ -25,15 +25,17 @@ public class Main {
 //            System.out.println(p.toString());
 //        }
 
-        Orders orders = new Orders();
-        orders.getOrdersFromDatabase();
-        orders.getOrderFromDatabase(694);
-        for (Order o: orders.getOrders()){
-            System.out.println(o.toString());
-            for (OrderLine ol: o.getOrderLines()){
-                System.out.println(ol.toString());
-            }
-            System.out.println(o.toString());
-        }
+//        Orders orders = new Orders();
+//        orders.getOrdersFromDatabase();
+//        orders.getOrderFromDatabase(65792);
+//        for (Order o: orders.getOrders()){
+//            o.setPickingCompletedWhen();
+//            System.out.println(o.toString());
+//            for (OrderLine ol: o.getOrderLines()){
+//                ol.setPickingCompletedWhen();
+//                System.out.println(ol.toString());
+//            }
+//            System.out.println(o.toString());
+//        }
     }
 }
