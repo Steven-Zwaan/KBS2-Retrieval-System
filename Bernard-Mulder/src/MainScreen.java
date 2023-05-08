@@ -74,7 +74,7 @@ public class MainScreen extends JFrame {
 	}
 
 
-	class MenuItemListener implements ActionListener {
+	static class MenuItemListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println(e.getActionCommand() + "JMenuButton clicked");
 		}
