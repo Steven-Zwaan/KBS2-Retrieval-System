@@ -12,6 +12,7 @@ public class MainScreen extends JFrame {
 	static JMenuItem menuButton2;
 	static JMenuItem menuButtonHelp;
 
+	JTextField searchBar;
 
 	public MainScreen(){
 		// Screen setup
@@ -19,6 +20,8 @@ public class MainScreen extends JFrame {
 		this.setTitle("HML-application");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+//		searchBar.setSize(100,20);
+//		this.add(searchBar);
 
 		// Menubar Setup
 		menuBar = new JMenuBar();
