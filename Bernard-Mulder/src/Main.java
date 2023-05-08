@@ -26,8 +26,8 @@ public class Main {
 //        }
 
         Orders orders = new Orders();
-        orders.storeOrdersFromDatabase();
-        orders.storeOrderFromDatabase(694);
+        orders.getOrdersFromDatabase();
+        orders.getOrderFromDatabase(694);
         for (Order o: orders.getOrders()){
             System.out.println(o.toString());
             for (OrderLine ol: o.getOrderLines()){

@@ -11,7 +11,7 @@ public class Products {
     private ArrayList<Product> products = new ArrayList<>();
     private DatabaseConnector databaseConnector = new DatabaseConnector();
 
-    public void storeProductsFromDatabase(){
+    public void getProductsFromDatabase(){
         String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID";
         try {
             PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
@@ -26,7 +26,7 @@ public class Products {
             databaseConnector.disconnect();
         }
     }
-    public void storeProductFromDatabase(int id){
+    public void getProductFromDatabase(int id){
         String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID WHERE stockitems.StockItemID = ? ";
         try {
             PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
@@ -42,7 +42,7 @@ public class Products {
             databaseConnector.disconnect();
         }
     }
-    public void storeProductFromDatabase(String name) {
+    public void getProductFromDatabase(String name) {
         String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID WHERE stockitems.StockItemName LIKE ? ";
         try {
             PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
