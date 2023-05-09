@@ -1,38 +1,45 @@
 import java.io.IOException;
-import com.fazecast.jSerialComm.SerialPort;
+import java.util.Arrays;
 
-/**
- * Simple application that is part of an tutorial. 
- * The tutorial shows how to establish a serial connection between a Java and Arduino program.
- * @author Michael Schoeffler (www.mschoeffler.de)
- *
- */
+import com.fazecast.jSerialComm.*;
+
 public class ArduinoConnection {
 
     private String port;
     public ArduinoConnection(String port) {
         this.port = port;
     }
-    public void sendByte(byte data) {
-        SerialPort sp = SerialPort.getCommPort(port); // device name
+
+    SerialPort sp = SerialPort.getCommPort("COM3"); // device name
+    public static int PACKET_SIZE_IN_BYTES = 2;
+    public void sendData (byte x, byte y) throws IOException {
         sp.setComPortParameters(9600, 8, 1, 0); // default connection settings for Arduino
         sp.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0); // block until bytes can be written
+        sp.getOutputStream().write(x);
+        sp.getOutputStream().write(y);
+        sp.getOutputStream().flush();
+    }
 
+    public void receiveData() {
+        sp.setComPortParameters(9600, 8, 1, 0);
+        sp.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0); // block until bytes can be written
+        PacketListener listener = new PacketListener();
+        sp.addDataListener(listener);
+    }
+
+    public void openPort() {
         if (sp.openPort()) {
             System.out.println("Port is open :)");
         } else {
             System.out.println("Failed to open port :(");
-            return;
-        }
-
-        while(true) {
-            try {
-                sp.getOutputStream().write(data);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
-
+    public void closePort() {
+        if (sp.closePort()) {
+            System.out.println("Port is closed :)");
+        } else {
+            System.out.println("Failed to close port :(");
+        }
+    }
 }
