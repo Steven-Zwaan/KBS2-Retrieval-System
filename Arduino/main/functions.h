@@ -2,10 +2,10 @@ void motorXleft();
 
 void motorXright();
 
-void motorYup();
+void motorYup(); // z as aruino
 
-void motorYdown();
+void motorYdown(); // z as aruino
 
 void motorXstop();
 
-void motoYstop();
+void motoYstop(); // z as aruino

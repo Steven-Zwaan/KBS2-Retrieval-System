@@ -9,8 +9,8 @@ void setup() {
   TCCR2B = TCCR2B & B11111000 | B00000111;
 pinMode (XPWM,OUTPUT);
 pinMode (XDir, OUTPUT);
-pinMode (YDir, OUTPUT);
-pinMode (YPWM, OUTPUT);
+pinMode (YDir, OUTPUT); // z as aruino
+pinMode (YPWM, OUTPUT); // z as aruino
 pinMode(VRX_PIN, INPUT);
 pinMode(VRY_PIN, INPUT);
 pinMode(zPin, OUTPUT);
@@ -73,7 +73,7 @@ void loop() {
       if (command & COMMAND_UP) {
        motorYup();
 
-      } else if (command & COMMAND_DOWN) {
+      } else if (command & COMMAND_DOWN) { // z as aruino
         motorYdown();
 
       } else  {
