@@ -20,6 +20,7 @@ int ZPWM = 11;
 int ZDir = 13;
 bool Vooruit = LOW;
 bool Achteruit = HIGH;
+bool dirState = 1; //0 is Y; 1 = Z;
 
 
 int zValue = 0; // To store value of the Z axis

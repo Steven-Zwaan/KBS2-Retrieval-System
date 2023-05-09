@@ -1,3 +1,4 @@
+#include <Wire.h>
 #include <ezButton.h>
 #include "variables.h"
 #include "functions.h"
@@ -5,6 +6,7 @@
 void setup() {
   // put your setup code here, to run once:
  Serial.begin(9600) ;
+ Wire.begin(1);
   button.setDebounceTime(50); // set debounce time to 50 milliseconds
   TCCR2B = TCCR2B & B11111000 | B00000111;
 pinMode (XPWM,OUTPUT);
@@ -73,17 +75,29 @@ void loop() {
       }
   
       if (command & COMMAND_UP) {
-       motorYup();
+        Wire.beginTransmission(2);
+        Wire.write(yValue);
+        Wire.endTransmission();
+      //  motorYup();
 
-      } else if (command & COMMAND_DOWN) {
-        motorYdown();
+      } else if (command & COMMAND_DOWN) { // z as aruino
+        Wire.beginTransmission(2);
+        Wire.write(yValue);
+        Wire.endTransmission();
+        // motorYdown();
 
       } else  {
-        motorYstop();
+        Wire.beginTransmission(2);
+        Wire.write(yValue);
+        Wire.endTransmission();
+        //motorYstop();
       }
     } else {
       Serial.println(yValue);
-      analogWrite(zPin, yValue);
+      Wire.beginTransmission(2);
+        Wire.write(yValue);
+        Wire.endTransmission();
+      // analogWrite(zPin, yValue);
     
     }
   }
