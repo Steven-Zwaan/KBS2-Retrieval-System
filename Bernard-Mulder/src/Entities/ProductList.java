@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Products {
+public class ProductList {
     private ArrayList<Product> products = new ArrayList<>();
     private DatabaseConnector databaseConnector = new DatabaseConnector();
 
