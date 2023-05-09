@@ -60,7 +60,6 @@ public class ProductStock extends JPanel implements ActionListener { ;
 		if (e.getActionCommand().equals("Aanpassen")){
 			if ( (Integer) aantal.getValue() != productVoorraad) {
 				this.productVoorraad = (Integer) aantal.getValue();
-
 			}
 		}
 	}

@@ -3,7 +3,7 @@ import Entities.*;
 public class Main {
     public static void main(String[] args) {
         MainScreen scherm = new MainScreen();
-        Noodstop schermNoodstop = new Noodstop();
+        //Noodstop schermNoodstop = new Noodstop();
         ArduinoConnection arduino = new ArduinoConnection("COM3");
 
 //        Products products = new Products();

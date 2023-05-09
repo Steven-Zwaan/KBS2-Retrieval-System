@@ -45,8 +45,8 @@ public class Noodstop extends JFrame {
 
         MainScreen.MenuItemListener menuItemListener = new MainScreen.MenuItemListener();
 
-        menuButtonVoorraadNoodstop.addActionListener(menuItemListener);
-        menuButtonOrdersNoodstop.addActionListener(menuItemListener);
+        menuButtonVoorraadNoodstop.addActionListener(this);
+        menuButtonOrdersNoodstop.addActionListener(this);
         menuButtonWeergaveNoodstop.addActionListener(menuItemListener);
         menuButton1Noodstop.addActionListener(menuItemListener);
         menuButton2Noodstop.addActionListener(menuItemListener);
