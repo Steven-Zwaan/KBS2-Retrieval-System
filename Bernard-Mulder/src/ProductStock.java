@@ -1,15 +1,19 @@
+import Entities.Product;
+import Entities.ProductList;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ProductStock extends JPanel implements ActionListener { ;
+public class ProductStock extends JPanel implements ActionListener {
 	JLabel naam;
 	JSpinner aantal;
 	JButton aanpassen;
 	String productNaam;
 	int productVoorraad;
 	int productArtikelnummer;
+	JLabel voorraad;
 
 	public ProductStock(String productNaam, int productVoorraad, int productArtikelnummer){
 		// Panel setup
@@ -34,22 +38,24 @@ public class ProductStock extends JPanel implements ActionListener { ;
 
 		JPanel card = new JPanel();
 
-		card.setSize(80,50);
-		card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+			card.setSize(80,50);
+			card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 
-		card.add(new JLabel("Voorraad: " + productVoorraad));
-		card.add(new JLabel("ID: " + String.valueOf(productArtikelnummer)));
+			voorraad = new JLabel("Voorraad: " + this.productVoorraad);
+			card.add(voorraad);
+			card.add(new JLabel("ID: " + String.valueOf(this.productArtikelnummer)));
 
 		this.add(card);
 
 		// Button
-		aantal = new JSpinner(new SpinnerNumberModel(productVoorraad, 0, 1000000000, 1));
+		aantal = new JSpinner(new SpinnerNumberModel(this.productVoorraad, 0, 1000000000, 1));
 		aantal.setSize(60,30);
 		this.add(aantal);
 
 		// Button
 		aanpassen = new JButton("Aanpassen");
 		aanpassen.setActionCommand("Aanpassen");
+		aanpassen.addActionListener(this);
 		this.add(aanpassen);
 
 		setVisible(true);
@@ -60,8 +66,11 @@ public class ProductStock extends JPanel implements ActionListener { ;
 		if (e.getActionCommand().equals("Aanpassen")){
 			if ( (Integer) aantal.getValue() != productVoorraad) {
 				this.productVoorraad = (Integer) aantal.getValue();
+				voorraad.setText(String.valueOf("Voorraad : " + aantal.getValue()));
+
 
 			}
 		}
+		this.revalidate();
 	}
 }

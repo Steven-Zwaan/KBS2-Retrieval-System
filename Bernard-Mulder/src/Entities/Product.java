@@ -41,6 +41,22 @@ public class Product {
             databaseConnector.disconnect();
         }
     }
+    public void setStockFromDatabase() {
+        String sql = "GET QuantityOnHand FROM stockitemholdings WHERE StockItemID = ?";
+        try {
+            PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()){
+                this.stock = resultSet.getInt("QuantityOnHand");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            databaseConnector.disconnect();
+        }
+    }
+
 
     @Override
     public String toString() {

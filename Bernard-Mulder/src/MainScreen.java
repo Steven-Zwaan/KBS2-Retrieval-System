@@ -1,11 +1,11 @@
 import Entities.*;
 
-
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 
 public class MainScreen extends JFrame implements ActionListener {
 
@@ -16,9 +16,11 @@ public class MainScreen extends JFrame implements ActionListener {
 	private JMenuItem menuButton1;
 	private JMenuItem menuButton2;
 	private JMenuItem menuButtonHelp;
-	public JScrollPane scrollPaneStockScreen;
 	CardLayout cardLayout;
 	JPanel root;
+	JList voorraadList;
+	ProductList productList;
+	int index;
 
 
 
@@ -33,16 +35,16 @@ public class MainScreen extends JFrame implements ActionListener {
 		cardLayout = new CardLayout();
 
 		root = new JPanel();
-		JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		jSplitPane.add(root);
 		root.setLayout(cardLayout);
+		this.add(root);
 
-		this.add(jSplitPane);
 
 
 		// Database order import
-		ProductList productList = new ProductList();
+		productList = new ProductList();
 		productList.getProductsFromDatabase();
+
+		OrderList orderList = new OrderList();
 
 		// Menubar Setup
 		menuBar = new JMenuBar();
@@ -50,28 +52,28 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		menuButtonVoorraad = new JMenuItem("Voorraad");
 		menuButtonVoorraad.setActionCommand("Voorraad");
+		menuButtonVoorraad.addActionListener(this);
 
 		menuButtonOrders = new JMenuItem("Orders");
 		menuButtonOrders.setActionCommand("Orders");
+		menuButtonOrders.addActionListener(this);
 
 		menuButtonWeergave = new JMenuItem("Weergave");
 		menuButtonWeergave.setActionCommand("Weergave");
+		menuButtonWeergave.addActionListener(this);
 
 		menuButton1 = new JMenuItem("-");
 		menuButton1.setActionCommand("button1");
+		menuButton1.addActionListener(this);
 
 		menuButton2 = new JMenuItem("-");
 		menuButton2.setActionCommand("button2");
+		menuButton2.addActionListener(this);
 
 		menuButtonHelp = new JMenuItem("Help");
 		menuButtonHelp.setActionCommand("Help");
-
-		menuButtonVoorraad.addActionListener(this);
-		menuButtonOrders.addActionListener(this);
-		menuButtonWeergave.addActionListener(this);
-		menuButton1.addActionListener(this);
-		menuButton2.addActionListener(this);
 		menuButtonHelp.addActionListener(this);
+
 
 		// Add buttons to menu bar
 		menuBar.add(menuButtonVoorraad);
@@ -85,19 +87,49 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		// Setup StockScreen
 		JPanel StockPanel = new JPanel();
-		this.scrollPaneStockScreen = new JScrollPane(StockPanel);
-		StockPanel.setLayout(new BoxLayout(StockPanel, BoxLayout.Y_AXIS));
-		StockPanel.add(Box.createVerticalGlue());
-		this.scrollPaneStockScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		this.scrollPaneStockScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		StockPanel.setLayout(new BorderLayout());
 
-		for (Product p: productList.getProducts()){
-			StockPanel.add(new ProductStock(ShortenString(p.getName(), 70), p.getStock(), p.getId()));
-		}
+		voorraadList = new JList(productList.getProducts().toArray());
+		JScrollPane scrollPaneStockScreen = new JScrollPane(voorraadList);
 
-		root.add("Voorraad", scrollPaneStockScreen);
+		scrollPaneStockScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPaneStockScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPaneStockScreen.getVerticalScrollBar().setUnitIncrement(16);
+
+		JPanel selectedStockScreen = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+		// Buttom bar (Selected bar)
+		JButton buttonAanpassen = new JButton("Aanpassen");
+		buttonAanpassen.setActionCommand("Aanpassen");
+		buttonAanpassen.addActionListener(this);
+
+		JButton buttonZoeken = new JButton("Zoeken");
+		buttonZoeken.setActionCommand("Zoeken");
+		buttonZoeken.addActionListener(this);
+
+		JTextField JTextField_Zoeken = new JTextField(10);
+
+		JLabel selectedProductLabel = new JLabel(" ");
+
+		voorraadList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				selectedProductLabel.setText(productList.getProducts().get(voorraadList.getSelectedIndex()).toString());
+				index = voorraadList.getSelectedIndex();
+			}
+		});
+
+		selectedStockScreen.add(buttonAanpassen);
+		selectedStockScreen.add(buttonZoeken);
+		selectedStockScreen.add(JTextField_Zoeken);
+		selectedStockScreen.add(selectedProductLabel);
 
 
+		StockPanel.add(scrollPaneStockScreen, BorderLayout.CENTER);
+		StockPanel.add(selectedStockScreen, BorderLayout.SOUTH);
+
+
+		root.add("Voorraad", StockPanel);
 
 		// Setup OrderScreen
 		JPanel OrderPanel = new JPanel();
@@ -115,7 +147,6 @@ public class MainScreen extends JFrame implements ActionListener {
 		root.add("Orders", scrollPaneOrderScreen);
 
 
-
 		// Setup WeergaveScreen
 		JPanel WeergavePanel = new JPanel();
 		JScrollPane scrollPaneWeergaveScreen = new JScrollPane(WeergavePanel);
@@ -125,6 +156,7 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		scrollPaneWeergaveScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneWeergaveScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
 
 		JLabel WeergaveLabel = new JLabel("Weergave");
 		WeergavePanel.add(WeergaveLabel);
@@ -163,7 +195,13 @@ public class MainScreen extends JFrame implements ActionListener {
 			cardLayout.show(root, "Weergave");
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");
+		} else if (e.getActionCommand().equals("Aanpassen")){
+			StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProducts().get(index), "Change stock of '" + productList.getProducts().get(index).getName() + "'", productList.getProducts().get(index).getStock());
+//			productList.getProducts().get(index).setStockFromDatabase();
+//			this.voorraadList.revalidate();
 		}
+		this.voorraadList.revalidate();
+		this.revalidate();
 	}
 
 	public String ShortenString(String string, int length){
