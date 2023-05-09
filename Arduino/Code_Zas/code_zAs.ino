@@ -11,6 +11,8 @@ void setup() {
   TCCR2B = TCCR2B & B11111000 | B00000111;
 pinMode (ZPWM,OUTPUT);
 pinMode (ZDir, OUTPUT);
+pinMode(VRY_PIN, INPUT);
+pinMode(zPin, INPUT);
 }
 
 void loop() {
@@ -37,15 +39,15 @@ zValue = analogRead(zPin);
   Serial.println(zValue);
   if (command & COMMAND_UP) {
     // TODO: add your task here
-    void motorZup();
+    motorZup();
 
   } else if (command & COMMAND_DOWN) {
     // TODO: add your task here
-    void motorZdown();
+    motorZdown();
 
   } else  {
   
-    void motorZstop();
+    motorZstop();
   
   }
 

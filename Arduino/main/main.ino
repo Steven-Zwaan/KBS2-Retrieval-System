@@ -14,58 +14,76 @@ pinMode (YPWM, OUTPUT);
 pinMode(VRX_PIN, INPUT);
 pinMode(VRY_PIN, INPUT);
 pinMode(zPin, OUTPUT);
+pinMode(NoodstopIngedrukt, INPUT_PULLUP);
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   button.loop(); // MUST call the loop() function first
+  Serial.println(!digitalRead(NoodstopIngedrukt));
+  //Noodstop check
+  if (!digitalRead(NoodstopIngedrukt) && !Noodstop)
+  {
+    Noodstop = true;
+    command;
+  }
+  
 
+  
     // read analog X and Y analog values
  xValue = analogRead(VRX_PIN);
  yValue = analogRead(VRY_PIN);
 
+  //Serial.println(xValue);
  // converts the analog value to commands
   // reset commands
   command = COMMAND_NO;
-  if (!zAs) {
-  // check left/right commands
-    if (xValue < LEFT_THRESHOLD)
-      command = command | COMMAND_LEFT;
-    else if (xValue > RIGHT_THRESHOLD)
-      command = command | COMMAND_RIGHT;
-
-    // check up/down commands
-    if (yValue < UP_THRESHOLD)
-      command = command | COMMAND_UP;
-    else if (yValue > DOWN_THRESHOLD)
-      command = command | COMMAND_DOWN;
-
-    // print command to serial and process command
-    if (command & COMMAND_LEFT) {
-      motorXleft();
-      
-    }  else if (command & COMMAND_RIGHT) {
-      motorXright();
-
-    } else  {
-      motorXstop();
-
-    }
-  
-    if (command & COMMAND_UP) {
-     motorYup();
-
-    } else if (command & COMMAND_DOWN) {
-      motorYdown();
-
-    } else  {
-      motorYstop();
-    }
-  } else {
-    Serial.println(yValue);
-    analogWrite(zPin, yValue);
+  if(Noodstop)
+  {
+    motorYstop();
+    motorXstop();
+  }   else if (!Noodstop){
     
+    if (!zAs) {
+    // check left/right commands
+      if (xValue < LEFT_THRESHOLD)
+        command = command | COMMAND_LEFT;
+      else if (xValue > RIGHT_THRESHOLD)
+        command = command | COMMAND_RIGHT;
+
+      // check up/down commands
+      if (yValue < UP_THRESHOLD)
+      command = command | COMMAND_UP;
+      else if (yValue > DOWN_THRESHOLD)
+        command = command | COMMAND_DOWN;
+
+      // print command to serial and process command
+      if (command & COMMAND_LEFT) {
+        motorXleft();
+      
+      }  else if (command & COMMAND_RIGHT) {
+        motorXright();
+
+      }  else  {
+        motorXstop();
+
+      }
+  
+      if (command & COMMAND_UP) {
+       motorYup();
+
+      } else if (command & COMMAND_DOWN) {
+        motorYdown();
+
+      } else  {
+        motorYstop();
+      }
+    } else {
+      Serial.println(yValue);
+      analogWrite(zPin, yValue);
+    
+    }
   }
 
 

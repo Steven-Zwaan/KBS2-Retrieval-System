@@ -29,6 +29,8 @@ bool Rechts = HIGH;
 
 bool zAs = false;
 
+bool Noodstop = false;
+int NoodstopIngedrukt = 2;
 
 int xValue = 0; // To store value of the X axis
 int yValue = 0; // To store value of the Y axis
