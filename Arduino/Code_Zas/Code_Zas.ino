@@ -41,6 +41,7 @@ void loop() {
 void handler(int bytes) {
   if(dirState) {
     zValue = Wire.read();
+    
       // check up/down commands
     if (zValue < UP_THRESHOLD)
       command = command | COMMAND_UP;
@@ -56,6 +57,26 @@ void handler(int bytes) {
       motorZstop();
     }
   } else {
+      yValue = Wire.read();
+    // check left/right commands
+      if (yValue < LEFT_THRESHOLD)
+        command = command | COMMAND_LEFT;
+      else if (yValue > RIGHT_THRESHOLD)
+        command = command | COMMAND_RIGHT;
 
+      // check up/down commands
+      if (yValue < UP_THRESHOLD)
+      command = command | COMMAND_UP;
+      else if (yValue > DOWN_THRESHOLD)
+        command = command | COMMAND_DOWN;
+    if (command & COMMAND_UP) {
+       motorYup();
+
+      } else if (command & COMMAND_DOWN) { // z as aruino
+        motorYdown();
+
+      } else  {
+        motorYstop();
+      }
   }
 }

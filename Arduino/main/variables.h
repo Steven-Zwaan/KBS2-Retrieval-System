@@ -32,7 +32,7 @@ bool zAs = false;
 bool Noodstop = false;
 int NoodstopIngedrukt = 4;
 
-int xValue = 0; // To store value of the X axis
-int yValue = 0; // To store value of the Y axis
+int xValue = 512; // To store value of the X axis
+int yValue = 512; // To store value of the Y axis
 int bValue = 0; // To store value of the button
 int command = COMMAND_NO; //stop
