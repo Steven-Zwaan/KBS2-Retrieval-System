@@ -9,8 +9,8 @@ void setup() {
   TCCR2B = TCCR2B & B11111000 | B00000111;
 pinMode (XPWM,OUTPUT);
 pinMode (XDir, OUTPUT);
-pinMode (YDir, OUTPUT); // z as aruino
-pinMode (YPWM, OUTPUT); // z as aruino
+pinMode (YDir, OUTPUT);
+pinMode (YPWM, OUTPUT);
 pinMode(VRX_PIN, INPUT);
 pinMode(VRY_PIN, INPUT);
 pinMode(zPin, OUTPUT);
@@ -21,21 +21,22 @@ pinMode(NoodstopIngedrukt, INPUT_PULLUP);
 void loop() {
   // put your main code here, to run repeatedly:
   button.loop(); // MUST call the loop() function first
-  Serial.println(!digitalRead(NoodstopIngedrukt));
+  
   //Noodstop check
   if (!digitalRead(NoodstopIngedrukt) && !Noodstop)
   {
     Noodstop = true;
     command;
   }
-  
+
 
   
     // read analog X and Y analog values
  xValue = analogRead(VRX_PIN);
  yValue = analogRead(VRY_PIN);
 
-  //Serial.println(xValue);
+  Serial.println(xValue);
+  //Serial.println(yValue);
  // converts the analog value to commands
   // reset commands
   command = COMMAND_NO;
@@ -60,6 +61,7 @@ void loop() {
 
       // print command to serial and process command
       if (command & COMMAND_LEFT) {
+        
         motorXleft();
       
       }  else if (command & COMMAND_RIGHT) {
@@ -73,7 +75,7 @@ void loop() {
       if (command & COMMAND_UP) {
        motorYup();
 
-      } else if (command & COMMAND_DOWN) { // z as aruino
+      } else if (command & COMMAND_DOWN) {
         motorYdown();
 
       } else  {

@@ -1,7 +1,7 @@
 #include <ezButton.h>
 
 #define VRX_PIN  A2 // Arduino pin connected to VRX pin
-#define VRY_PIN  A3 // Arduino pin connected to VRY pin 
+#define VRY_PIN  A3 // Arduino pin connected to VRY pin
 #define SW_PIN   7  // Arduino pin connected to SW  pin
 
 
@@ -21,18 +21,18 @@ ezButton button(SW_PIN);
 // Variabelen
 const int zPin = A5;
 int XPWM = 11;
-int XDir = 2;
-int YDir = 2; // z as aruino
-int YPWM= 3; // z as aruino
+int XDir = 13;
+int YDir = 12;
+int YPWM= 3;
 bool Links = LOW;
 bool Rechts = HIGH;
 
 bool zAs = false;
 
 bool Noodstop = false;
-int NoodstopIngedrukt = 13;
+int NoodstopIngedrukt = 4;
 
 int xValue = 0; // To store value of the X axis
-int yValue = 0; // To store value of the Y axis // z as aruino
+int yValue = 0; // To store value of the Y axis
 int bValue = 0; // To store value of the button
 int command = COMMAND_NO; //stop
