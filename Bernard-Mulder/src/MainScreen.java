@@ -41,8 +41,8 @@ public class MainScreen extends JFrame implements ActionListener {
 
 
 		// Database order import
-		Products products = new Products();
-		products.getProductsFromDatabase();
+		ProductList productList = new ProductList();
+		productList.getProductsFromDatabase();
 
 		// Menubar Setup
 		menuBar = new JMenuBar();
@@ -91,7 +91,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		this.scrollPaneStockScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		this.scrollPaneStockScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-		for (Product p: products.getProducts()){
+		for (Product p: productList.getProducts()){
 			StockPanel.add(new ProductStock(ShortenString(p.getName(), 70), p.getStock(), p.getId()));
 		}
 
