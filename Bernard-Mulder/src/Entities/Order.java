@@ -12,14 +12,8 @@ public class Order {
     private Timestamp date;
     private Timestamp pickingCompletedWhen;
     private ArrayList<OrderLine> orderLines = new ArrayList<>();
-    DatabaseConnector databaseConnector = new DatabaseConnector();
+    private DatabaseConnector databaseConnector = new DatabaseConnector();
 
-//    public Order(int id, Customer customer, Timestamp date) {
-//        this.id = id;
-//        this.customer = customer;
-//        this.date = date;
-//        this.pickingCompletedWhen = null;
-//    }
     public Order(int id, Customer customer, Timestamp date, Timestamp pickingCompletedWhen) {
         this.id = id;
         this.customer = customer;
@@ -61,8 +55,33 @@ public class Order {
         return orderLines;
     }
 
+    public void setPickingCompletedWhen() {
+        String sql = "UPDATE orders SET PickingCompletedWhen = ? WHERE OrderID = ?";
+        int pickingCompletedWhenNullCount = 0;
+        for (OrderLine ol: getOrderLines()){
+            if (ol.getPickingCompletedWhen() == null) {
+                pickingCompletedWhenNullCount++;
+            }
+        }
+        if (pickingCompletedWhenNullCount == 0) {
+            try {
+                PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
+                statement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+                statement.setInt(2, id);
+                int resultSet = statement.executeUpdate();
+                if(resultSet > 0){
+                    this.pickingCompletedWhen = new Timestamp(System.currentTimeMillis());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                databaseConnector.disconnect();
+            }
+        }
+    }
+
     @Override
     public String toString() {
-        return "id: " + id + " order date: " + date + " picked when: " + pickingCompletedWhen + " " + customer;
+        return "id: " + id + " order date: " + date + " picking completed when: " + pickingCompletedWhen + " " + customer;
     }
 }

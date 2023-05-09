@@ -7,11 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Orders {
+public class OrderList {
     private ArrayList<Order> orders = new ArrayList<>();
-    DatabaseConnector databaseConnector = new DatabaseConnector();
+    private DatabaseConnector databaseConnector = new DatabaseConnector();
 
-    public void storeOrdersFromDatabase(){
+    public void getOrdersFromDatabase(){
         String sql = "SELECT orders.OrderID, orders.OrderDate, orders.PickingCompletedWhen, customers.CustomerID, customers.CustomerName, " +
                 "cities.CityName, stateprovinces.StateProvinceName, customers.DeliveryAddressLine1, customers.DeliveryAddressLine2, customers.DeliveryPostalCode " +
                 "FROM `orders` JOIN `customers` ON orders.CustomerID = customers.CustomerID JOIN `cities` ON customers.DeliveryCityID = cities.CityID " +
@@ -33,7 +33,7 @@ public class Orders {
         }
     }
 
-    public void storeOrderFromDatabase(int id){
+    public void getOrderFromDatabase(int id){
         String sql = "SELECT orders.OrderID, orders.OrderDate, orders.PickingCompletedWhen, customers.CustomerID, customers.CustomerName, " +
                 "cities.CityName, stateprovinces.StateProvinceName, customers.DeliveryAddressLine1, customers.DeliveryAddressLine2, " +
                 "customers.DeliveryPostalCode FROM `orders` JOIN `customers` ON orders.CustomerID = customers.CustomerID JOIN `cities` " +
