@@ -13,7 +13,6 @@ public class ProductStock extends JPanel implements ActionListener { ;
 
 	public ProductStock(String productNaam, int productVoorraad, int productArtikelnummer){
 		// Panel setup
-//		this.setSize(600,50);
 		this.setLayout(new FlowLayout(FlowLayout.RIGHT, 60,10));
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
