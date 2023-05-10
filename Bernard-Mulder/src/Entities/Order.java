@@ -11,7 +11,6 @@ public class Order {
     private Customer customer;
     private Timestamp date;
     private Timestamp pickingCompletedWhen;
-    private ArrayList<OrderLine> orderLines = new ArrayList<>();
     private DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public Order(int id, Customer customer, Timestamp date, Timestamp pickingCompletedWhen) {
@@ -38,6 +37,7 @@ public class Order {
     }
 
     public ArrayList<OrderLine> getOrderLines(){
+        ArrayList<OrderLine> orderLines = new ArrayList<>();
         String sql = "SELECT * FROM `orderlines` JOIN `stockitems` ON orderlines.StockItemID = stockitems.StockItemID JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID WHERE OrderID = ? ";
         try {
             PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
@@ -45,7 +45,7 @@ public class Order {
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()){
                 Product product = new Product(resultSet.getInt("StockItemID"), resultSet.getString("StockItemName"), resultSet.getInt("QuantityOnHand"));
-                this.orderLines.add(new OrderLine(resultSet.getInt("OrderLineID"), product, resultSet.getInt("Quantity"), resultSet.getInt("pickedQuantity"), resultSet.getTimestamp("PickingCompletedWhen")));
+                orderLines.add(new OrderLine(resultSet.getInt("OrderLineID"), product, resultSet.getInt("Quantity"), resultSet.getInt("pickedQuantity"), resultSet.getTimestamp("PickingCompletedWhen")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

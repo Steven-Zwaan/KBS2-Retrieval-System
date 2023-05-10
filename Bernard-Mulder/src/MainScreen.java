@@ -6,6 +6,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MainScreen extends JFrame implements ActionListener {
 
@@ -25,7 +26,7 @@ public class MainScreen extends JFrame implements ActionListener {
 	ProductList productList;
 	int index;
 	Order selectedOrder;
-	JList orderLine;
+	JList orderLines;
 	JPanel OrderInfo;
 
 
@@ -148,26 +149,38 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		OrderPanel.add(scrollPaneOrderScreen, BorderLayout.WEST);
 
-//		JPanel OrderInfo = new JPanel();
-//		OrderInfo.setLayout(new BorderLayout());
-//		OrderPanel.add(OrderInfo, BorderLayout.EAST);
-//
-//		JPanel ProductView = new JPanel();
-//		OrderInfo.add(ProductView, BorderLayout.WEST);
-//
-//		JLabel OrderNummer = new JLabel("");
-//		ProductView.add(OrderNummer);
-//
-//		orderLine = new JList(selectedOrder.getOrderLines().toArray());
-//		ProductView.add(orderLine);
+		//setup orderinfo scherm
+		JPanel OrderInfo = new JPanel();
+		OrderInfo.setLayout(new BorderLayout());
+		OrderPanel.add(OrderInfo, BorderLayout.EAST);
+
+		JPanel ProductView = new JPanel();
+		ProductView.setLayout(new BoxLayout(ProductView, BoxLayout.Y_AXIS));
+		OrderInfo.add(ProductView, BorderLayout.WEST);
+
+		JLabel OrderNummer = new JLabel("");
+		ProductView.add(OrderNummer);
+
+		selectedOrder = orderList.getOrders().get(0);
+		orderLines = new JList(selectedOrder.getOrderLines().toArray());
+		JScrollPane scrollpaneOrderLines = new JScrollPane(orderLines);
+		scrollpaneOrderLines.setVisible(false);
+
+		ProductView.add(scrollpaneOrderLines);
 
 		orders.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				selectedOrder = orderList.getOrders().get(orders.getSelectedIndex());
+				orderLines.clearSelection();
+				orderLines.setListData(selectedOrder.getOrderLines().toArray());
+				scrollpaneOrderLines.setVisible(true);
+				OrderPanel.revalidate();
+				OrderPanel.repaint();
 			}
 		});
 
+		//setup zoekbalk
 		JButton buttonZoekenOrder = new JButton("Zoeken");
 		buttonZoekenOrder.setActionCommand("Zoeken");
 		buttonZoekenOrder.addActionListener(this);
