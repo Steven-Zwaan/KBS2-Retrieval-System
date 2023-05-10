@@ -12,7 +12,7 @@ public class OrderList {
     private DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public void getOrdersFromDatabase(){
-        String sql = "SELECT orders.OrderID, orders.OrderDate, orders.PickingCompletedWhen, customers.CustomerID, customers.CustomerName, " +
+        String sql = "SELECT orders.OrderID , orders.OrderDate, orders.PickingCompletedWhen, customers.CustomerID, customers.CustomerName, " +
                 "cities.CityName, stateprovinces.StateProvinceName, customers.DeliveryAddressLine1, customers.DeliveryAddressLine2, customers.DeliveryPostalCode " +
                 "FROM `orders` JOIN `customers` ON orders.CustomerID = customers.CustomerID JOIN `cities` ON customers.DeliveryCityID = cities.CityID " +
                 "JOIN `stateprovinces` ON cities.StateProvinceID = stateprovinces.StateProvinceID WHERE `PickingCompletedWhen` IS NULL ";
@@ -60,4 +60,5 @@ public class OrderList {
     public ArrayList<Order> getOrders() {
         return orders;
     }
+
 }

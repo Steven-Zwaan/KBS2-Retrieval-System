@@ -82,6 +82,6 @@ public class Order {
 
     @Override
     public String toString() {
-        return "id: " + id + " order date: " + date + " picking completed when: " + pickingCompletedWhen + " " + customer;
+        return "Order nummer: " + id + " postcode: " + customer.getPostalCode() + " woonplaats: " + customer.getAddressLine2();
     }
 }
