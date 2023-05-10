@@ -1,5 +1,13 @@
-void motorZup();
+// Z
+void motorZforward();
 
-void motorZdown();
+void motorZbackward();
 
 void motorZstop();
+
+// Y
+void motorYup();
+
+void motorYdown();
+
+void motorYstop();

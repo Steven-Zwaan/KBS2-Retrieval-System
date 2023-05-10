@@ -1,20 +1,22 @@
+#include <Wire.h>
 #include <ezButton.h>
 #include "variables.h"
 #include "functions.h"
 
+
 void setup() {
   // put your setup code here, to run once:
- Serial.begin(9600) ;
+  Serial.begin(9600) ;
+  // setup as master adruino
+  Wire.begin();
+  
   button.setDebounceTime(50); // set debounce time to 50 milliseconds
   TCCR2B = TCCR2B & B11111000 | B00000111;
-pinMode (XPWM,OUTPUT);
-pinMode (XDir, OUTPUT);
-pinMode (YDir, OUTPUT);
-pinMode (YPWM, OUTPUT);
-pinMode(VRX_PIN, INPUT);
-pinMode(VRY_PIN, INPUT);
-pinMode(zPin, OUTPUT);
-pinMode(NoodstopIngedrukt, INPUT_PULLUP);
+  pinMode (XPWM,OUTPUT);
+  pinMode (XDir, OUTPUT);
+  pinMode(VRX_PIN, INPUT);
+  pinMode(zPin, OUTPUT);
+  pinMode(NoodstopIngedrukt, INPUT_PULLUP);
 
 }
 
@@ -29,23 +31,19 @@ void loop() {
     command;
   }
 
+  // read analog X and Y analog values
+  xValue = analogRead(VRX_PIN);
 
-  
-    // read analog X and Y analog values
- xValue = analogRead(VRX_PIN);
- yValue = analogRead(VRY_PIN);
 
-  Serial.println(xValue);
-  //Serial.println(yValue);
- // converts the analog value to commands
+  // converts the analog value to commands
   // reset commands
   command = COMMAND_NO;
+
   if(Noodstop)
   {
-    motorYstop();
     motorXstop();
-  }   else if (!Noodstop){
-    
+  } else if (!Noodstop){
+
     if (!zAs) {
     // check left/right commands
       if (xValue < LEFT_THRESHOLD)
@@ -53,51 +51,33 @@ void loop() {
       else if (xValue > RIGHT_THRESHOLD)
         command = command | COMMAND_RIGHT;
 
-      // check up/down commands
-      if (yValue < UP_THRESHOLD)
-      command = command | COMMAND_UP;
-      else if (yValue > DOWN_THRESHOLD)
-        command = command | COMMAND_DOWN;
-
       // print command to serial and process command
-      if (command & COMMAND_LEFT) {
-        
+      if ((command & COMMAND_LEFT) & COMMAND_LEFT) {
         motorXleft();
       
-      }  else if (command & COMMAND_RIGHT) {
+      } else if ((command & COMMAND_RIGHT) & COMMAND_RIGHT) {
         motorXright();
 
-      }  else  {
+      } else {
         motorXstop();
 
       }
   
-      if (command & COMMAND_UP) {
-       motorYup();
-
-      } else if (command & COMMAND_DOWN) {
-        motorYdown();
-
-      } else  {
-        motorYstop();
-      }
-    } else {
-      Serial.println(yValue);
-      analogWrite(zPin, yValue);
-    
     }
   }
 
 
   bValue = button.getState();
 
- if (button.isPressed() && zAs == false) {
+  if (button.isPressed() && zAs == false) {
     zAs = true;
+    Wire.beginTransmission(9);
+    Wire.write("ZT");
+    Wire.endTransmission();
   } else if (button.isPressed()) {
     zAs = false;
+    Wire.beginTransmission(9);
+    Wire.write("ZF");
+    Wire.endTransmission();
   }
-
 }
-
-
-
