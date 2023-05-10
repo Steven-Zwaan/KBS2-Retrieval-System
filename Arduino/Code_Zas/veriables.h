@@ -3,10 +3,10 @@
 
 
 
-#define FORWARD_THRESHOLD    200
-#define BACKWARD_THRESHOLD  700
-#define UP_THRESHOLD    200
-#define DOWN_THRESHOLD  700
+#define FORWARD_THRESHOLD     200
+#define BACKWARD_THRESHOLD    700
+#define UP_THRESHOLD          200
+#define DOWN_THRESHOLD        700
 
 #define COMMAND_NO         0x00
 #define COMMAND_UP         0x01
@@ -29,10 +29,11 @@ int YDir = 12;
 bool Vooruit = LOW;
 bool Achteruit = HIGH;
 
+bool noodstop = false;
+
 bool zAs = false;
 
 //int bValue = 0; // To store value of the button
-int zValue = 0; // To store value of the Z axis
 int yValue = 0; // To store value of the Y axis
 int bValue = 0; // To store value of the button
 int command = COMMAND_NO; //stop

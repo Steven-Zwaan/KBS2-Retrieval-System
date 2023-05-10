@@ -36,51 +36,56 @@ void loop() {
   // reset commands
   command = COMMAND_NO;
 
-  
-  if (zAs){
+  if (noodstop) {
+    command;
+    motorZstop();
+    motorYstop();
+  } else if (!noodstop) {
+    if (zAs){
     // check up/down commands
-    if (yValue < FORWARD_THRESHOLD)
-      command = command | COMMAND_FORWARD;
-    else if (yValue > BACKWARD_THRESHOLD)
-      command = command | COMMAND_BACKWARD;
+      if (yValue < FORWARD_THRESHOLD)
+        command = command | COMMAND_FORWARD;
+      else if (yValue > BACKWARD_THRESHOLD)
+        command = command | COMMAND_BACKWARD;
 
-    // NOTE: AT A TIME, THERE MAY BE NO COMMAND, ONE COMMAND OR TWO COMMANDS
+      // NOTE: AT A TIME, THERE MAY BE NO COMMAND, ONE COMMAND OR TWO COMMANDS
 
-    // print command to serial and process command
-    if ((command & COMMAND_FORWARD) & COMMAND_FORWARD) {
-      // TODO: add your task here
-      motorZforward();
+      // print command to serial and process command
+      if ((command & COMMAND_FORWARD) & COMMAND_FORWARD) {
+        // TODO: add your task here
+        motorZforward();
 
-    } else if ((command & COMMAND_BACKWARD) & COMMAND_BACKWARD) {
-      // TODO: add your task here
-      motorZbackward();
+      } else if ((command & COMMAND_BACKWARD) & COMMAND_BACKWARD) {
+        // TODO: add your task here
+        motorZbackward();
 
-    } else  {
-      motorZstop();
-    
-    }
-  } else {
-    // check up/down commands
-    if (yValue < UP_THRESHOLD)
-      command = command | COMMAND_UP;
-    else if (yValue > DOWN_THRESHOLD)
-      command = command | COMMAND_DOWN;
+      } else  {
+        motorZstop();
+      
+      }
+    } else {
+      // check up/down commands
+      if (yValue < UP_THRESHOLD)
+        command = command | COMMAND_UP;
+      else if (yValue > DOWN_THRESHOLD)
+        command = command | COMMAND_DOWN;
 
-    // print command to serial and process command 
-    if ((command & COMMAND_UP) & COMMAND_UP) {
-      motorYup();
+      // print command to serial and process command 
+      if ((command & COMMAND_UP) & COMMAND_UP) {
+        motorYup();
 
-    } else if ((command & COMMAND_DOWN) & COMMAND_DOWN) {
-      motorYdown();
+      } else if ((command & COMMAND_DOWN) & COMMAND_DOWN) {
+        motorYdown();
 
-    } else  {
-      motorYstop();
+      } else  {
+        motorYstop();
+      }
     }
   }
 }
 
 void RequestEvent(){
-
+  
 }
 
 void RecieveEvent(int howMany){
@@ -93,5 +98,9 @@ void RecieveEvent(int howMany){
     zAs = true;    
   } else if (recieved == "ZF") {
     zAs = false;
+  }
+
+  if (recieved == "NT"){
+    noodstop = true;
   }
 }

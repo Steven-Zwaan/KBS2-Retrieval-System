@@ -17,7 +17,6 @@ void setup() {
   pinMode(VRX_PIN, INPUT);
   pinMode(zPin, OUTPUT);
   pinMode(NoodstopIngedrukt, INPUT_PULLUP);
-
 }
 
 void loop() {
@@ -28,6 +27,9 @@ void loop() {
   if (!digitalRead(NoodstopIngedrukt) && !Noodstop)
   {
     Noodstop = true;
+    Wire.beginTransmission(9);
+    Wire.write("NT");
+    Wire.endTransmission();    
     command;
   }
 
@@ -41,7 +43,7 @@ void loop() {
 
   if(Noodstop)
   {
-    motorXstop();
+    motorXstop(); 
   } else if (!Noodstop){
 
     if (!zAs) {
