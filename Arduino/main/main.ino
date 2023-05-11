@@ -11,6 +11,10 @@ void setup() {
   Wire.begin();
   
   button.setDebounceTime(50); // set debounce time to 50 milliseconds
+
+  limitSwitchR.setDebounceTime(50);
+  limitSwitchL.setDebounceTime(50);
+
   TCCR2B = TCCR2B & B11111000 | B00000111;
   pinMode (XPWM,OUTPUT);
   pinMode (XDir, OUTPUT);
@@ -82,4 +86,27 @@ void loop() {
     Wire.write("ZF");
     Wire.endTransmission();
   }
+
+limitSwitchR.loop();
+
+int stateR = limitSwitchR.getState();
+
+if(stateR == HIGH)
+{
+  Serial.println("aan op R");
+} else {
+  Serial.println("uit op R");
+}
+
+limitSwitchL.loop();
+
+int stateL = limitSwitchL.getState();
+
+if(stateL == HIGH)
+{
+  Serial.println("aan op L");
+} else {
+  Serial.println("uit op L");
+}
+
 }
