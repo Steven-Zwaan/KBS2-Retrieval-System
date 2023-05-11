@@ -10,22 +10,27 @@ void setup() {
   // setup as master adruino
   Wire.begin();
   
-  button.setDebounceTime(50); // set debounce time to 50 milliseconds
-
+  joystickButton.setDebounceTime(50); // set debounce time to 50 milliseconds
   limitSwitchR.setDebounceTime(50);
   limitSwitchL.setDebounceTime(50);
 
   TCCR2B = TCCR2B & B11111000 | B00000111;
   pinMode (XPWM,OUTPUT);
   pinMode (XDir, OUTPUT);
+  pinMode (xEnc, INPUT);
+  
   pinMode(VRX_PIN, INPUT);
+
   pinMode(zPin, OUTPUT);
+  
   pinMode(NoodstopIngedrukt, INPUT_PULLUP);
+
+  attachInterrupt(digitalPinToInterrupt(2), encoderXadd, RISING);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  button.loop(); // MUST call the loop() function first
+  joystickButton.loop(); // MUST call the loop() function first
   
   //Noodstop check
   if (!digitalRead(NoodstopIngedrukt) && !Noodstop)
@@ -37,50 +42,63 @@ void loop() {
     command;
   }
 
-  // read analog X and Y analog values
+// read analog X and Y analog values
   xValue = analogRead(VRX_PIN);
 
 
-  // converts the analog value to commands
-  // reset commands
+// reset commands
   command = COMMAND_NO;
 
-  if(Noodstop)
-  {
-    motorXstop(); 
-  } else if (!Noodstop){
+  if (calibrate) {
+    if (!borderHitLeft){
+      motorXleft();
+    } else {
+      motorXstop();
+      xPos = 0;
+      calibrate = false;
+    }
+  } else {
+    if(Noodstop) {
+      motorXstop(); 
+    } else if (!Noodstop){
+      if (manual) {
+        if (!zAs) {
+        // check left/right commands
+          if (xValue < LEFT_THRESHOLD)
+            command = command | COMMAND_LEFT;
+          else if (xValue > RIGHT_THRESHOLD)
+            command = command | COMMAND_RIGHT;
 
-    if (!zAs) {
-    // check left/right commands
-      if (xValue < LEFT_THRESHOLD)
-        command = command | COMMAND_LEFT;
-      else if (xValue > RIGHT_THRESHOLD)
-        command = command | COMMAND_RIGHT;
+          // print command to serial and process command
+          if (((command & COMMAND_LEFT) & COMMAND_LEFT) && (!borderHitLeft)) {
+            motorXleft();
+          
+          } else if (((command & COMMAND_RIGHT) & COMMAND_RIGHT) && (!borderHitRight)) {
+            motorXright();
 
-      // print command to serial and process command
-      if ((command & COMMAND_LEFT) & COMMAND_LEFT) {
-        motorXleft();
-      
-      } else if ((command & COMMAND_RIGHT) & COMMAND_RIGHT) {
-        motorXright();
+          } else {
+            motorXstop();
 
+          }
+        }
       } else {
-        motorXstop();
-
+        if (motorXgoTo(xPosBoxes[2])){
+          Serial.println("Succes!");
+        }
       }
-  
     }
   }
+ 
 
 
-  bValue = button.getState();
+  bValue = joystickButton.getState();
 
-  if (button.isPressed() && zAs == false) {
+  if (joystickButton.isPressed() && zAs == false) {
     zAs = true;
     Wire.beginTransmission(9);
     Wire.write("ZT");
     Wire.endTransmission();
-  } else if (button.isPressed()) {
+  } else if (joystickButton.isPressed()) {
     zAs = false;
     Wire.beginTransmission(9);
     Wire.write("ZF");
@@ -93,9 +111,10 @@ int stateR = limitSwitchR.getState();
 
 if(stateR == HIGH)
 {
-  Serial.println("aan op R");
-} else {
-  Serial.println("uit op R");
+  borderHitRight = true;
+ 
+} else if (borderHitRight == true) {
+  borderHitRight = false;
 }
 
 limitSwitchL.loop();
@@ -104,9 +123,14 @@ int stateL = limitSwitchL.getState();
 
 if(stateL == HIGH)
 {
-  Serial.println("aan op L");
-} else {
-  Serial.println("uit op L");
+  borderHitLeft = true;
+
+} else if (borderHitLeft == true) {
+  borderHitLeft = false;
 }
+
+Serial.println(xPos);
+// Serial.println(borderHitLeft);
+// Serial.println(borderHitRight);
 
 }
