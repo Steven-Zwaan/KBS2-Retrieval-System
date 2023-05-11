@@ -44,6 +44,8 @@ int NoodstopIngedrukt = 4;
 
 int xPos = 0;
 
+bool zSent = false;
+
 int xPosBoxes[] = {100, 800, 1600, 2300, 3000};
 
 int xValue = 0; // To store value of the X axis
