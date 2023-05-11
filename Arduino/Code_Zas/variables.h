@@ -1,7 +1,16 @@
+
 #define VRY_PIN  A3 // Arduino pin connected to VRY pin
 #define SW_PIN   A0  // Arduino pin connected to SW  pin
 
-
+#define IR_PIN A2 //InfraRed pin
+#define model 430 // SharpIR model based on info below
+/* Model :
+  GP2Y0A02YK0F --> 20150
+  GP2Y0A21YK0F --> 1080
+  GP2Y0A710K0F --> 100500
+  GP2YA41SK0F --> 430
+*/
+SharpIR irSensor = SharpIR(IR_PIN, model); // new SharpIR object
 
 #define FORWARD_THRESHOLD     200
 #define BACKWARD_THRESHOLD    700

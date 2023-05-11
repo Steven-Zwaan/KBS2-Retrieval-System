@@ -1,6 +1,8 @@
+#include <SharpIR.h>
 #include <Wire.h>
 #include <ezButton.h>
-#include "veriables.h"
+#include <SharpIR.h>
+#include "variables.h"
 #include "functions.h"
 
 
@@ -51,11 +53,11 @@ void loop() {
       // NOTE: AT A TIME, THERE MAY BE NO COMMAND, ONE COMMAND OR TWO COMMANDS
 
       // print command to serial and process command
-      if ((command & COMMAND_FORWARD) & COMMAND_FORWARD) {
+      if (((command & COMMAND_FORWARD) & COMMAND_FORWARD) && (readIR() < 18)) {
         // TODO: add your task here
         motorZforward();
 
-      } else if ((command & COMMAND_BACKWARD) & COMMAND_BACKWARD) {
+      } else if (((command & COMMAND_BACKWARD) & COMMAND_BACKWARD) && (readIR() > 5)) {
         // TODO: add your task here
         motorZbackward();
 
