@@ -39,8 +39,8 @@ int ZDir = 13;
 int YPWM= 3;
 int YDir = 12;
 
-bool Vooruit = LOW;
-bool Achteruit = HIGH;
+bool Omhoog = false;
+bool Omlaag = false;
 
 bool borderHitTop = false;
 bool borderHitBottom = false;
@@ -48,6 +48,8 @@ bool borderHitBottom = false;
 bool noodstop = false;
 
 bool zAs = false;
+
+int yPos = 0;
 
 //int bValue = 0; // To store value of the button
 int yValue = 0; // To store value of the Y axis

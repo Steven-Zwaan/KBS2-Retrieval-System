@@ -29,6 +29,8 @@ void setup() {
   pinMode (YDir, OUTPUT);
   pinMode (YPWM, OUTPUT);
   pinMode(VRY_PIN, INPUT);  
+
+  attachInterrupt(digitalPinToInterrupt(2), encoderYadd, RISING);
 }
 
 void loop() {
@@ -42,7 +44,7 @@ void loop() {
  // converts the analog value to commands
   // reset commands
   command = COMMAND_NO;
-  
+
   if (noodstop) {
     command;
     motorZstop();
@@ -109,7 +111,9 @@ void loop() {
 
   } else if (borderHitBottom == true) {
     borderHitBottom = false;
-}
+  }
+  Serial.print(" Y: ");
+  Serial.println(yPos);
 }
 
 void RequestEvent(){
