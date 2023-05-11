@@ -8,7 +8,8 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600) ;
   // setup as master adruino
-  Wire.begin();
+  Wire.begin(8);
+  Wire.onReceive(ReceiveEvent);
   
   joystickButton.setDebounceTime(50); // set debounce time to 50 milliseconds
   limitSwitchR.setDebounceTime(50);
@@ -50,12 +51,18 @@ void loop() {
   command = COMMAND_NO;
 
   if (calibrate) {
-    if (!borderHitLeft){
-      motorXleft();
+    if (!zAxisSafe) {
+      Wire.beginTransmission(9);
+      Wire.write("NS");
+      Wire.endTransmission();
     } else {
-      motorXstop();
-      xPos = 0;
-      calibrate = false;
+      if (!borderHitLeft){
+        motorXleft();
+      } else {
+        motorXstop();
+        xPos = 0;
+        calibrate = false;
+      }
     }
   } else {
     if(Noodstop) {
@@ -127,6 +134,16 @@ if(stateL == HIGH)
 
 } else if (borderHitLeft == true) {
   borderHitLeft = false;
+}
+
+void RecieveEvent(int howMany){
+  String received = "";
+  for(int i = 0; i < howMany; i++){
+    recieved += (char)Wire.read();
+  }
+  if (received = "AS"){
+    zAxisSafe = true;
+  }
 }
 
 Serial.println(xPos);

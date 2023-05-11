@@ -31,6 +31,7 @@ bool Rechts = HIGH;
 
 bool borderHitRight = false;
 bool borderHitLeft = false;
+bool zAxisSafe = false;
 
 bool zAs = false;
 

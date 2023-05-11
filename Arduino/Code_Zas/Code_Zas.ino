@@ -105,4 +105,12 @@ void RecieveEvent(int howMany){
   if (recieved == "NT"){
     noodstop = true;
   }
+  if(recieved == "NS"){
+      while(readIR() > 5){
+        motorZbackward();
+      }
+      Wire.beginTransmission(8);
+      Wire.write("AS");
+      Wire.endTransmission();
+  }
 }
