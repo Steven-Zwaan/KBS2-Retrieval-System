@@ -40,6 +40,8 @@ bool Achteruit = HIGH;
 
 bool noodstop = false;
 
+bool calibrate = false;
+
 bool zAs = false;
 
 //int bValue = 0; // To store value of the button

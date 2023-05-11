@@ -87,7 +87,14 @@ void loop() {
 }
 
 void RequestEvent(){
-  
+  if(calibrate){
+    if(readIR() != 5){
+      motorZbackward();
+    } else {
+      motorZstop();
+      Wire.write("CZF");
+    }
+  }
 }
 
 void RecieveEvent(int howMany){
@@ -104,5 +111,9 @@ void RecieveEvent(int howMany){
 
   if (recieved == "NT"){
     noodstop = true;
+  }
+
+  if(recieved == "CS"){
+    calibrate = true;
   }
 }

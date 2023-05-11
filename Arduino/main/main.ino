@@ -50,12 +50,26 @@ void loop() {
   command = COMMAND_NO;
 
   if (calibrate) {
-    if (!borderHitLeft){
-      motorXleft();
+    if(!zAxisCalibrated){
+      Wire.beginTransmission(9);
+      Wire.write("CS");
+      Wire.endTransmission();
+      Wire.requestFrom(9, 3);
+      String received = "";
+      while(Wire.available()){
+        received += (char)Wire.read();
+      }
+      if(received == "CZF"){
+          zAxisCalibrated = true;
+      }
     } else {
-      motorXstop();
-      xPos = 0;
-      calibrate = false;
+      if (!borderHitLeft){
+        motorXleft();
+      } else {
+        motorXstop();
+        xPos = 0;
+        calibrate = false;
+      }
     }
   } else {
     if(Noodstop) {
