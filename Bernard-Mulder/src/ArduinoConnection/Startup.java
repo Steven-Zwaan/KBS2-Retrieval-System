@@ -13,9 +13,9 @@ import java.io.IOException;
 public class Startup {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        SerialPort sp = SerialPort.getCommPort("/dev/ttyACM1"); // device name TODO: must be changed
-        sp.setComPortParameters(9600, 8, 1, 0); // default connection settings for Arduino
-        sp.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0); // block until bytes can be written
+        SerialPort sp = SerialPort.getCommPort("/dev/ttyACM1");
+        sp.setComPortParameters(9600, 8, 1, 0);
+        sp.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0);
 
         if (sp.openPort()) {
             System.out.println("Port is open :)");

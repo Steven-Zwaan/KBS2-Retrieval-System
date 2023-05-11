@@ -6,6 +6,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MainScreen extends JFrame implements ActionListener {
 
@@ -19,8 +20,14 @@ public class MainScreen extends JFrame implements ActionListener {
 	CardLayout cardLayout;
 	JPanel root;
 	JList voorraadList;
+
+	JList orders;
+	OrderList orderList;
 	ProductList productList;
 	int index;
+	Order selectedOrder;
+	JList orderLines;
+	JPanel OrderInfo;
 
 
 
@@ -29,7 +36,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		// Screen setup
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setMinimumSize(new Dimension(1200, 500));
-		this.setTitle("HML-application");
+		this.setTitle("HMI-application");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		cardLayout = new CardLayout();
@@ -37,14 +44,6 @@ public class MainScreen extends JFrame implements ActionListener {
 		root = new JPanel();
 		root.setLayout(cardLayout);
 		this.add(root);
-
-
-
-		// Database order import
-		productList = new ProductList();
-		productList.getProductsFromDatabase();
-
-		OrderList orderList = new OrderList();
 
 		// Menubar Setup
 		menuBar = new JMenuBar();
@@ -86,6 +85,9 @@ public class MainScreen extends JFrame implements ActionListener {
 
 
 		// Setup StockScreen
+		productList = new ProductList();
+		productList.getProductsFromDatabase();
+
 		JPanel StockPanel = new JPanel();
 		StockPanel.setLayout(new BorderLayout());
 
@@ -98,16 +100,18 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		JPanel selectedStockScreen = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
+		StockPanel.add(scrollPaneStockScreen, BorderLayout.CENTER);
+
 		// Buttom bar (Selected bar)
-		JButton buttonAanpassen = new JButton("Aanpassen");
-		buttonAanpassen.setActionCommand("Aanpassen");
-		buttonAanpassen.addActionListener(this);
+		JButton buttonAanpassenStock = new JButton("Aanpassen");
+		buttonAanpassenStock.setActionCommand("Aanpassen");
+		buttonAanpassenStock.addActionListener(this);
 
-		JButton buttonZoeken = new JButton("Zoeken");
-		buttonZoeken.setActionCommand("Zoeken");
-		buttonZoeken.addActionListener(this);
+		JButton buttonZoekenStock = new JButton("Zoeken");
+		buttonZoekenStock.setActionCommand("Zoeken");
+		buttonZoekenStock.addActionListener(this);
 
-		JTextField JTextField_Zoeken = new JTextField(10);
+		JTextField zoekenStock = new JTextField(10);
 
 		JLabel selectedProductLabel = new JLabel(" ");
 
@@ -119,33 +123,78 @@ public class MainScreen extends JFrame implements ActionListener {
 			}
 		});
 
-		selectedStockScreen.add(buttonAanpassen);
-		selectedStockScreen.add(buttonZoeken);
-		selectedStockScreen.add(JTextField_Zoeken);
+		selectedStockScreen.add(buttonAanpassenStock);
+		selectedStockScreen.add(buttonZoekenStock);
+		selectedStockScreen.add(zoekenStock);
 		selectedStockScreen.add(selectedProductLabel);
 
-
-		StockPanel.add(scrollPaneStockScreen, BorderLayout.CENTER);
 		StockPanel.add(selectedStockScreen, BorderLayout.SOUTH);
 
 
 		root.add("Voorraad", StockPanel);
 
 		// Setup OrderScreen
-		JPanel OrderPanel = new JPanel();
-		JScrollPane scrollPaneOrderScreen = new JScrollPane(OrderPanel);
+		orderList = new OrderList();
+		orderList.getOrdersFromDatabase();
 
-		OrderPanel.setLayout(new BoxLayout(OrderPanel, BoxLayout.Y_AXIS));
-		OrderPanel.add(Box.createVerticalGlue());
+		JPanel OrderPanel = new JPanel();
+		OrderPanel.setLayout(new BorderLayout());
+
+		orders = new JList(orderList.getOrders().toArray());
+		JScrollPane scrollPaneOrderScreen = new JScrollPane(orders);
 
 		scrollPaneOrderScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneOrderScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPaneOrderScreen.getVerticalScrollBar().setUnitIncrement(16);
 
-		JLabel OrdersLabel = new JLabel("Orders");
-		OrderPanel.add(OrdersLabel);
+		OrderPanel.add(scrollPaneOrderScreen, BorderLayout.WEST);
 
-		root.add("Orders", scrollPaneOrderScreen);
+		//setup orderinfo scherm
+		JPanel OrderInfo = new JPanel();
+		OrderInfo.setLayout(new BorderLayout());
+		OrderPanel.add(OrderInfo, BorderLayout.EAST);
 
+		JPanel ProductView = new JPanel();
+		ProductView.setLayout(new BoxLayout(ProductView, BoxLayout.Y_AXIS));
+		OrderInfo.add(ProductView, BorderLayout.WEST);
+
+		JLabel OrderNummer = new JLabel("");
+		ProductView.add(OrderNummer);
+
+		selectedOrder = orderList.getOrders().get(0);
+		orderLines = new JList(selectedOrder.getOrderLines().toArray());
+		JScrollPane scrollpaneOrderLines = new JScrollPane(orderLines);
+		scrollpaneOrderLines.setVisible(false);
+
+		ProductView.add(scrollpaneOrderLines);
+
+		orders.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				selectedOrder = orderList.getOrders().get(orders.getSelectedIndex());
+				orderLines.clearSelection();
+				orderLines.setListData(selectedOrder.getOrderLines().toArray());
+				scrollpaneOrderLines.setVisible(true);
+				OrderPanel.revalidate();
+				OrderPanel.repaint();
+			}
+		});
+
+		//setup zoekbalk
+		JButton buttonZoekenOrder = new JButton("Zoeken");
+		buttonZoekenOrder.setActionCommand("Zoeken");
+		buttonZoekenOrder.addActionListener(this);
+
+		JTextField zoekenOrder = new JTextField(10);
+
+		JPanel selectedOrderScreen = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+		selectedOrderScreen.add(buttonZoekenOrder);
+		selectedOrderScreen.add(zoekenOrder);
+
+		OrderPanel.add(selectedOrderScreen, BorderLayout.SOUTH);
+
+		root.add("Orders", OrderPanel);
 
 		// Setup WeergaveScreen
 		JPanel WeergavePanel = new JPanel();
@@ -163,8 +212,6 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		root.add("Weergave", scrollPaneWeergaveScreen);
 
-
-
 		// Setup HelpScreen
 		JPanel HelpPanel = new JPanel();
 		JScrollPane scrollPaneHelpScreen = new JScrollPane(HelpPanel);
@@ -180,10 +227,9 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		root.add("Help", scrollPaneHelpScreen);
 
-
-
 		setVisible(true);
 	}
+
 
 
 	public void actionPerformed(ActionEvent e) {
@@ -201,6 +247,7 @@ public class MainScreen extends JFrame implements ActionListener {
 //			this.voorraadList.revalidate();
 		}
 		this.voorraadList.revalidate();
+		this.orders.revalidate();
 		this.revalidate();
 	}
 
