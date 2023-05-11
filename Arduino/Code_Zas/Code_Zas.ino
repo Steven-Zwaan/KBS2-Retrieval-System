@@ -87,14 +87,14 @@ void loop() {
 }
 
 void RequestEvent(){
-  // if(calibrate){
-  //   if(readIR() != 5){
-  //     motorZbackward();
-  //   } else {
-  //     motorZstop();
-  //     Wire.write("CZF");
-  //   }
-  // }
+  if(calibrate){
+    if(readIR() != 5){
+      motorZbackward();
+    } else {
+      motorZstop();
+      Wire.write("CZF");
+    }
+  }
 }
 
 void RecieveEvent(int howMany){
@@ -115,18 +115,5 @@ void RecieveEvent(int howMany){
 
   if(recieved == "CS"){
     calibrate = true;
-    Serial.print("CS1");
-    while(readIR() != 5){
-      Serial.println("CS2");
-      motorZbackward();
-      // Serial.print("calibrating Z");
-    } 
-      calibrate = false;
-      motorZstop();
-      Serial.print("FInished calibrating Z");
-      Wire.beginTransmission(1);
-      Wire.write("CZF");
-      Wire.endTransmission();
-  
   }
 }

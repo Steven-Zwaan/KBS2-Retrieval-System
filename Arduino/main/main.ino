@@ -8,9 +8,7 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600) ;
   // setup as master adruino
-  Wire.begin(1);
-  Wire.onReceive(ReceiveEvent);
-  Wire.onRequest(RequestEvent);
+  Wire.begin();
   
   joystickButton.setDebounceTime(50); // set debounce time to 50 milliseconds
   limitSwitchR.setDebounceTime(50);
@@ -53,26 +51,18 @@ void loop() {
 
   if (calibrate) {
     if(!zAxisCalibrated){
-      Serial.println("test 1");
-      if (!zSent){
-        Wire.beginTransmission(9);
-        Wire.write("CS");
-        Wire.endTransmission();
-        Serial.println("CS Sent");
-        zSent = true;
-      }      
-      
-      // Serial.print(zAxisCalibrated);
-      // Wire.requestFrom(9, 3);
-      // String received = "";
-      // while(Wire.available()){
-      //   received += (char)Wire.read();
-      // }
-      // if(received == "CZF"){
-      //     zAxisCalibrated = true;
-      // }
+      Wire.beginTransmission(9);
+      Wire.write("CS");
+      Wire.endTransmission();
+      Wire.requestFrom(9, 3);
+      String received = "";
+      while(Wire.available()){
+        received += (char)Wire.read();
+      }
+      if(received == "CZF"){
+          zAxisCalibrated = true;
+      }
     } else {
-      Serial.print(zAxisCalibrated);
       if (!borderHitLeft){
         motorXleft();
       } else {
@@ -153,24 +143,8 @@ if(stateL == HIGH)
   borderHitLeft = false;
 }
 
-// Serial.println(xPos);
+Serial.println(xPos);
 // Serial.println(borderHitLeft);
 // Serial.println(borderHitRight);
 
-}
-
-void RequestEvent(){
-
-}
-
-void ReceiveEvent(int howMany){
-  String received = "";
-  for(int i = 0; i < howMany; i++){
-    received += (char)Wire.read();
-  }
-
-  if (received == "CZF"){
-    Serial.print("Received CZF");
-    zAxisCalibrated = true;
-  }    
 }
