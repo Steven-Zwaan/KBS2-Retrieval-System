@@ -106,10 +106,11 @@ void RecieveEvent(int howMany){
     noodstop = true;
   }
   if(recieved == "NS"){
-      while(readIR() > 5){
+      while(readIR() != 5){
         motorZbackward();
+          Serial.print(readIR());
       }
-      Wire.beginTransmission(8);
+      Wire.beginTransmission(6);
       Wire.write("AS");
       Wire.endTransmission();
   }

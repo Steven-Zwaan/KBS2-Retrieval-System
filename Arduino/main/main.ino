@@ -8,7 +8,7 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600) ;
   // setup as master adruino
-  Wire.begin(8);
+  Wire.begin(6);
   Wire.onReceive(ReceiveEvent);
   
   joystickButton.setDebounceTime(50); // set debounce time to 50 milliseconds
@@ -52,6 +52,8 @@ void loop() {
 
   if (calibrate) {
     if (!zAxisSafe) {
+                Serial.print(zAxisSafe);
+
       Wire.beginTransmission(9);
       Wire.write("NS");
       Wire.endTransmission();
@@ -136,18 +138,20 @@ if(stateL == HIGH)
   borderHitLeft = false;
 }
 
-void RecieveEvent(int howMany){
-  String received = "";
-  for(int i = 0; i < howMany; i++){
-    recieved += (char)Wire.read();
-  }
-  if (received = "AS"){
-    zAxisSafe = true;
-  }
-}
+
 
 Serial.println(xPos);
 // Serial.println(borderHitLeft);
 // Serial.println(borderHitRight);
 
+}
+
+void ReceiveEvent(int howMany){
+  String received = "";
+  for(int i = 0; i < howMany; i++){
+    received += (char)Wire.read();
+  }
+  if (received = "AS"){
+    zAxisSafe = true;
+  }
 }
