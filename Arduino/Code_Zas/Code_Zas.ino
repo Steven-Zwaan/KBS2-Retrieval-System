@@ -16,8 +16,12 @@ void setup() {
   Wire.onReceive(RecieveEvent);
   Wire.onRequest(RequestEvent);
 
-  button.setDebounceTime(50); // set debounce time to 50 milliseconds
+  // set debounce time to 50 milliseconds
+  limitSwitchT.setDebounceTime(50); 
+  limitSwitchB.setDebounceTime(50); 
+
   TCCR2B = TCCR2B & B11111000 | B00000111;
+
   pinMode (ZPWM,OUTPUT);
   pinMode (ZDir, OUTPUT);
   pinMode(VRY_PIN, INPUT);
@@ -29,7 +33,8 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  button.loop(); // MUST call the loop() function first
+  limitSwitchT.loop(); // MUST call the loop() function first
+  limitSwitchB.loop();
 
   // read analog Y analog values
   yValue = analogRead(VRY_PIN);
@@ -37,7 +42,7 @@ void loop() {
  // converts the analog value to commands
   // reset commands
   command = COMMAND_NO;
-
+  
   if (noodstop) {
     command;
     motorZstop();
@@ -73,10 +78,10 @@ void loop() {
         command = command | COMMAND_DOWN;
 
       // print command to serial and process command 
-      if ((command & COMMAND_UP) & COMMAND_UP) {
+      if (((command & COMMAND_UP) & COMMAND_UP) && !borderHitTop) {
         motorYup();
 
-      } else if ((command & COMMAND_DOWN) & COMMAND_DOWN) {
+      } else if (((command & COMMAND_DOWN) & COMMAND_DOWN) && !borderHitBottom) {
         motorYdown();
 
       } else  {
@@ -84,6 +89,27 @@ void loop() {
       }
     }
   }
+  
+  int stateT = limitSwitchT.getState();
+
+  if(stateT == HIGH)
+  {
+    borderHitTop = true;
+
+  } else if (borderHitTop == true) {
+    borderHitTop = false;
+  }
+
+
+  int stateB = limitSwitchB.getState();
+
+  if(stateB == HIGH)
+  {
+    borderHitBottom = true;
+
+  } else if (borderHitBottom == true) {
+    borderHitBottom = false;
+}
 }
 
 void RequestEvent(){
@@ -106,3 +132,6 @@ void RecieveEvent(int howMany){
     noodstop = true;
   }
 }
+
+
+

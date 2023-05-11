@@ -2,6 +2,9 @@
 #define VRY_PIN  A3 // Arduino pin connected to VRY pin
 #define SW_PIN   A0  // Arduino pin connected to SW  pin
 
+#define LS_BOTTOM 5
+#define LS_TOP    6
+
 #define IR_PIN A2 //InfraRed pin
 #define model 430 // SharpIR model based on info below
 /* Model :
@@ -23,7 +26,8 @@ SharpIR irSensor = SharpIR(IR_PIN, model); // new SharpIR object
 #define COMMAND_FORWARD    0x04
 #define COMMAND_BACKWARD   0x08
 
-ezButton button(SW_PIN);
+ezButton limitSwitchT(LS_TOP);
+ezButton limitSwitchB(LS_BOTTOM);
 
 //ezButton button(SW_PIN);
 
@@ -37,6 +41,9 @@ int YDir = 12;
 
 bool Vooruit = LOW;
 bool Achteruit = HIGH;
+
+bool borderHitTop = false;
+bool borderHitBottom = false;
 
 bool noodstop = false;
 
