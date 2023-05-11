@@ -16,6 +16,9 @@
 
 ezButton button(SW_PIN);
 
+ezButton limitSwitchR(5);
+ezButton limitSwitchL(6);
+
 // Variabelen
 const int zPin = A5;
 int XPWM = 11;
