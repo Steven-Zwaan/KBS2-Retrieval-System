@@ -117,12 +117,21 @@ void loop() {
 }
 
 void RequestEvent(){
-  if(calibrate){
+  if(calibrateZ){
     if(readIR() != 5){
       motorZbackward();
     } else {
       motorZstop();
       Wire.write("CZF");
+      calibrateZ = false;
+    }
+  } else if(calibrateY) {
+    if(!borderHitBottom){
+      motorYdown();
+    } else {
+      motorYstop();
+      Wire.write("CYF");
+      calibrateY = false;
     }
   }
 }
@@ -143,8 +152,11 @@ void RecieveEvent(int howMany){
     noodstop = true;
   }
 
-  if(recieved == "CS"){
-    calibrate = true;
+  if(recieved == "CSZ"){
+    calibrateZ = true;
+  }
+  if(recieved == "CSY"){
+    calibrateY = true;
   }
 }
 

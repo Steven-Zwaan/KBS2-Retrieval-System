@@ -52,7 +52,7 @@ void loop() {
   if (calibrate) {
     if(!zAxisCalibrated){
       Wire.beginTransmission(9);
-      Wire.write("CS");
+      Wire.write("CSZ");
       Wire.endTransmission();
       Wire.requestFrom(9, 3);
       String received = "";
@@ -63,6 +63,19 @@ void loop() {
           zAxisCalibrated = true;
       }
     } else {
+      if(!yAxisCalibrated){
+      Wire.beginTransmission(9);
+      Wire.write("CSY");
+      Wire.endTransmission();
+      Wire.requestFrom(9, 3);
+      String received = "";
+      while(Wire.available()){
+        received += (char)Wire.read();
+      }
+      if(received == "CYF"){
+          yAxisCalibrated = true;
+      }
+    } else {
       if (!borderHitLeft){
         motorXleft();
       } else {
@@ -70,6 +83,7 @@ void loop() {
         xPos = 0;
         calibrate = false;
       }
+    }
     }
   } else {
     if(Noodstop) {
