@@ -108,6 +108,7 @@ void loop() {
   if(stateB == HIGH)
   {
     borderHitBottom = true;
+    yPos = 0;
 
   } else if (borderHitBottom == true) {
     borderHitBottom = false;
