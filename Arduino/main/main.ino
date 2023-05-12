@@ -53,68 +53,68 @@ void loop() {
     motorXstop(); 
   } else if (!Noodstop){
     if (calibrate) {
-    if(!zAxisCalibrated){
-      Wire.beginTransmission(9);
-      Wire.write("CSZ");
-      Wire.endTransmission();
-      Wire.requestFrom(9, 3);
-      String received = "";
-      while(Wire.available()){
-        received += (char)Wire.read();
-      }
-      if(received == "CZF"){
-          zAxisCalibrated = true;
-      }
-    } else {
-      if(!yAxisCalibrated){
-      Wire.beginTransmission(9);
-      Wire.write("CSY");
-      Wire.endTransmission();
-      Wire.requestFrom(9, 3);
-      String received = "";
-      while(Wire.available()){
-        received += (char)Wire.read();
-      }
-      if(received == "CYF"){
-          yAxisCalibrated = true;
-      }
+      if(!zAxisCalibrated){
+        Wire.beginTransmission(9);
+        Wire.write("CSZ");
+        Wire.endTransmission();
+        Wire.requestFrom(9, 3);
+        String received = "";
+        while(Wire.available()){
+          received += (char)Wire.read();
+        }
+        if(received == "CZF"){
+            zAxisCalibrated = true;
+        }
       } else {
-        if (!borderHitLeft){
-          motorXleft();
+        if(!yAxisCalibrated){
+          Wire.beginTransmission(9);
+          Wire.write("CSY");
+          Wire.endTransmission();
+          Wire.requestFrom(9, 3);
+          String received = "";
+          while(Wire.available()){
+            received += (char)Wire.read();
+          }
+          if(received == "CYF"){
+            yAxisCalibrated = true;
+          }
         } else {
-          motorXstop();
-          xPos = 0;
-          calibrate = false;
-        }
-      }
-    }
-  } else {
-    if (manual) {
-      if (!zAs) {
-      // check left/right commands
-        if (xValue < LEFT_THRESHOLD)
-          command = command | COMMAND_LEFT;
-        else if (xValue > RIGHT_THRESHOLD)
-          command = command | COMMAND_RIGHT;
-
-        // print command to serial and process command
-        if (((command & COMMAND_LEFT) & COMMAND_LEFT) && (!borderHitLeft)) {
-          motorXleft();
-        
-        } else if (((command & COMMAND_RIGHT) & COMMAND_RIGHT) && (!borderHitRight)) {
-          motorXright();
-
-        } else {
-          motorXstop();
-
+          if (!borderHitLeft){
+            motorXleft();
+          } else {
+            motorXstop();
+            xPos = 0;
+            calibrate = false;
+          }
         }
       }
     } else {
-      if (motorXgoTo(xPosBoxes[2])){
-        Serial.println("Succes!");
+      if (manual) {
+        if (!zAs) {
+        // check left/right commands
+          if (xValue < LEFT_THRESHOLD)
+            command = command | COMMAND_LEFT;
+          else if (xValue > RIGHT_THRESHOLD)
+            command = command | COMMAND_RIGHT;
+
+          // print command to serial and process command
+          if (((command & COMMAND_LEFT) & COMMAND_LEFT) && (!borderHitLeft)) {
+            motorXleft();
+          
+          } else if (((command & COMMAND_RIGHT) & COMMAND_RIGHT) && (!borderHitRight)) {
+            motorXright();
+
+          } else {
+            motorXstop();
+
+          }
+        }
+      } else {
+        if (motorXgoTo(xPosBoxes[2])){
+          Serial.println("Succes!");
+        }
       }
     }
-  }
   }
  
 
