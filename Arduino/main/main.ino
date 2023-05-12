@@ -140,7 +140,6 @@ int stateR = limitSwitchR.getState();
 if(stateR == HIGH)
 {
   borderHitRight = true;
- 
 } else if (borderHitRight == true) {
   borderHitRight = false;
 }
@@ -152,7 +151,7 @@ int stateL = limitSwitchL.getState();
 if(stateL == HIGH)
 {
   borderHitLeft = true;
-
+  xPos = 0;
 } else if (borderHitLeft == true) {
   borderHitLeft = false;
 }
