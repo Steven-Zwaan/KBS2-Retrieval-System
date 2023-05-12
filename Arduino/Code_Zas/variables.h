@@ -47,6 +47,8 @@ bool borderHitBottom = false;
 
 bool noodstop = false;
 
+bool calibrate = false;
+
 bool zAs = false;
 
 int yPos = 0;
