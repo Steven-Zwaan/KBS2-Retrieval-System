@@ -47,8 +47,11 @@ bool borderHitBottom = false;
 
 bool noodstop = false;
 
+bool calibrate = true;
 bool calibrateZ = false;
 bool calibrateY = false;
+bool calibrateZFinished = false;
+bool calibrateYFinished = false;
 
 bool zAs = false;
 

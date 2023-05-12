@@ -44,7 +44,29 @@ void loop() {
  // converts the analog value to commands
   // reset commands
   command = COMMAND_NO;
-
+if(calibrate){
+  if(calibrateZ){
+    if(readIR() != 5){
+      motorZbackward();
+    } else {
+      motorZstop();
+      calibrateZFinished = true;
+      if(calibrateYFinished) {
+        calibrate = true;
+      }
+    }
+  } else if(calibrateY) {
+    if(!borderHitBottom){
+      motorYdown();
+    } else {
+      motorYstop();
+      calibrateYFinished = true;
+      if(calibrateZFinished) {
+        calibrate = true;
+      }
+    }
+  }
+} else{
   if (noodstop) {
     command;
     motorZstop();
@@ -91,7 +113,7 @@ void loop() {
       }
     }
   }
-  
+} 
   int stateT = limitSwitchT.getState();
 
   if(stateT == HIGH)
@@ -108,30 +130,23 @@ void loop() {
   if(stateB == HIGH)
   {
     borderHitBottom = true;
+    // yPos = 0;
 
   } else if (borderHitBottom == true) {
     borderHitBottom = false;
   }
-  Serial.print(" Y: ");
-  Serial.println(yPos);
+  // Serial.print(" Y: ");
+  // Serial.println(yPos);
 }
 
 void RequestEvent(){
   if(calibrateZ){
-    if(readIR() != 5){
-      motorZbackward();
-    } else {
-      motorZstop();
+    if(calibrateZFinished){
       Wire.write("CZF");
-      calibrateZ = false;
     }
   } else if(calibrateY) {
-    if(!borderHitBottom){
-      motorYdown();
-    } else {
-      motorYstop();
+    if(calibrateYFinished){
       Wire.write("CYF");
-      calibrateY = false;
     }
   }
 }
@@ -154,9 +169,11 @@ void RecieveEvent(int howMany){
 
   if(recieved == "CSZ"){
     calibrateZ = true;
+    calibrateZFinished = false;
   }
   if(recieved == "CSY"){
     calibrateY = true;
+    calibrateYFinished = false;
   }
 }
 
