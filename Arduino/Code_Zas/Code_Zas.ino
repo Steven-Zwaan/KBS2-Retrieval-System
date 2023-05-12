@@ -63,7 +63,7 @@ void loop() {
         // NOTE: AT A TIME, THERE MAY BE NO COMMAND, ONE COMMAND OR TWO COMMANDS
 
         // print command to serial and process command
-        if (((command & COMMAND_FORWARD) & COMMAND_FORWARD) && (readIR() < 18)) {
+        if (((command & COMMAND_FORWARD) & COMMAND_FORWARD) && (readIR() < 17)) {
           // TODO: add your task here
           motorZforward();
 
@@ -117,8 +117,8 @@ void loop() {
   } else if (borderHitBottom == true) {
     borderHitBottom = false;
   }
-  Serial.print(" Y: ");
-  Serial.println(yPos);
+  // Serial.print(" Y: ");
+  // Serial.println(yPos);
 }
 
 void RequestEvent(){
@@ -129,6 +129,7 @@ void RequestEvent(){
       motorZstop();
       Wire.write("CZF");
       calibrateZ = false;
+      zAs = false;
     }
   } else if(calibrateY) {
     if(!borderHitBottom){
