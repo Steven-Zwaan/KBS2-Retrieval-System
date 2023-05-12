@@ -49,7 +49,10 @@ void loop() {
 // reset commands
   command = COMMAND_NO;
 
-  if (calibrate) {
+  if(Noodstop) {
+    motorXstop(); 
+  } else if (!Noodstop){
+    if (calibrate) {
     if(!zAxisCalibrated){
       Wire.beginTransmission(9);
       Wire.write("CSZ");
@@ -75,46 +78,43 @@ void loop() {
       if(received == "CYF"){
           yAxisCalibrated = true;
       }
-    } else {
-      if (!borderHitLeft){
-        motorXleft();
       } else {
-        motorXstop();
-        xPos = 0;
-        calibrate = false;
+        if (!borderHitLeft){
+          motorXleft();
+        } else {
+          motorXstop();
+          xPos = 0;
+          calibrate = false;
+        }
       }
-    }
     }
   } else {
-    if(Noodstop) {
-      motorXstop(); 
-    } else if (!Noodstop){
-      if (manual) {
-        if (!zAs) {
-        // check left/right commands
-          if (xValue < LEFT_THRESHOLD)
-            command = command | COMMAND_LEFT;
-          else if (xValue > RIGHT_THRESHOLD)
-            command = command | COMMAND_RIGHT;
+    if (manual) {
+      if (!zAs) {
+      // check left/right commands
+        if (xValue < LEFT_THRESHOLD)
+          command = command | COMMAND_LEFT;
+        else if (xValue > RIGHT_THRESHOLD)
+          command = command | COMMAND_RIGHT;
 
-          // print command to serial and process command
-          if (((command & COMMAND_LEFT) & COMMAND_LEFT) && (!borderHitLeft)) {
-            motorXleft();
-          
-          } else if (((command & COMMAND_RIGHT) & COMMAND_RIGHT) && (!borderHitRight)) {
-            motorXright();
+        // print command to serial and process command
+        if (((command & COMMAND_LEFT) & COMMAND_LEFT) && (!borderHitLeft)) {
+          motorXleft();
+        
+        } else if (((command & COMMAND_RIGHT) & COMMAND_RIGHT) && (!borderHitRight)) {
+          motorXright();
 
-          } else {
-            motorXstop();
+        } else {
+          motorXstop();
 
-          }
-        }
-      } else {
-        if (motorXgoTo(xPosBoxes[2])){
-          Serial.println("Succes!");
         }
       }
+    } else {
+      if (motorXgoTo(xPosBoxes[2])){
+        Serial.println("Succes!");
+      }
     }
+  }
   }
  
 
