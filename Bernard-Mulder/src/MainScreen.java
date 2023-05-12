@@ -38,6 +38,8 @@ public class MainScreen extends JFrame implements ActionListener {
 
 	ArrayList<Order> orderResult;
 
+	ArrayList<Product> stockResult;
+
 
 
 	public MainScreen(){
@@ -121,6 +123,39 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		JTextField zoekenStock = new JTextField(10);
 
+		zoekenStock.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				filterStock(voorraadList, productList.getProducts());
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				filterStock(voorraadList, productList.getProducts());
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				filterStock(voorraadList, productList.getProducts());
+			}
+			public void filterStock (JList<Product> product, List<Product> productList){
+				ArrayList<Product> foundStocks= new ArrayList<>();
+				int orderID = Integer.parseInt(zoekenStock.getText());
+				for (Product foundStock : productList){
+					if (String.valueOf(foundStock.getId()).contains(String.valueOf(orderID))){
+						foundStocks.add(foundStock);
+					}
+				}
+				if (foundStocks.size() >0){
+					product.setListData(foundStocks.toArray(new Product[0]));
+				} else {
+					product.setListData(productList.toArray(new Product[0]));
+				}
+			}
+		});
+
+
+
 		JLabel selectedProductLabel = new JLabel(" ");
 
 		voorraadList.addListSelectionListener(new ListSelectionListener() {
@@ -130,6 +165,8 @@ public class MainScreen extends JFrame implements ActionListener {
 				index = voorraadList.getSelectedIndex();
 			}
 		});
+
+
 
 		selectedStockScreen.add(buttonAanpassenStock);
 		selectedStockScreen.add(buttonZoekenStock);
@@ -198,20 +235,21 @@ public class MainScreen extends JFrame implements ActionListener {
 		zoekenOrder.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				filter(orders, orderResult);
+				filterOrder(orders, orderResult);
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				filter(orders, orderResult);
+				filterOrder(orders, orderResult);
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				filter(orders, orderResult);
+
+				filterOrder(orders, orderResult);
 			}
 
-			public void filter (JList<Order> order, List<Order> orderList){
+			public void filterOrder (JList<Order> order, List<Order> orderList){
 				ArrayList<Order> foundOrders= new ArrayList<>();
 				int orderID = Integer.parseInt(zoekenOrder.getText());
 				for (Order foundOrder : orderList){
