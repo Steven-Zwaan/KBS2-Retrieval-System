@@ -1,12 +1,17 @@
 import Entities.*;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MainScreen extends JFrame implements ActionListener {
 
@@ -26,9 +31,12 @@ public class MainScreen extends JFrame implements ActionListener {
 	ProductList productList;
 	int index;
 	Order selectedOrder;
+	Order gezochteOrder;
 	JList orderLines;
 	JPanel OrderInfo;
+	JTextField zoekenOrder;
 
+	ArrayList<Order> orderResult;
 
 
 
@@ -140,7 +148,8 @@ public class MainScreen extends JFrame implements ActionListener {
 		JPanel OrderPanel = new JPanel();
 		OrderPanel.setLayout(new BorderLayout());
 
-		orders = new JList(orderList.getOrders().toArray());
+		orderResult =orderList.getOrders();
+		orders = new JList(orderResult.toArray());
 		JScrollPane scrollPaneOrderScreen = new JScrollPane(orders);
 
 		scrollPaneOrderScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -181,15 +190,48 @@ public class MainScreen extends JFrame implements ActionListener {
 		});
 
 		//setup zoekbalk
-		JButton buttonZoekenOrder = new JButton("Zoeken");
-		buttonZoekenOrder.setActionCommand("Zoeken");
-		buttonZoekenOrder.addActionListener(this);
+		JButton buttonzoekenOrder = new JButton("Zoeken");
+		buttonzoekenOrder.setActionCommand("Zoeken");
+		buttonzoekenOrder.addActionListener(this);
 
-		JTextField zoekenOrder = new JTextField(10);
+		zoekenOrder = new JTextField(10);
+		zoekenOrder.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				filter(orders, orderResult);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				filter(orders, orderResult);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				filter(orders, orderResult);
+			}
+
+			public void filter (JList<Order> order, List<Order> orderList){
+				ArrayList<Order> foundOrders= new ArrayList<>();
+				int orderID = Integer.parseInt(zoekenOrder.getText());
+				for (Order foundOrder : orderList){
+					if (String.valueOf(foundOrder.getId()).contains(String.valueOf(orderID))){
+						foundOrders.add(foundOrder);
+					}
+				}
+				if (foundOrders.size() >0){
+					order.setListData(foundOrders.toArray(new Order[0]));
+				} else {
+					order.setListData(orderList.toArray(new Order[0]));
+				}
+			}
+
+		});
+
 
 		JPanel selectedOrderScreen = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-		selectedOrderScreen.add(buttonZoekenOrder);
+		selectedOrderScreen.add(buttonzoekenOrder);
 		selectedOrderScreen.add(zoekenOrder);
 
 		OrderPanel.add(selectedOrderScreen, BorderLayout.SOUTH);
