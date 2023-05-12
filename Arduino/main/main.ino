@@ -65,6 +65,10 @@ void loop() {
         if(received == "CZF"){
             zAxisCalibrated = true;
         }
+        zAs = false;
+        Wire.beginTransmission(9);
+        Wire.write("ZF");
+        Wire.endTransmission();
       } else {
         if(!yAxisCalibrated){
           Wire.beginTransmission(9);
