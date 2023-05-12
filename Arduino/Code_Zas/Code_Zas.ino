@@ -50,44 +50,48 @@ void loop() {
     motorZstop();
     motorYstop();
   } else if (!noodstop) {
-    if (zAs){
-    // check up/down commands
-      if (yValue < FORWARD_THRESHOLD)
-        command = command | COMMAND_FORWARD;
-      else if (yValue > BACKWARD_THRESHOLD)
-        command = command | COMMAND_BACKWARD;
+    if(calibrate){
 
-      // NOTE: AT A TIME, THERE MAY BE NO COMMAND, ONE COMMAND OR TWO COMMANDS
-
-      // print command to serial and process command
-      if (((command & COMMAND_FORWARD) & COMMAND_FORWARD) && (readIR() < 18)) {
-        // TODO: add your task here
-        motorZforward();
-
-      } else if (((command & COMMAND_BACKWARD) & COMMAND_BACKWARD) && (readIR() > 5)) {
-        // TODO: add your task here
-        motorZbackward();
-
-      } else  {
-        motorZstop();
-      
-      }
     } else {
+      if (zAs){
       // check up/down commands
-      if (yValue < UP_THRESHOLD)
-        command = command | COMMAND_UP;
-      else if (yValue > DOWN_THRESHOLD)
-        command = command | COMMAND_DOWN;
+        if (yValue < FORWARD_THRESHOLD)
+          command = command | COMMAND_FORWARD;
+        else if (yValue > BACKWARD_THRESHOLD)
+          command = command | COMMAND_BACKWARD;
 
-      // print command to serial and process command 
-      if (((command & COMMAND_UP) & COMMAND_UP) && !borderHitTop) {
-        motorYup();
+        // NOTE: AT A TIME, THERE MAY BE NO COMMAND, ONE COMMAND OR TWO COMMANDS
 
-      } else if (((command & COMMAND_DOWN) & COMMAND_DOWN) && !borderHitBottom) {
-        motorYdown();
+        // print command to serial and process command
+        if (((command & COMMAND_FORWARD) & COMMAND_FORWARD) && (readIR() < 18)) {
+          // TODO: add your task here
+          motorZforward();
 
-      } else  {
-        motorYstop();
+        } else if (((command & COMMAND_BACKWARD) & COMMAND_BACKWARD) && (readIR() > 5)) {
+          // TODO: add your task here
+          motorZbackward();
+
+        } else  {
+          motorZstop();
+        
+        }
+      } else {
+        // check up/down commands
+        if (yValue < UP_THRESHOLD)
+          command = command | COMMAND_UP;
+        else if (yValue > DOWN_THRESHOLD)
+          command = command | COMMAND_DOWN;
+
+        // print command to serial and process command 
+        if (((command & COMMAND_UP) & COMMAND_UP) && !borderHitTop) {
+          motorYup();
+
+        } else if (((command & COMMAND_DOWN) & COMMAND_DOWN) && !borderHitBottom) {
+          motorYdown();
+
+        } else  {
+          motorYstop();
+        }
       }
     }
   }
