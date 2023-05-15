@@ -6,7 +6,7 @@ import Entities.*;
 
 public class OrderScreenEditPopup extends JDialog implements ActionListener {
 
-    public OrderScreenEditPopup(Order order, String titel, int index) {
+    public OrderScreenEditPopup(OrderLine orderLine, String titel) {
         this.setSize(new Dimension(300,100));
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.setLayout(new GridLayout(2,2));
@@ -16,7 +16,7 @@ public class OrderScreenEditPopup extends JDialog implements ActionListener {
 
         JLabel gepickteAantalLabel = new JLabel("Gepickte aantal");
         JLabel totaleAantalLabel = new JLabel("totale aantal");
-
+        JSpinner gepickteAantalSpinner = new JSpinner(new SpinnerNumberModel(, 0, 1000000000, 1));
 
     }
 

@@ -35,10 +35,9 @@ public class MainScreen extends JFrame implements ActionListener {
 	JList orderLines;
 	JPanel OrderInfo;
 	JTextField zoekenOrder;
-
 	ArrayList<Order> orderResult;
-
 	ArrayList<Product> stockResult;
+	OrderLine selectedOrderLine;
 
 
 
@@ -140,16 +139,23 @@ public class MainScreen extends JFrame implements ActionListener {
 			}
 			public void filterStock (JList<Product> product, List<Product> productList){
 				ArrayList<Product> foundStocks= new ArrayList<>();
-				int orderID = Integer.parseInt(zoekenStock.getText());
-				for (Product foundStock : productList){
-					if (String.valueOf(foundStock.getId()).contains(String.valueOf(orderID))){
-						foundStocks.add(foundStock);
+				try {
+					int orderID = Integer.parseInt(zoekenStock.getText());
+					for (Product foundStock : productList){
+						if (String.valueOf(foundStock.getId()).contains(String.valueOf(orderID))){
+							foundStocks.add(foundStock);
+						}
 					}
-				}
-				if (foundStocks.size() >0){
 					product.setListData(foundStocks.toArray(new Product[0]));
-				} else {
-					product.setListData(productList.toArray(new Product[0]));
+
+				} catch (NumberFormatException e) {
+					String orderNaam = zoekenStock.getText();
+					for (Product foundStock : productList){
+						if (String.valueOf(foundStock.getName()).contains(String.valueOf(orderNaam))){
+							foundStocks.add(foundStock);
+						}
+					}
+					product.setListData(foundStocks.toArray(new Product[0]));
 				}
 			}
 		});
@@ -192,27 +198,64 @@ public class MainScreen extends JFrame implements ActionListener {
 		scrollPaneOrderScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneOrderScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPaneOrderScreen.getVerticalScrollBar().setUnitIncrement(16);
+		scrollPaneOrderScreen.setSize(new Dimension(this.getHeight(), 1500));
 
 		OrderPanel.add(scrollPaneOrderScreen, BorderLayout.WEST);
 
 		//setup orderinfo scherm
-		JPanel OrderInfo = new JPanel();
-		OrderInfo.setLayout(new BorderLayout());
-		OrderPanel.add(OrderInfo, BorderLayout.EAST);
 
 		JPanel ProductView = new JPanel();
 		ProductView.setLayout(new BoxLayout(ProductView, BoxLayout.Y_AXIS));
-		OrderInfo.add(ProductView, BorderLayout.WEST);
-
-		JLabel OrderNummer = new JLabel("");
-		ProductView.add(OrderNummer);
+		OrderPanel.add(ProductView, BorderLayout.CENTER);
 
 		selectedOrder = orderList.getOrders().get(0);
+		JLabel OrderNummer = new JLabel();
+		ProductView.add(OrderNummer);
+
 		orderLines = new JList(selectedOrder.getOrderLines().toArray());
 		JScrollPane scrollpaneOrderLines = new JScrollPane(orderLines);
-		scrollpaneOrderLines.setVisible(false);
-
 		ProductView.add(scrollpaneOrderLines);
+
+		ProductView.setVisible(false);
+
+		JPanel adressLines = new JPanel();
+		adressLines.setLayout(new GridLayout(15, 1));
+		adressLines.setPreferredSize(new Dimension(this.getWidth()/4, this.getHeight()));
+
+		JPanel adressLinesPanel = new JPanel();
+		adressLinesPanel.setLayout(new BorderLayout());
+		adressLinesPanel.add(adressLines, BorderLayout.CENTER);
+
+		OrderPanel.add(adressLinesPanel, BorderLayout.EAST);
+
+		JLabel naam = new JLabel();
+		adressLines.add(naam);
+
+		JLabel adres = new JLabel();
+		adressLines.add(adres);
+
+		JLabel postcode = new JLabel();
+		adressLines.add(postcode);
+
+		JLabel woonplaats = new JLabel();
+		adressLines.add(woonplaats);
+
+		JLabel telnr = new JLabel();
+		adressLines.add(telnr);
+
+		JPanel adressLinesKnoppen = new JPanel();
+		adressLinesKnoppen.setLayout(new GridLayout(1, 2));
+		adressLinesKnoppen.setPreferredSize(new Dimension(adressLinesPanel.getWidth(), 25));
+		adressLinesPanel.add(adressLinesKnoppen, BorderLayout.SOUTH);
+
+		JButton pickOrder = new JButton("Order Picken");
+		adressLinesKnoppen.add(pickOrder);
+
+		JButton aanpassenOrderLine = new JButton("Product aanpassen");
+		adressLinesKnoppen.add(aanpassenOrderLine);
+
+
+		adressLinesPanel.setVisible(false);
 
 		orders.addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -220,9 +263,24 @@ public class MainScreen extends JFrame implements ActionListener {
 				selectedOrder = orderList.getOrders().get(orders.getSelectedIndex());
 				orderLines.clearSelection();
 				orderLines.setListData(selectedOrder.getOrderLines().toArray());
-				scrollpaneOrderLines.setVisible(true);
+				OrderNummer.setText("Ordernummer: " + selectedOrder.getId());
+				naam.setText("Naam: " + selectedOrder.getCustomer().getName());
+				adres.setText("Adres: " + selectedOrder.getCustomer().getAddressLine2());
+				postcode.setText("Postcode: " + selectedOrder.getCustomer().getPostalCode());
+				woonplaats.setText("Woonplaats: " + selectedOrder.getCustomer().getCity());
+				telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer().getName());
+
+				ProductView.setVisible(true);
+				adressLinesPanel.setVisible(true);
 				OrderPanel.revalidate();
 				OrderPanel.repaint();
+			}
+		});
+
+		orderLines.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+
 			}
 		});
 
@@ -255,16 +313,16 @@ public class MainScreen extends JFrame implements ActionListener {
 
 			public void filterOrder (JList<Order> order, List<Order> orderList){
 				ArrayList<Order> foundOrders= new ArrayList<>();
-				int orderID = Integer.parseInt(zoekenOrder.getText());
-				for (Order foundOrder : orderList){
-					if (String.valueOf(foundOrder.getId()).contains(String.valueOf(orderID))){
-						foundOrders.add(foundOrder);
+				try {
+					int orderID = Integer.parseInt(zoekenOrder.getText());
+					for (Order foundOrder : orderList) {
+						if (String.valueOf(foundOrder.getId()).contains(String.valueOf(orderID))) {
+							foundOrders.add(foundOrder);
+						}
 					}
-				}
-				if (foundOrders.size() >0){
 					order.setListData(foundOrders.toArray(new Order[0]));
-				} else {
-					order.setListData(orderList.toArray(new Order[0]));
+				} catch (NumberFormatException e) {
+
 				}
 			}
 
@@ -333,7 +391,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("AanpassenOrder")){
 			System.out.println(orderLines.getSelectedIndex());
 			OrderLine selectedOrderLine = selectedOrder.getOrderLines().get(orderLines.getSelectedIndex());
-			OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrder, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId(), orderLines.getSelectedIndex());
+			OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrder, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId());
 		} else if (e.getActionCommand().equals("AanpassenPickDatum")) {
 			SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
 		}
