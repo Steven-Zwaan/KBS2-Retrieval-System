@@ -39,6 +39,8 @@ public class MainScreen extends JFrame implements ActionListener {
 	ArrayList<Product> stockResult;
 	OrderLine selectedOrderLine;
 
+	JButton aanpassenOrderLine;
+
 
 
 	public MainScreen(){
@@ -251,7 +253,9 @@ public class MainScreen extends JFrame implements ActionListener {
 		JButton pickOrder = new JButton("Order Picken");
 		adressLinesKnoppen.add(pickOrder);
 
-		JButton aanpassenOrderLine = new JButton("Product aanpassen");
+		aanpassenOrderLine = new JButton("Product aanpassen");
+		aanpassenOrderLine.setActionCommand("AanpassenOrder");
+		aanpassenOrderLine.addActionListener(this);
 		adressLinesKnoppen.add(aanpassenOrderLine);
 
 
@@ -280,7 +284,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		orderLines.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-
+				selectedOrderLine = selectedOrder.getOrderLines().get(orderLines.getSelectedIndex());
 			}
 		});
 
@@ -389,9 +393,13 @@ public class MainScreen extends JFrame implements ActionListener {
 //			productList.getProducts().get(index).setStockFromDatabase();
 //			this.voorraadList.revalidate();
 		} else if (e.getActionCommand().equals("AanpassenOrder")){
-			System.out.println(orderLines.getSelectedIndex());
-			OrderLine selectedOrderLine = selectedOrder.getOrderLines().get(orderLines.getSelectedIndex());
-			OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrder, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId());
+			try {
+				aanpassenOrderLine.setBackground(null);
+				int voorraad = selectedOrderLine.getProduct().getStock();
+				OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrderLine, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId(), voorraad);
+			} catch (NullPointerException npe) {
+				aanpassenOrderLine.setBackground(new Color(255, 0, 0));
+			}
 		} else if (e.getActionCommand().equals("AanpassenPickDatum")) {
 			SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
 		}

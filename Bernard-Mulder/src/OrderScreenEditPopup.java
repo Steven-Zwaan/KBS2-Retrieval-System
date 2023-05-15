@@ -6,22 +6,48 @@ import Entities.*;
 
 public class OrderScreenEditPopup extends JDialog implements ActionListener {
 
-    public OrderScreenEditPopup(OrderLine orderLine, String titel) {
+    OrderLine orderLine;
+    JSpinner gepickteAantalSpinner;
+    JSpinner totaleAantalSpinner;
+
+    public OrderScreenEditPopup(OrderLine orderLine, String titel, int voorraad) {
         this.setSize(new Dimension(300,100));
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        this.setLayout(new GridLayout(2,2));
+        this.setLayout(new GridLayout(3,2));
         this.setModal(false);
         this.setTitle(titel);
-        setVisible(true);
+        this.orderLine = orderLine;
 
         JLabel gepickteAantalLabel = new JLabel("Gepickte aantal");
         JLabel totaleAantalLabel = new JLabel("totale aantal");
-        JSpinner gepickteAantalSpinner = new JSpinner(new SpinnerNumberModel(, 0, 1000000000, 1));
+        gepickteAantalSpinner = new JSpinner(new SpinnerNumberModel(orderLine.getPickedQuantity(), 0, orderLine.getQuantity(), 1));
+        totaleAantalSpinner = new JSpinner(new SpinnerNumberModel(orderLine.getQuantity(), 0, voorraad + orderLine.getQuantity(), 1));
+        JButton annuleren = new JButton("Annuleren");
+        annuleren.setActionCommand("annuleren");
+        annuleren.addActionListener(this);
+        JButton ok = new JButton("OK");
+        ok.setActionCommand("akkoord");
+        ok.addActionListener(this);
+
+        this.add(gepickteAantalLabel);
+        this.add(totaleAantalLabel);
+        this.add(gepickteAantalSpinner);
+        this.add(totaleAantalSpinner);
+        this.add(annuleren);
+        this.add(ok);
+
+        setVisible(true);
 
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getActionCommand() == "akkoord") {
+            orderLine.setPickedQuantity((Integer) gepickteAantalSpinner.getValue());
+            orderLine.setQuantity((Integer) totaleAantalSpinner.getValue());
+            this.dispose();
+        } else if (e.getActionCommand() == "annuleren") {
+            this.dispose();
+        }
     }
 }
