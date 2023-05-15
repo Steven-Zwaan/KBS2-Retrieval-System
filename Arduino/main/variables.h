@@ -16,6 +16,8 @@
 #define COMMAND_UP     0x04 // 00000100
 #define COMMAND_DOWN   0x08 // 00001000
 
+#define BUS 9
+
 ezButton joystickButton(SW_PIN);
 ezButton limitSwitchR(LS_RIGHT);
 ezButton limitSwitchL(LS_LEFT);

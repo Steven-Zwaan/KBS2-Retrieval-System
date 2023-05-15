@@ -12,3 +12,6 @@ bool motorYgoTo(int yPosition);
 
 // Z sensor
 int readIR();
+
+// Communication
+void sendTransmission(String message);

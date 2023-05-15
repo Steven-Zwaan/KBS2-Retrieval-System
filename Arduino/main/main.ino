@@ -36,9 +36,7 @@ void loop() {
   if (!digitalRead(NoodstopIngedrukt) && !Noodstop)
   {
     Noodstop = true;
-    Wire.beginTransmission(9);
-    Wire.write("NT");
-    Wire.endTransmission();    
+    sendTransmission("NT");  
     command;
   }
 
@@ -55,11 +53,7 @@ void loop() {
     if (calibrate) {
       if(!zAxisCalibrated){
         if (!zAxisMessageSent) {
-          Serial.println("Test - Preparing transmission Z-axis");
-          Wire.beginTransmission(9);
-          Wire.write("CSZ");
-          Wire.endTransmission();
-          Serial.println("Test - Transmission send Z-axis");
+          sendTransmission("CSZ");
           zAxisMessageSent = true;
         }
       } else {
@@ -69,12 +63,9 @@ void loop() {
           motorXstop();
           xPos = 0;
           if (yAxisCalibrated) {
-            Wire.beginTransmission(9);
-            Wire.write("CF");
-            Wire.endTransmission();
+            sendTransmission("CF");
             calibrate = false;
             zAs = false;
-            Serial.println("Calibration process complete");
           }
         }
       }
@@ -112,14 +103,10 @@ void loop() {
 
   if (joystickButton.isPressed() && zAs == false) {
     zAs = true;
-    Wire.beginTransmission(9);
-    Wire.write("ZT");
-    Wire.endTransmission();
+    sendTransmission("ZT");
   } else if (joystickButton.isPressed()) {
     zAs = false;
-    Wire.beginTransmission(9);
-    Wire.write("ZF");
-    Wire.endTransmission();
+    sendTransmission("ZF");
   }
 
   limitSwitchR.loop();

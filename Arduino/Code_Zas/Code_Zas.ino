@@ -52,16 +52,11 @@ void loop() {
   } else if (!noodstop) {
     if(calibrate){
       if (calibrateZ) {
-        Serial.println("Messagerecieved");
         if(readIR() != 5){
           motorZbackward();
         } else {
-          Serial.println("Z-axis calibrated");
           motorZstop();
-          Wire.beginTransmission(1);
-          Wire.write("CZF");
-          Wire.endTransmission();
-          Serial.println("Transmission CZF send");
+          sendTransmission("CZF");
           calibrateZ = false;
           zAs = false;
           calibrateY = true;
@@ -71,10 +66,7 @@ void loop() {
           motorYdown();
         } else {
           motorYstop();
-          Wire.beginTransmission(1);
-          Wire.write("CYF");
-          Wire.endTransmission();
-          Serial.println("Transmission CYF send");
+          sendTransmission("CYF");
           calibrateY = false;
         }
       }

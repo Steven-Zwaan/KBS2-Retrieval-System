@@ -26,6 +26,8 @@ SharpIR irSensor = SharpIR(IR_PIN, model); // new SharpIR object
 #define COMMAND_FORWARD    0x04
 #define COMMAND_BACKWARD   0x08
 
+#define BUS 1
+
 ezButton limitSwitchT(LS_TOP);
 ezButton limitSwitchB(LS_BOTTOM);
 
