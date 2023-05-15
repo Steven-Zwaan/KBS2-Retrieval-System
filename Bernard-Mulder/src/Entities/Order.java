@@ -55,7 +55,7 @@ public class Order {
         return orderLines;
     }
 
-    public void setPickingCompletedWhen() {
+    public boolean setPickingCompletedWhen() {
         String sql = "UPDATE orders SET PickingCompletedWhen = ? WHERE OrderID = ?";
         int pickingCompletedWhenNullCount = 0;
         for (OrderLine ol: getOrderLines()){
@@ -72,12 +72,15 @@ public class Order {
                 if(resultSet > 0){
                     this.pickingCompletedWhen = new Timestamp(System.currentTimeMillis());
                 }
+                return true;
             } catch (SQLException e) {
                 e.printStackTrace();
+                return false;
             } finally {
                 databaseConnector.disconnect();
             }
         }
+        return false;
     }
 
     @Override

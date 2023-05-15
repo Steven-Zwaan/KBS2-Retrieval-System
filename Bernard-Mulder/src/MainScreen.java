@@ -114,7 +114,7 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		// Buttom bar (Selected bar)
 		JButton buttonAanpassenStock = new JButton("Aanpassen");
-		buttonAanpassenStock.setActionCommand("Aanpassen");
+		buttonAanpassenStock.setActionCommand("AanpassenStock");
 		buttonAanpassenStock.addActionListener(this);
 
 		JButton buttonZoekenStock = new JButton("Zoeken");
@@ -227,6 +227,10 @@ public class MainScreen extends JFrame implements ActionListener {
 		});
 
 		//setup zoekbalk
+		JButton buttonAanpassenPickDatum = new JButton("Pickdatum aanpassen");
+		buttonAanpassenPickDatum.setActionCommand("AanpassenPickDatum");
+		buttonAanpassenPickDatum.addActionListener(this);
+
 		JButton buttonzoekenOrder = new JButton("Zoeken");
 		buttonzoekenOrder.setActionCommand("Zoeken");
 		buttonzoekenOrder.addActionListener(this);
@@ -269,6 +273,7 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		JPanel selectedOrderScreen = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
+		selectedOrderScreen.add(buttonAanpassenPickDatum);
 		selectedOrderScreen.add(buttonzoekenOrder);
 		selectedOrderScreen.add(zoekenOrder);
 
@@ -321,10 +326,16 @@ public class MainScreen extends JFrame implements ActionListener {
 			cardLayout.show(root, "Weergave");
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");
-		} else if (e.getActionCommand().equals("Aanpassen")){
+		} else if (e.getActionCommand().equals("AanpassenStock")){
 			StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProducts().get(index), "Change stock of '" + productList.getProducts().get(index).getName() + "'", productList.getProducts().get(index).getStock());
 //			productList.getProducts().get(index).setStockFromDatabase();
 //			this.voorraadList.revalidate();
+		} else if (e.getActionCommand().equals("AanpassenOrder")){
+			System.out.println(orderLines.getSelectedIndex());
+			OrderLine selectedOrderLine = selectedOrder.getOrderLines().get(orderLines.getSelectedIndex());
+			OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrder, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId(), orderLines.getSelectedIndex());
+		} else if (e.getActionCommand().equals("AanpassenPickDatum")) {
+			SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
 		}
 		this.voorraadList.revalidate();
 		this.orders.revalidate();
