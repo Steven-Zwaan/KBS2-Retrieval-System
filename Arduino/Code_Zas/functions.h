@@ -2,6 +2,7 @@
 void motorZforward();
 void motorZbackward();
 void motorZstop();
+bool motorYgoTo(int yPosition);
 
 // Y
 void motorYup();

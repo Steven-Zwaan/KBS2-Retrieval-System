@@ -113,22 +113,28 @@ void loop() {
           // print command to serial and process command 
           if (((command & COMMAND_UP) & COMMAND_UP) && !borderHitTop) {
             motorYup();
-            Serial.print(" Y: ");
-            Serial.println(yPos);
+            // Serial.print(" Y: ");
+            // Serial.println(yPos);
 
           } else if (((command & COMMAND_DOWN) & COMMAND_DOWN) && !borderHitBottom) {
             motorYdown();
-            Serial.print(" Y: ");
-            Serial.println(yPos);
+            // Serial.print(" Y: ");
+            // Serial.println(yPos);
 
           } else  {
             motorYstop();
           }
         } 
       } else {
-        if (motorYgoTo(yPosBoxes[4])){
-          Serial.println("Succes!");
+        if (!done){
+          motorYgoTo(yPosBoxes[4]);
+        } 
+        else if(motorZpickUp(zPosBoxes[0]) && done){
+          // Serial.println("Succes!");
         }
+        // if(motorZpickUp(zPosBoxes[0])){
+        //   // Serial.println("Succes!");
+        // }
       }
     }
   }

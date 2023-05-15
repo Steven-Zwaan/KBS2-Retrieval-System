@@ -59,6 +59,31 @@ bool motorYgoTo(int yPosition){
     return 0;
   } else {
     motorYstop();
+    yPositionCurrent = yPosition;
+    done = true;
     return 1;
+  }
+}
+
+bool motorZpickUp(int zPosition){
+  while(!packagePicked){
+    while(!inPosition){
+      if (readIR() < zPosition){
+        motorZforward();
+      } else if (readIR() > zPosition){
+       motorZbackward();
+      } else {
+       motorZstop();
+       inPosition = true;
+      }
+    }
+    if(motorYgoTo(yPosBoxes[4] + 100)){
+      if(readIR() != 5){
+        motorZbackward();
+      }
+      packagePicked = true;
+      return 1;
+    }
+    
   }
 }

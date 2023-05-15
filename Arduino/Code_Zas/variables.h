@@ -54,10 +54,15 @@ bool calibrateY = false;
 bool zAs = false;
 
 int yPos = 0;
+int yPositionCurrent = 0;
+bool packagePicked = false;
+bool inPosition = false;
+bool done = false;
 
 bool manual = false;
 
 int yPosBoxes[] = {145, 625, 1160, 1650, 2200};
+int zPosBoxes[] = {17, 12, 8}; //12 might be 13 and 8 might be 9
 
 //int bValue = 0; // To store value of the button
 int yValue = 0; // To store value of the Y axis
