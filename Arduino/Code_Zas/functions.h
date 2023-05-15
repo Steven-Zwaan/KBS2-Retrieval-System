@@ -7,6 +7,7 @@ void motorZstop();
 void motorYup();
 void motorYdown();
 void motorYstop();
+bool motorYgoTo(int yPosition);
 
 // Z sensor
 int readIR();

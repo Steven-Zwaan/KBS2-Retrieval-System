@@ -55,6 +55,10 @@ bool zAs = false;
 
 int yPos = 0;
 
+bool manual = false;
+
+int yPosBoxes[] = {145, 625, 1160, 1650, 2200};
+
 //int bValue = 0; // To store value of the button
 int yValue = 0; // To store value of the Y axis
 int bValue = 0; // To store value of the button

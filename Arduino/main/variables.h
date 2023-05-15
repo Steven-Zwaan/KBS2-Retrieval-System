@@ -41,7 +41,7 @@ bool zAs = false;
 
 bool calibrate = true;
 
-bool manual = true;
+bool manual = false;
 
 bool Noodstop = false;
 int NoodstopIngedrukt = 4;
