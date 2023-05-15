@@ -31,8 +31,11 @@ bool Rechts = HIGH;
 
 bool borderHitRight = false;
 bool borderHitLeft = false;
+
 bool zAxisCalibrated = false;
 bool yAxisCalibrated = false;
+
+bool zAxisMessageSent = false;
 
 bool zAs = false;
 

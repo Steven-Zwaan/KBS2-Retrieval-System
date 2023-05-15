@@ -51,6 +51,33 @@ void loop() {
     motorYstop();
   } else if (!noodstop) {
     if(calibrate){
+      if (calibrateZ) {
+        Serial.println("Messagerecieved");
+        if(readIR() != 5){
+          motorZbackward();
+        } else {
+          Serial.println("Z-axis calibrated");
+          motorZstop();
+          Wire.beginTransmission(1);
+          Wire.write("CZF");
+          Wire.endTransmission();
+          Serial.println("Transmission CZF send");
+          calibrateZ = false;
+          zAs = false;
+          calibrateY = true;
+        }
+      } else if (calibrateY) {
+        if(!borderHitBottom){
+          motorYdown();
+        } else {
+          motorYstop();
+          Wire.beginTransmission(1);
+          Wire.write("CYF");
+          Wire.endTransmission();
+          Serial.println("Transmission CYF send");
+          calibrateY = false;
+        }
+      }
 
     } else {
       if (zAs){
@@ -122,24 +149,7 @@ void loop() {
 }
 
 void RequestEvent(){
-  if(calibrateZ){
-    if(readIR() != 5){
-      motorZbackward();
-    } else {
-      motorZstop();
-      Wire.write("CZF");
-      calibrateZ = false;
-      zAs = false;
-    }
-  } else if(calibrateY) {
-    if(!borderHitBottom){
-      motorYdown();
-    } else {
-      motorYstop();
-      Wire.write("CYF");
-      calibrateY = false;
-    }
-  }
+  
 }
 
 void RecieveEvent(int howMany){
@@ -161,8 +171,14 @@ void RecieveEvent(int howMany){
   if(recieved == "CSZ"){
     calibrateZ = true;
   }
+  
   if(recieved == "CSY"){
     calibrateY = true;
+  }
+
+  if (recieved == "CF"){
+    calibrate = false;
+    Serial.println("Calibration process completed");
   }
 }
 
