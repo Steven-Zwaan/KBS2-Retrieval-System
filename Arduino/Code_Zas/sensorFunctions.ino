@@ -8,3 +8,9 @@ int readIR() {
   // Read IR distance and return
   return irSensor.distance();
 }
+
+void sendTransmission(String message) {
+  Wire.beginTransmission(BUS);
+  Wire.write(message.c_str());
+  Wire.endTransmission();
+}

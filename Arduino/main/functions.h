@@ -7,4 +7,6 @@ void motorXstop();
 
 void encoderXadd();
 
-bool motorXgoTO(int xPosition);
+bool motorXgoTo(int xPosition);
+
+void sendTransmission(String message);

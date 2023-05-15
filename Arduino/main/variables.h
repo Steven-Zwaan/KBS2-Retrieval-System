@@ -16,6 +16,8 @@
 #define COMMAND_UP     0x04 // 00000100
 #define COMMAND_DOWN   0x08 // 00001000
 
+#define BUS 9
+
 ezButton joystickButton(SW_PIN);
 ezButton limitSwitchR(LS_RIGHT);
 ezButton limitSwitchL(LS_LEFT);
@@ -31,14 +33,17 @@ bool Rechts = HIGH;
 
 bool borderHitRight = false;
 bool borderHitLeft = false;
+
 bool zAxisCalibrated = false;
 bool yAxisCalibrated = false;
+
+bool zAxisMessageSent = false;
 
 bool zAs = false;
 
 bool calibrate = true;
 
-bool manual = true;
+bool manual = false;
 
 bool Noodstop = false;
 int NoodstopIngedrukt = 4;

@@ -40,3 +40,9 @@ bool motorXgoTo(int xPosition){
     return 1;
   }
 }
+
+void sendTransmission(String message) {
+  Wire.beginTransmission(BUS);
+  Wire.write(message.c_str());
+  Wire.endTransmission();
+}
