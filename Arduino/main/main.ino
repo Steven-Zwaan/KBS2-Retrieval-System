@@ -6,8 +6,9 @@
 
 void setup() {
   // put your setup code here, to run once:
+
   Serial.begin(9600) ;
-  // setup as master adruino
+  // setup as master arduino
   Wire.begin();
   
   joystickButton.setDebounceTime(50); // set debounce time to 50 milliseconds
@@ -23,17 +24,23 @@ void setup() {
 
   pinMode(zPin, OUTPUT);
   
-  pinMode(NoodstopIngedrukt, INPUT_PULLUP);
+  pinMode(noodstopPressed, INPUT_PULLUP);
+  
 
   attachInterrupt(digitalPinToInterrupt(2), encoderXadd, RISING);
+
+
 }
+
 
 void loop() {
   // put your main code here, to run repeatedly:
   joystickButton.loop(); // MUST call the loop() function first
-  
-  //Noodstop check
-  if (!digitalRead(NoodstopIngedrukt) && !Noodstop)
+}
+
+
+//  Noodstop check
+  if (!digitalRead(noodstopPressed) && !Noodstop)
   {
     Noodstop = true;
     Wire.beginTransmission(9);
@@ -42,11 +49,13 @@ void loop() {
     command;
   }
 
-// read analog X and Y analog values
+read analog X and Y analog values
   xValue = analogRead(VRX_PIN);
 
 
-// reset commands
+
+
+reset commands
   command = COMMAND_NO;
 
   if (calibrate) {
@@ -91,7 +100,7 @@ void loop() {
  
 
 
-  bValue = joystickButton.getState();
+  joystickButton = joystickButton.getState();
 
   if (joystickButton.isPressed() && zAs == false) {
     zAs = true;
@@ -130,7 +139,6 @@ if(stateL == HIGH)
 }
 
 Serial.println(xPos);
-// Serial.println(borderHitLeft);
-// Serial.println(borderHitRight);
-
+Serial.println(borderHitLeft);
+Serial.println(borderHitRight);
 }
