@@ -3,13 +3,12 @@
 #include "variables.h"
 #include "functions.h"
 
-
 void setup() {
   // put your setup code here, to run once:
-
   Serial.begin(9600) ;
-  // setup as master arduino
-  Wire.begin();
+  // setup as master adruino
+  Wire.begin(1);
+  Wire.onReceive(ReceiveEvent);
   
   joystickButton.setDebounceTime(50); // set debounce time to 50 milliseconds
   limitSwitchR.setDebounceTime(50);
@@ -24,23 +23,17 @@ void setup() {
 
   pinMode(zPin, OUTPUT);
   
-  pinMode(noodstopPressed, INPUT_PULLUP);
-  
+  pinMode(NoodstopIngedrukt, INPUT_PULLUP);
 
   attachInterrupt(digitalPinToInterrupt(2), encoderXadd, RISING);
-
-
 }
-
 
 void loop() {
   // put your main code here, to run repeatedly:
   joystickButton.loop(); // MUST call the loop() function first
-}
-
-
-//  Noodstop check
-  if (!digitalRead(noodstopPressed) && !Noodstop)
+  
+  //Noodstop check
+  if (!digitalRead(NoodstopIngedrukt) && !Noodstop)
   {
     Noodstop = true;
     Wire.beginTransmission(9);
@@ -49,27 +42,43 @@ void loop() {
     command;
   }
 
-read analog X and Y analog values
+// read analog X and Y analog values
   xValue = analogRead(VRX_PIN);
 
 
-
-
-reset commands
+// reset commands
   command = COMMAND_NO;
 
-  if (calibrate) {
-    if (!borderHitLeft){
-      motorXleft();
+  if(Noodstop) {
+    motorXstop(); 
+  } else if (!Noodstop){
+    if (calibrate) {
+      if(!zAxisCalibrated){
+        if (!zAxisMessageSent) {
+          Serial.println("Test - Preparing transmission Z-axis");
+          Wire.beginTransmission(9);
+          Wire.write("CSZ");
+          Wire.endTransmission();
+          Serial.println("Test - Transmission send Z-axis");
+          zAxisMessageSent = true;
+        }
+      } else {
+        if (!borderHitLeft){
+          motorXleft();
+        } else {
+          motorXstop();
+          xPos = 0;
+          if (yAxisCalibrated) {
+            Wire.beginTransmission(9);
+            Wire.write("CF");
+            Wire.endTransmission();
+            calibrate = false;
+            zAs = false;
+            Serial.println("Calibration process complete");
+          }
+        }
+      }
     } else {
-      motorXstop();
-      xPos = 0;
-      calibrate = false;
-    }
-  } else {
-    if(Noodstop) {
-      motorXstop(); 
-    } else if (!Noodstop){
       if (manual) {
         if (!zAs) {
         // check left/right commands
@@ -97,10 +106,9 @@ reset commands
       }
     }
   }
- 
+  
 
-
-  joystickButton = joystickButton.getState();
+  bValue = joystickButton.getState();
 
   if (joystickButton.isPressed() && zAs == false) {
     zAs = true;
@@ -114,31 +122,44 @@ reset commands
     Wire.endTransmission();
   }
 
-limitSwitchR.loop();
+  limitSwitchR.loop();
 
-int stateR = limitSwitchR.getState();
+  int stateR = limitSwitchR.getState();
 
-if(stateR == HIGH)
-{
-  borderHitRight = true;
- 
-} else if (borderHitRight == true) {
-  borderHitRight = false;
+  if(stateR == HIGH)
+  {
+    borderHitRight = true;
+  } else if (borderHitRight == true) {
+    borderHitRight = false;
+  }
+
+  limitSwitchL.loop();
+
+  int stateL = limitSwitchL.getState();
+
+  if(stateL == HIGH)
+  {
+    borderHitLeft = true;
+    xPos = 0;
+  } else if (borderHitLeft == true) {
+    borderHitLeft = false;
+  }
+
 }
 
-limitSwitchL.loop();
+void ReceiveEvent(int howMany){
+  String recieved = "";
+  for(int i = 0; i < howMany; i++){
+    recieved += (char)Wire.read();
+  }
 
-int stateL = limitSwitchL.getState();
+  if (recieved == "CZF") {
+    zAxisCalibrated = true;
+    Serial.println("CZF recieved");
+  }
 
-if(stateL == HIGH)
-{
-  borderHitLeft = true;
-
-} else if (borderHitLeft == true) {
-  borderHitLeft = false;
-}
-
-Serial.println(xPos);
-Serial.println(borderHitLeft);
-Serial.println(borderHitRight);
+  if (recieved == "CYF") {
+    yAxisCalibrated = true;
+    Serial.println("CYF recieved");
+  }
 }

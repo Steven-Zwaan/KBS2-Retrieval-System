@@ -1,47 +1,55 @@
 #include <ezButton.h>
 
-#define VRX_PIN  A2 // Arduino pin connected to VRX pin
-#define VRY_PIN  A3 // Arduino pin connected to VRY pin
-#define SW_PIN   7  // Arduino pin connected to SW  pin
-#define NOODSTOP_PIN 4
+#define VRX_PIN  A2 // Arduino pin connected to joystick x-axis (VRX) pin
+#define SW_PIN   7  // Arduino pin connected to joystick button (SW)  pin
 
-// pins voor Stoplicht
-#define STOPLICHTKNOP 7 
-#define STOPLICHTAUTOMATISCH 11 //groen
-#define STOPLICHTHANDMATIG 10 //geel
-#define STOPLICHTNOODSTOP 9 //rood
-
-#define LEFT_THRESHOLD  200
-#define RIGHT_THRESHOLD 700
-#define UP_THRESHOLD    200
-#define DOWN_THRESHOLD  700
-
-#define COMMAND_NO     0x00
-#define COMMAND_LEFT   0x01
-#define COMMAND_RIGHT  0x02
-#define COMMAND_UP     0x04
-#define COMMAND_DOWN   0x08
+#define LS_LEFT  6 // Arduino pin connected to limit switch (left) pin 
+#define LS_RIGHT 5 // Arduino pin connected to limit switch (right) pin
 
 
-//ezButton button(SW_PIN);
+#define LEFT_THRESHOLD  200 // Minimum the joystick has to move before action
+#define RIGHT_THRESHOLD 700 // Maximum the joystick has to move before action
+
+#define COMMAND_NO     0x00 // 00000000
+#define COMMAND_LEFT   0x01 // 00000001
+#define COMMAND_RIGHT  0x02 // 00000010
+#define COMMAND_UP     0x04 // 00000100
+#define COMMAND_DOWN   0x08 // 00001000
+
+ezButton joystickButton(SW_PIN);
+ezButton limitSwitchR(LS_RIGHT);
+ezButton limitSwitchL(LS_LEFT);
 
 // Variabelen
 const int zPin = A5;
 int XPWM = 11;
 int XDir = 13;
-int YDir = 12;
-int YPWM= 3;
+int xEnc = 2;
+
 bool Links = LOW;
 bool Rechts = HIGH;
 
+bool borderHitRight = false;
+bool borderHitLeft = false;
+
+bool zAxisCalibrated = false;
+bool yAxisCalibrated = false;
+
+bool zAxisMessageSent = false;
+
 bool zAs = false;
-bool handmatig = false;
 
-bool noodstopPressed = false;
+bool calibrate = true;
 
-int xValue = 512; // To store value of the X axis
-int yValue = 512; // To store value of the Y axis
-int joystickButton = 0; // To store value of the button
+bool manual = true;
+
+bool Noodstop = false;
+int NoodstopIngedrukt = 4;
+
+int xPos = 0;
+
+int xPosBoxes[] = {100, 800, 1600, 2300, 3000};
+
+int xValue = 0; // To store value of the X axis
+int bValue = 0; // To store value of the button
 int command = COMMAND_NO; //stop
-
-int ledState = LOW;     // current state of LED
