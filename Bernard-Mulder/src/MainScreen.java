@@ -123,6 +123,21 @@ public class MainScreen extends JFrame implements ActionListener {
 		buttonZoekenStock.addActionListener(this);
 
 		JTextField zoekenStock = new JTextField(10);
+		zoekenStock.setText("Zoeken...");
+		zoekenStock.addFocusListener(new java.awt.event.FocusAdapter() {
+			public void focusGained(java.awt.event.FocusEvent evt) {
+				if (zoekenStock.getText().equals("Zoeken...")) {
+					zoekenStock.setText("");
+				}
+			}
+
+			public void focusLost(java.awt.event.FocusEvent evt) {
+				if (zoekenStock.getText().isEmpty()) {
+					zoekenStock.setText("Zoeken...");
+				}
+
+			}
+		});
 
 		zoekenStock.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -139,25 +154,40 @@ public class MainScreen extends JFrame implements ActionListener {
 			public void changedUpdate(DocumentEvent e) {
 				filterStock(voorraadList, productList.getProducts());
 			}
-			public void filterStock (JList<Product> product, List<Product> productList){
-				ArrayList<Product> foundStocks= new ArrayList<>();
+
+			public void filterStock(JList<Product> product, List<Product> productList) {
+				ArrayList<Product> foundStocks = new ArrayList<>();
 				try {
 					int orderID = Integer.parseInt(zoekenStock.getText());
-					for (Product foundStock : productList){
-						if (String.valueOf(foundStock.getId()).contains(String.valueOf(orderID))){
+					for (Product foundStock : productList) {
+						if (String.valueOf(foundStock.getId()).contains(String.valueOf(orderID))) {
 							foundStocks.add(foundStock);
 						}
 					}
+//					if (foundStocks.size() >0){
 					product.setListData(foundStocks.toArray(new Product[0]));
-
+//
+//					}
 				} catch (NumberFormatException e) {
 					String orderNaam = zoekenStock.getText();
-					for (Product foundStock : productList){
-						if (String.valueOf(foundStock.getName()).contains(String.valueOf(orderNaam))){
-							foundStocks.add(foundStock);
+					if (orderNaam.equals("Zoeken...")) {
+						foundStocks.addAll(productList);
+					} else {
+						for (Product foundStock : productList) {
+							if (String.valueOf(foundStock.getName()).contains(String.valueOf(orderNaam))) {
+								foundStocks.add(foundStock);
+							}
 						}
+						product.setListData(foundStocks.toArray(new Product[0]));
+
 					}
-					product.setListData(foundStocks.toArray(new Product[0]));
+
+				}
+				product.setListData(foundStocks.toArray(new Product[0]));
+				if(foundStocks.size() == 0) {
+					zoekenStock.setBackground(Color.RED);
+				} else {
+					zoekenStock.setBackground(Color.white);
 				}
 			}
 		});
@@ -298,6 +328,22 @@ public class MainScreen extends JFrame implements ActionListener {
 		buttonzoekenOrder.addActionListener(this);
 
 		zoekenOrder = new JTextField(10);
+		zoekenOrder.setText("Zoeken...");
+		zoekenOrder.addFocusListener(new java.awt.event.FocusAdapter() {
+			public void focusGained(java.awt.event.FocusEvent evt) {
+				if (zoekenOrder.getText().equals("Zoeken...")) {
+					zoekenOrder.setText("");
+				}
+			}
+
+			public void focusLost(java.awt.event.FocusEvent evt) {
+				if (zoekenOrder.getText().isEmpty()) {
+					zoekenOrder.setText("Zoeken...");
+				}
+
+			}
+		});
+
 		zoekenOrder.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
@@ -315,8 +361,8 @@ public class MainScreen extends JFrame implements ActionListener {
 				filterOrder(orders, orderResult);
 			}
 
-			public void filterOrder (JList<Order> order, List<Order> orderList){
-				ArrayList<Order> foundOrders= new ArrayList<>();
+			public void filterOrder(JList<Order> order, List<Order> orderList) {
+				ArrayList<Order> foundOrders = new ArrayList<>();
 				try {
 					int orderID = Integer.parseInt(zoekenOrder.getText());
 					for (Order foundOrder : orderList) {
@@ -325,8 +371,22 @@ public class MainScreen extends JFrame implements ActionListener {
 						}
 					}
 					order.setListData(foundOrders.toArray(new Order[0]));
-				} catch (NumberFormatException e) {
 
+				} catch (NumberFormatException e) {
+					String orderNaam = zoekenOrder.getText();
+					if (orderNaam.equals("Zoeken...")) {
+						foundOrders.addAll(orderList);
+					}else if (orderNaam.equals("")){
+						foundOrders.addAll(orderList);
+					} else{
+						order.setListData(foundOrders.toArray(new Order[0]));
+					}
+				}
+				order.setListData(foundOrders.toArray(new Order[0]));
+				if(foundOrders.size() == 0) {
+					zoekenOrder.setBackground(Color.RED);
+				} else {
+					zoekenOrder.setBackground(Color.white);
 				}
 			}
 
