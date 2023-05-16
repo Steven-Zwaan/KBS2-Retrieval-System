@@ -35,15 +35,13 @@ public class MainScreen extends JFrame implements ActionListener {
 	JList orderLines;
 	JPanel OrderInfo;
 	JTextField zoekenOrder;
+
 	ArrayList<Order> orderResult;
+
 	ArrayList<Product> stockResult;
-	OrderLine selectedOrderLine;
-
-	JButton aanpassenOrderLine;
 
 
-
-	public MainScreen(){
+	public MainScreen() {
 		// Screen setup
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setMinimumSize(new Dimension(1200, 500));
@@ -94,7 +92,6 @@ public class MainScreen extends JFrame implements ActionListener {
 		menuBar.add(menuButtonHelp);
 
 
-
 		// Setup StockScreen
 		productList = new ProductList();
 		productList.getProductsFromDatabase();
@@ -115,7 +112,7 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		// Buttom bar (Selected bar)
 		JButton buttonAanpassenStock = new JButton("Aanpassen");
-		buttonAanpassenStock.setActionCommand("AanpassenStock");
+		buttonAanpassenStock.setActionCommand("Aanpassen");
 		buttonAanpassenStock.addActionListener(this);
 
 		JButton buttonZoekenStock = new JButton("Zoeken");
@@ -123,6 +120,21 @@ public class MainScreen extends JFrame implements ActionListener {
 		buttonZoekenStock.addActionListener(this);
 
 		JTextField zoekenStock = new JTextField(10);
+		zoekenStock.setText("Zoeken...");
+		zoekenStock.addFocusListener(new java.awt.event.FocusAdapter() {
+			public void focusGained(java.awt.event.FocusEvent evt) {
+				if (zoekenStock.getText().equals("Zoeken...")) {
+					zoekenStock.setText("");
+				}
+			}
+
+			public void focusLost(java.awt.event.FocusEvent evt) {
+				if (zoekenStock.getText().isEmpty()) {
+					zoekenStock.setText("Zoeken...");
+				}
+
+			}
+		});
 
 		zoekenStock.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -139,29 +151,43 @@ public class MainScreen extends JFrame implements ActionListener {
 			public void changedUpdate(DocumentEvent e) {
 				filterStock(voorraadList, productList.getProducts());
 			}
-			public void filterStock (JList<Product> product, List<Product> productList){
-				ArrayList<Product> foundStocks= new ArrayList<>();
+
+			public void filterStock(JList<Product> product, List<Product> productList) {
+				ArrayList<Product> foundStocks = new ArrayList<>();
 				try {
 					int orderID = Integer.parseInt(zoekenStock.getText());
-					for (Product foundStock : productList){
-						if (String.valueOf(foundStock.getId()).contains(String.valueOf(orderID))){
+					for (Product foundStock : productList) {
+						if (String.valueOf(foundStock.getId()).contains(String.valueOf(orderID))) {
 							foundStocks.add(foundStock);
 						}
 					}
+//					if (foundStocks.size() >0){
 					product.setListData(foundStocks.toArray(new Product[0]));
-
+//
+//					}
 				} catch (NumberFormatException e) {
 					String orderNaam = zoekenStock.getText();
-					for (Product foundStock : productList){
-						if (String.valueOf(foundStock.getName()).contains(String.valueOf(orderNaam))){
-							foundStocks.add(foundStock);
+					if (orderNaam.equals("Zoeken...")) {
+						foundStocks.addAll(productList);
+					} else {
+						for (Product foundStock : productList) {
+							if (String.valueOf(foundStock.getName()).contains(String.valueOf(orderNaam))) {
+								foundStocks.add(foundStock);
+							}
 						}
+						product.setListData(foundStocks.toArray(new Product[0]));
+
 					}
-					product.setListData(foundStocks.toArray(new Product[0]));
+
+				}
+				product.setListData(foundStocks.toArray(new Product[0]));
+				if(foundStocks.size() == 0) {
+					zoekenStock.setBackground(Color.RED);
+				} else {
+					zoekenStock.setBackground(Color.white);
 				}
 			}
 		});
-
 
 
 		JLabel selectedProductLabel = new JLabel(" ");
@@ -173,7 +199,6 @@ public class MainScreen extends JFrame implements ActionListener {
 				index = voorraadList.getSelectedIndex();
 			}
 		});
-
 
 
 		selectedStockScreen.add(buttonAanpassenStock);
@@ -193,73 +218,34 @@ public class MainScreen extends JFrame implements ActionListener {
 		JPanel OrderPanel = new JPanel();
 		OrderPanel.setLayout(new BorderLayout());
 
-		orderResult =orderList.getOrders();
+		orderResult = orderList.getOrders();
 		orders = new JList(orderResult.toArray());
 		JScrollPane scrollPaneOrderScreen = new JScrollPane(orders);
 
 		scrollPaneOrderScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneOrderScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPaneOrderScreen.getVerticalScrollBar().setUnitIncrement(16);
-		scrollPaneOrderScreen.setSize(new Dimension(this.getHeight(), 1500));
 
 		OrderPanel.add(scrollPaneOrderScreen, BorderLayout.WEST);
 
 		//setup orderinfo scherm
+		JPanel OrderInfo = new JPanel();
+		OrderInfo.setLayout(new BorderLayout());
+		OrderPanel.add(OrderInfo, BorderLayout.EAST);
 
 		JPanel ProductView = new JPanel();
 		ProductView.setLayout(new BoxLayout(ProductView, BoxLayout.Y_AXIS));
-		OrderPanel.add(ProductView, BorderLayout.CENTER);
+		OrderInfo.add(ProductView, BorderLayout.WEST);
 
-		selectedOrder = orderList.getOrders().get(0);
-		JLabel OrderNummer = new JLabel();
+		JLabel OrderNummer = new JLabel("");
 		ProductView.add(OrderNummer);
 
+		selectedOrder = orderList.getOrders().get(0);
 		orderLines = new JList(selectedOrder.getOrderLines().toArray());
 		JScrollPane scrollpaneOrderLines = new JScrollPane(orderLines);
+		scrollpaneOrderLines.setVisible(false);
+
 		ProductView.add(scrollpaneOrderLines);
-
-		ProductView.setVisible(false);
-
-		JPanel adressLines = new JPanel();
-		adressLines.setLayout(new GridLayout(15, 1));
-		adressLines.setPreferredSize(new Dimension(this.getWidth()/4, this.getHeight()));
-
-		JPanel adressLinesPanel = new JPanel();
-		adressLinesPanel.setLayout(new BorderLayout());
-		adressLinesPanel.add(adressLines, BorderLayout.CENTER);
-
-		OrderPanel.add(adressLinesPanel, BorderLayout.EAST);
-
-		JLabel naam = new JLabel();
-		adressLines.add(naam);
-
-		JLabel adres = new JLabel();
-		adressLines.add(adres);
-
-		JLabel postcode = new JLabel();
-		adressLines.add(postcode);
-
-		JLabel woonplaats = new JLabel();
-		adressLines.add(woonplaats);
-
-		JLabel telnr = new JLabel();
-		adressLines.add(telnr);
-
-		JPanel adressLinesKnoppen = new JPanel();
-		adressLinesKnoppen.setLayout(new GridLayout(1, 2));
-		adressLinesKnoppen.setPreferredSize(new Dimension(adressLinesPanel.getWidth(), 25));
-		adressLinesPanel.add(adressLinesKnoppen, BorderLayout.SOUTH);
-
-		JButton pickOrder = new JButton("Order Picken");
-		adressLinesKnoppen.add(pickOrder);
-
-		aanpassenOrderLine = new JButton("Product aanpassen");
-		aanpassenOrderLine.setActionCommand("AanpassenOrder");
-		aanpassenOrderLine.addActionListener(this);
-		adressLinesKnoppen.add(aanpassenOrderLine);
-
-
-		adressLinesPanel.setVisible(false);
 
 		orders.addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -267,37 +253,35 @@ public class MainScreen extends JFrame implements ActionListener {
 				selectedOrder = orderList.getOrders().get(orders.getSelectedIndex());
 				orderLines.clearSelection();
 				orderLines.setListData(selectedOrder.getOrderLines().toArray());
-				OrderNummer.setText("Ordernummer: " + selectedOrder.getId());
-				naam.setText("Naam: " + selectedOrder.getCustomer().getName());
-				adres.setText("Adres: " + selectedOrder.getCustomer().getAddressLine2());
-				postcode.setText("Postcode: " + selectedOrder.getCustomer().getPostalCode());
-				woonplaats.setText("Woonplaats: " + selectedOrder.getCustomer().getCity());
-				telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer().getName());
-
-				ProductView.setVisible(true);
-				adressLinesPanel.setVisible(true);
+				scrollpaneOrderLines.setVisible(true);
 				OrderPanel.revalidate();
 				OrderPanel.repaint();
 			}
 		});
 
-		orderLines.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				selectedOrderLine = selectedOrder.getOrderLines().get(orderLines.getSelectedIndex());
-			}
-		});
-
 		//setup zoekbalk
-		JButton buttonAanpassenPickDatum = new JButton("Pickdatum aanpassen");
-		buttonAanpassenPickDatum.setActionCommand("AanpassenPickDatum");
-		buttonAanpassenPickDatum.addActionListener(this);
-
 		JButton buttonzoekenOrder = new JButton("Zoeken");
 		buttonzoekenOrder.setActionCommand("Zoeken");
 		buttonzoekenOrder.addActionListener(this);
 
 		zoekenOrder = new JTextField(10);
+
+		zoekenOrder.setText("Zoeken...");
+		zoekenOrder.addFocusListener(new java.awt.event.FocusAdapter() {
+			public void focusGained(java.awt.event.FocusEvent evt) {
+				if (zoekenOrder.getText().equals("Zoeken...")) {
+					zoekenOrder.setText("");
+				}
+			}
+
+			public void focusLost(java.awt.event.FocusEvent evt) {
+				if (zoekenOrder.getText().isEmpty()) {
+					zoekenOrder.setText("Zoeken...");
+				}
+
+			}
+		});
+
 		zoekenOrder.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
@@ -315,8 +299,8 @@ public class MainScreen extends JFrame implements ActionListener {
 				filterOrder(orders, orderResult);
 			}
 
-			public void filterOrder (JList<Order> order, List<Order> orderList){
-				ArrayList<Order> foundOrders= new ArrayList<>();
+			public void filterOrder(JList<Order> order, List<Order> orderList) {
+				ArrayList<Order> foundOrders = new ArrayList<>();
 				try {
 					int orderID = Integer.parseInt(zoekenOrder.getText());
 					for (Order foundOrder : orderList) {
@@ -325,8 +309,22 @@ public class MainScreen extends JFrame implements ActionListener {
 						}
 					}
 					order.setListData(foundOrders.toArray(new Order[0]));
-				} catch (NumberFormatException e) {
 
+				} catch (NumberFormatException e) {
+					String orderNaam = zoekenOrder.getText();
+					if (orderNaam.equals("Zoeken...")) {
+						foundOrders.addAll(orderList);
+					}else if (orderNaam.equals("")){
+						foundOrders.addAll(orderList);
+					} else{
+						order.setListData(foundOrders.toArray(new Order[0]));
+					}
+				}
+				order.setListData(foundOrders.toArray(new Order[0]));
+				if(foundOrders.size() == 0) {
+					zoekenOrder.setBackground(Color.RED);
+				} else {
+					zoekenOrder.setBackground(Color.white);
 				}
 			}
 
@@ -335,7 +333,6 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		JPanel selectedOrderScreen = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-		selectedOrderScreen.add(buttonAanpassenPickDatum);
 		selectedOrderScreen.add(buttonzoekenOrder);
 		selectedOrderScreen.add(zoekenOrder);
 
@@ -377,8 +374,6 @@ public class MainScreen extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
-
-
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Voorraad")){
 			cardLayout.show(root, "Voorraad");
@@ -393,13 +388,9 @@ public class MainScreen extends JFrame implements ActionListener {
 //			productList.getProducts().get(index).setStockFromDatabase();
 //			this.voorraadList.revalidate();
 		} else if (e.getActionCommand().equals("AanpassenOrder")){
-			try {
-				aanpassenOrderLine.setBackground(null);
-				int voorraad = selectedOrderLine.getProduct().getStock();
-				OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrderLine, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId(), voorraad);
-			} catch (NullPointerException npe) {
-				aanpassenOrderLine.setBackground(new Color(255, 0, 0));
-			}
+			System.out.println(orderLines.getSelectedIndex());
+			OrderLine selectedOrderLine = selectedOrder.getOrderLines().get(orderLines.getSelectedIndex());
+			OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrderLine, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId(), orderLines.getSelectedIndex());
 		} else if (e.getActionCommand().equals("AanpassenPickDatum")) {
 			SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
 		}
@@ -408,8 +399,8 @@ public class MainScreen extends JFrame implements ActionListener {
 		this.revalidate();
 	}
 
-	public String ShortenString(String string, int length){
-		if (string.length() < length){
+	public String ShortenString(String string, int length) {
+		if (string.length() < length) {
 			return string;
 		} else {
 			return string.substring(0, length) + "...";
