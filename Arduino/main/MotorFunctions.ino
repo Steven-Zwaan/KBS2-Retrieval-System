@@ -1,7 +1,7 @@
 // X
 void motorXleft(){
   // int motorSpeed = 255 - map(xValue, 0, 512, 0, 255);
-      digitalWrite(XDir, LOW);
+      digitalWrite(XDIR, LOW);
       analogWrite(XPWM, 255);
       Links = true;
       Rechts = false;
@@ -9,7 +9,7 @@ void motorXleft(){
 
 void motorXright(){
   // int motorSpeed = map(xValue, 512, 1023, 0, 255);
-      digitalWrite(XDir, HIGH);
+      digitalWrite(XDIR, HIGH);
       analogWrite(XPWM, 255);
       Links = false;
       Rechts = true;

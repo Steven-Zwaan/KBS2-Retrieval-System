@@ -18,15 +18,26 @@
 
 #define BUS 9
 
+#define NOODSTOP 10
+#define RESET 4
+
+#define ZPIN A5
+#define XPWM 11
+#define XDIR 13
+#define XENC 2
+
 ezButton joystickButton(SW_PIN);
 ezButton limitSwitchR(LS_RIGHT);
 ezButton limitSwitchL(LS_LEFT);
 
+ezButton noodstopButton(NOODSTOP);
+ezButton resetButton(RESET);
+
 // Variabelen
-const int zPin = A5;
-int XPWM = 11;
-int XDir = 13;
-int xEnc = 2;
+// const int zPin = A5;
+// int XPWM = 11;
+// int XDir = 13;
+// int xEnc = 2;
 
 bool Links = LOW;
 bool Rechts = HIGH;
@@ -43,10 +54,9 @@ bool zAs = false;
 
 bool calibrate = true;
 
-bool manual = false;
+bool manual = true;
 
 bool Noodstop = false;
-int NoodstopIngedrukt = 4;
 
 int xPos = 0;
 

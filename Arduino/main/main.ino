@@ -13,17 +13,17 @@ void setup() {
   joystickButton.setDebounceTime(50); // set debounce time to 50 milliseconds
   limitSwitchR.setDebounceTime(50);
   limitSwitchL.setDebounceTime(50);
+  noodstopButton.setDebounceTime(50);
+  resetButton.setDebounceTime(50);
 
   TCCR2B = TCCR2B & B11111000 | B00000111;
   pinMode (XPWM,OUTPUT);
-  pinMode (XDir, OUTPUT);
-  pinMode (xEnc, INPUT);
+  pinMode (XDIR, OUTPUT);
+  pinMode (XENC, INPUT);
   
   pinMode(VRX_PIN, INPUT);
-
-  pinMode(zPin, OUTPUT);
   
-  pinMode(NoodstopIngedrukt, INPUT_PULLUP);
+  pinMode(NOODSTOP, INPUT_PULLUP);
 
   attachInterrupt(digitalPinToInterrupt(2), encoderXadd, RISING);
 }
@@ -31,9 +31,11 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   joystickButton.loop(); // MUST call the loop() function first
+  noodstopButton.loop();
+  resetButton.loop();
   
   //Noodstop check
-  if (!digitalRead(NoodstopIngedrukt) && !Noodstop)
+  if (noodstopButton.isPressed() && !Noodstop)
   {
     Noodstop = true;
     sendTransmission("NT");  
@@ -49,6 +51,7 @@ void loop() {
 
   if(Noodstop) {
     motorXstop(); 
+    Serial.println("NOODSTOP");
   } else if (!Noodstop){
     if (calibrate) {
       if(!zAxisCalibrated){
@@ -91,6 +94,7 @@ void loop() {
           }
         }
       } else {
+
         if (motorXgoTo(xPosBoxes[0])){
           Serial.println("Succes!");
         }
@@ -130,6 +134,16 @@ void loop() {
     xPos = 0;
   } else if (borderHitLeft == true) {
     borderHitLeft = false;
+  }
+
+  if (resetButton.isPressed()){
+    Noodstop = false;
+    calibrate = true;
+    
+    zAxisCalibrated = false;
+    yAxisCalibrated = false;
+    zAxisMessageSent = false;
+    sendTransmission("NF");    
   }
 
 }

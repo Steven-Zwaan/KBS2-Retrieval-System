@@ -14,3 +14,23 @@ void sendTransmission(String message) {
   Wire.write(message.c_str());
   Wire.endTransmission();
 }
+
+void updateLEDS(){
+  if (noodstop) {
+    analogWrite(RED,1023);
+    digitalWrite(ORANGE,LOW);
+    digitalWrite(GREEN,LOW);
+
+  } else {
+    if (manual){
+      analogWrite(RED,0);
+      digitalWrite(ORANGE,HIGH);
+      digitalWrite(GREEN,LOW);
+    } else {
+      analogWrite(RED,0);
+      digitalWrite(ORANGE,LOW);
+      digitalWrite(GREEN,HIGH);
+    }
+  }
+  
+}
