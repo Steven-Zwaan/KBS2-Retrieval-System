@@ -154,6 +154,10 @@ void ReceiveEvent(int howMany){
     recieved += (char)Wire.read();
   }
 
+  if (recieved == "MS") {
+    manual = !manual; 
+  }
+
   if (recieved == "CZF") {
     zAxisCalibrated = true;
     Serial.println("CZF recieved");
