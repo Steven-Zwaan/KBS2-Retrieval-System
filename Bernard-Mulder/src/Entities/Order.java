@@ -85,6 +85,6 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order nummer: " + id + " postcode: " + customer.getPostalCode() + " woonplaats: " + customer.getAddressLine2();
+        return "Order nummer: " + id + " postcode: " + customer.getPostalCode() + " adres: " + customer.getAddressLine2();
     }
 }

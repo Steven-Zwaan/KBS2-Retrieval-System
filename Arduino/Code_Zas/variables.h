@@ -26,8 +26,17 @@ SharpIR irSensor = SharpIR(IR_PIN, model); // new SharpIR object
 #define COMMAND_FORWARD    0x04
 #define COMMAND_BACKWARD   0x08
 
+#define BUS 1
+
+#define RED A0
+#define ORANGE 4
+#define GREEN 7
+
+#define MODE 10
+
 ezButton limitSwitchT(LS_TOP);
 ezButton limitSwitchB(LS_BOTTOM);
+ezButton modeSwitch(MODE);
 
 //ezButton button(SW_PIN);
 
@@ -54,6 +63,15 @@ bool calibrateY = false;
 bool zAs = false;
 
 int yPos = 0;
+int yPositionCurrent = 0;
+bool packagePicked = false;
+bool inPosition = false;
+bool done = false;
+
+bool manual = true;
+
+int yPosBoxes[] = {145, 625, 1160, 1650, 2200};
+int zPosBoxes[] = {17, 12, 9}; //12 might be 13 and 8 might be 9
 
 //int bValue = 0; // To store value of the button
 int yValue = 0; // To store value of the Y axis

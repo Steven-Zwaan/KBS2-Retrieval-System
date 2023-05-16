@@ -30,6 +30,10 @@ void setup() {
   pinMode (YPWM, OUTPUT);
   pinMode(VRY_PIN, INPUT);  
 
+  pinMode(RED, OUTPUT);
+  pinMode(ORANGE, OUTPUT);
+  pinMode(GREEN, OUTPUT);
+
   attachInterrupt(digitalPinToInterrupt(2), encoderYadd, RISING);
 }
 
@@ -37,6 +41,9 @@ void loop() {
   // put your main code here, to run repeatedly:
   limitSwitchT.loop(); // MUST call the loop() function first
   limitSwitchB.loop();
+  modeSwitch.loop();
+
+  updateLEDS();
 
   // read analog Y analog values
   yValue = analogRead(VRY_PIN);
@@ -49,19 +56,15 @@ void loop() {
     command;
     motorZstop();
     motorYstop();
+    Serial.print("NOODSTOP");
   } else if (!noodstop) {
     if(calibrate){
       if (calibrateZ) {
-        Serial.println("Messagerecieved");
         if(readIR() != 5){
           motorZbackward();
         } else {
-          Serial.println("Z-axis calibrated");
           motorZstop();
-          Wire.beginTransmission(1);
-          Wire.write("CZF");
-          Wire.endTransmission();
-          Serial.println("Transmission CZF send");
+          sendTransmission("CZF");
           calibrateZ = false;
           zAs = false;
           calibrateY = true;
@@ -71,54 +74,67 @@ void loop() {
           motorYdown();
         } else {
           motorYstop();
-          Wire.beginTransmission(1);
-          Wire.write("CYF");
-          Wire.endTransmission();
-          Serial.println("Transmission CYF send");
+          sendTransmission("CYF");
           calibrateY = false;
         }
       }
 
     } else {
-      if (zAs){
-      // check up/down commands
-        if (yValue < FORWARD_THRESHOLD)
-          command = command | COMMAND_FORWARD;
-        else if (yValue > BACKWARD_THRESHOLD)
-          command = command | COMMAND_BACKWARD;
-
-        // NOTE: AT A TIME, THERE MAY BE NO COMMAND, ONE COMMAND OR TWO COMMANDS
-
-        // print command to serial and process command
-        if (((command & COMMAND_FORWARD) & COMMAND_FORWARD) && (readIR() < 17)) {
-          // TODO: add your task here
-          motorZforward();
-
-        } else if (((command & COMMAND_BACKWARD) & COMMAND_BACKWARD) && (readIR() > 5)) {
-          // TODO: add your task here
-          motorZbackward();
-
-        } else  {
-          motorZstop();
-        
-        }
-      } else {
+      if(manual){
+        if(zAs){
         // check up/down commands
-        if (yValue < UP_THRESHOLD)
-          command = command | COMMAND_UP;
-        else if (yValue > DOWN_THRESHOLD)
-          command = command | COMMAND_DOWN;
+          if (yValue < FORWARD_THRESHOLD)
+            command = command | COMMAND_FORWARD;
+          else if (yValue > BACKWARD_THRESHOLD)
+            command = command | COMMAND_BACKWARD;
 
-        // print command to serial and process command 
-        if (((command & COMMAND_UP) & COMMAND_UP) && !borderHitTop) {
-          motorYup();
+          // NOTE: AT A TIME, THERE MAY BE NO COMMAND, ONE COMMAND OR TWO COMMANDS
 
-        } else if (((command & COMMAND_DOWN) & COMMAND_DOWN) && !borderHitBottom) {
-          motorYdown();
+          // print command to serial and process command
+          if (((command & COMMAND_FORWARD) & COMMAND_FORWARD) && (readIR() < 17)) {
+            // TODO: add your task here
+            motorZforward();
 
-        } else  {
-          motorYstop();
+          } else if (((command & COMMAND_BACKWARD) & COMMAND_BACKWARD) && (readIR() > 5)) {
+            // TODO: add your task here
+            motorZbackward();
+
+          } else  {
+            motorZstop();
+          
+          }
+        } else {
+          // check up/down commands
+          if (yValue < UP_THRESHOLD)
+            command = command | COMMAND_UP;
+          else if (yValue > DOWN_THRESHOLD)
+            command = command | COMMAND_DOWN;
+
+          // print command to serial and process command 
+          if (((command & COMMAND_UP) & COMMAND_UP) && !borderHitTop) {
+            motorYup();
+            // Serial.print(" Y: ");
+            // Serial.println(yPos);
+
+          } else if (((command & COMMAND_DOWN) & COMMAND_DOWN) && !borderHitBottom) {
+            motorYdown();
+            // Serial.print(" Y: ");
+            // Serial.println(yPos);
+
+          } else  {
+            motorYstop();
+          }
+        } 
+      } else {
+        if (!done){
+          motorYgoTo(yPosBoxes[4]);
+        } 
+        else if(motorZpickUp(zPosBoxes[2]) && done){
+          // Serial.println("Succes!");
         }
+        // if(motorZpickUp(zPosBoxes[0])){
+        //   // Serial.println("Succes!");
+        // }
       }
     }
   }
@@ -140,12 +156,13 @@ void loop() {
   {
     borderHitBottom = true;
     yPos = 0;
-
   } else if (borderHitBottom == true) {
     borderHitBottom = false;
   }
-  // Serial.print(" Y: ");
-  // Serial.println(yPos);
+
+  if (modeSwitch.isPressed()){
+    manual = !manual; 
+  }
 }
 
 void RequestEvent(){
@@ -166,6 +183,12 @@ void RecieveEvent(int howMany){
 
   if (recieved == "NT"){
     noodstop = true;
+    
+  } else if (recieved == "NF"){
+    noodstop = false;
+    calibrate = true;
+    calibrateZ = false;
+    calibrateY = false;
   }
 
   if(recieved == "CSZ"){
@@ -178,7 +201,6 @@ void RecieveEvent(int howMany){
 
   if (recieved == "CF"){
     calibrate = false;
-    Serial.println("Calibration process completed");
   }
 }
 

@@ -8,3 +8,5 @@ void motorXstop();
 void encoderXadd();
 
 bool motorXgoTo(int xPosition);
+
+void sendTransmission(String message);
