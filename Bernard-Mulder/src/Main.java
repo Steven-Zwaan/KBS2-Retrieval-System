@@ -1,9 +1,13 @@
 import Entities.*;
 
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         MainScreen scherm = new MainScreen();
         ArduinoConnection arduino = new ArduinoConnection("COM3");
+        arduino.openPort();
+        arduino.sendData((byte) 'M', (byte) 5, (byte) 3);
 
 
 //        Products products = new Products();

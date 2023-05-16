@@ -94,10 +94,28 @@ void loop() {
           }
         }
       } else {
+          // check if data is available
+          int rxlen = Serial.available(); // number of bytes available in Serial buffer
+          if (rxlen > 0) {
+            int rlen; // number of bytes to read
+            if (rxlen > BUFFER_SIZE){
+              rlen = BUFFER_SIZE;    // if yes, read BUFFER_SIZE bytes. The remaining will be read in the next time
+            } // check if the data exceeds the buffer size
+            else {
+              rlen = rxlen;
+            }
 
-        if (motorXgoTo(xPosBoxes[0])){
-          Serial.println("Succes!");
-        }
+            // read the incoming bytes:
+            rlen = Serial.readBytes(buf, rlen);
+
+            // prints the received data
+            Serial.print("I received: ");
+            for(int i = 0; i < rlen; i++)
+              Serial.print(buf[i]);
+          }
+        // if (motorXgoTo(xPosBoxes[0])){
+        //   Serial.println("Succes!");
+        // }
       }
     }
   }

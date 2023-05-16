@@ -54,7 +54,7 @@ bool zAs = false;
 
 bool calibrate = true;
 
-bool manual = true;
+bool manual = false;
 
 bool Noodstop = false;
 
@@ -65,3 +65,6 @@ int xPosBoxes[] = {100, 800, 1600, 2300, 3000};
 int xValue = 0; // To store value of the X axis
 int bValue = 0; // To store value of the button
 int command = COMMAND_NO; //stop
+
+const int BUFFER_SIZE = 3;
+char buf[BUFFER_SIZE]; // application buffer
