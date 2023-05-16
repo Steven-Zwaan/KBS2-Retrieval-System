@@ -23,7 +23,7 @@ void setup() {
 
   pinMode(zPin, OUTPUT);
   
-  pinMode(NoodstopIngedrukt, INPUT_PULLUP);
+  pinMode(NOODSTOPBUTTON, INPUT_PULLUP);
 
   attachInterrupt(digitalPinToInterrupt(2), encoderXadd, RISING);
 }
@@ -33,7 +33,7 @@ void loop() {
   joystickButton.loop(); // MUST call the loop() function first
   
   //Noodstop check
-  if (!digitalRead(NoodstopIngedrukt) && !Noodstop)
+  if (!digitalRead(NOODSTOPBUTTON) && !Noodstop)
   {
     Noodstop = true;
     Wire.beginTransmission(9);
@@ -108,7 +108,7 @@ void loop() {
   }
   
 
-  bValue = joystickButton.getState();
+  joystickButton = joystickButton.getState();
 
   if (joystickButton.isPressed() && zAs == false) {
     zAs = true;

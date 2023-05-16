@@ -44,12 +44,12 @@ bool calibrate = true;
 bool manual = true;
 
 bool Noodstop = false;
-int NoodstopIngedrukt = 4;
+int NOODSTOPBUTTON = 4;
 
 int xPos = 0;
 
 int xPosBoxes[] = {100, 800, 1600, 2300, 3000};
 
 int xValue = 0; // To store value of the X axis
-int bValue = 0; // To store value of the button
+int joystickButton = 0; // To store value of the button
 int command = COMMAND_NO; //stop
