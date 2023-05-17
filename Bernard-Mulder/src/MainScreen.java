@@ -38,6 +38,7 @@ public class MainScreen extends JFrame implements ActionListener {
 	OrderLine selectedOrderLine;
 
 	JButton aanpassenOrderLine;
+	WeergavePanel weergavePanel;
 
 
 
@@ -279,6 +280,9 @@ public class MainScreen extends JFrame implements ActionListener {
 		adressLinesPanel.add(adressLinesKnoppen, BorderLayout.SOUTH);
 
 		JButton pickOrder = new JButton("Order Picken");
+		pickOrder.addActionListener(e -> {
+			WeergavePanel.gepickteOrder = selectedOrder;
+		});
 		adressLinesKnoppen.add(pickOrder);
 
 		aanpassenOrderLine = new JButton("Product aanpassen");
@@ -300,7 +304,7 @@ public class MainScreen extends JFrame implements ActionListener {
 				adres.setText("Adres: " + selectedOrder.getCustomer().getAddressLine2());
 				postcode.setText("Postcode: " + selectedOrder.getCustomer().getPostalCode());
 				woonplaats.setText("Woonplaats: " + selectedOrder.getCustomer().getCity());
-				telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer().getName());
+				telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer());
 
 				ProductView.setVisible(true);
 				adressLinesPanel.setVisible(true);
@@ -402,7 +406,8 @@ public class MainScreen extends JFrame implements ActionListener {
 		root.add("Orders", OrderPanel);
 
 		// Setup WeergaveScreen
-		root.add("Weergave", new WeergavePanel());
+		weergavePanel = new WeergavePanel();
+		root.add("Weergave", weergavePanel);
 
 		// Setup HelpScreen
 		JPanel HelpPanel = new JPanel();
@@ -430,6 +435,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("Orders")){
 			cardLayout.show(root, "Orders");
 		} else if (e.getActionCommand().equals("Weergave")){
+			weergavePanel.refreshPanel();
 			cardLayout.show(root, "Weergave");
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");

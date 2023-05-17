@@ -17,6 +17,7 @@ public class OrderScreenEditPopup extends JDialog implements ActionListener {
         this.setModal(false);
         this.setTitle(titel);
         this.orderLine = orderLine;
+        this.setLocationRelativeTo(null);
 
         JLabel gepickteAantalLabel = new JLabel("Gepickte aantal");
         JLabel totaleAantalLabel = new JLabel("totale aantal");

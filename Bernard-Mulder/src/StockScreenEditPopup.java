@@ -19,6 +19,7 @@ public class StockScreenEditPopup extends JDialog implements ActionListener{
 		this.setLayout(new GridLayout(2,2));
 		setVisible(true);
 		this.setModal(false);
+		this.setLocationRelativeTo(null);
 
 		this.setTitle(title);
 

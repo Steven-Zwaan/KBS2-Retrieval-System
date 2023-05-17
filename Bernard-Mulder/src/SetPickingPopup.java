@@ -11,6 +11,7 @@ public class SetPickingPopup extends JDialog implements ActionListener {
         this.setLayout (new GridLayout(2,1));
         this.setModal(false);
         this.setTitle((setPickingDate) ? "datum aangepast" : "error");
+        this.setLocationRelativeTo(null);
 
         JLabel message = new JLabel();
         message.setText((setPickingDate) ? "De Picking datum is succesvol aangepast" : "De picking datum is niet aangepast");
