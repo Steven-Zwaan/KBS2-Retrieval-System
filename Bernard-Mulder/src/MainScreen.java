@@ -118,10 +118,6 @@ public class MainScreen extends JFrame implements ActionListener {
 		buttonAanpassenStock.setActionCommand("AanpassenStock");
 		buttonAanpassenStock.addActionListener(this);
 
-		JButton buttonZoekenStock = new JButton("Zoeken");
-		buttonZoekenStock.setActionCommand("Zoeken");
-		buttonZoekenStock.addActionListener(this);
-
 		JTextField zoekenStock = new JTextField(10);
 		zoekenStock.setText("Zoeken...");
 		zoekenStock.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -207,7 +203,6 @@ public class MainScreen extends JFrame implements ActionListener {
 
 
 		selectedStockScreen.add(buttonAanpassenStock);
-		selectedStockScreen.add(buttonZoekenStock);
 		selectedStockScreen.add(zoekenStock);
 		selectedStockScreen.add(selectedProductLabel);
 
@@ -323,9 +318,6 @@ public class MainScreen extends JFrame implements ActionListener {
 		buttonAanpassenPickDatum.setActionCommand("AanpassenPickDatum");
 		buttonAanpassenPickDatum.addActionListener(this);
 
-		JButton buttonzoekenOrder = new JButton("Zoeken");
-		buttonzoekenOrder.setActionCommand("Zoeken");
-		buttonzoekenOrder.addActionListener(this);
 
 		zoekenOrder = new JTextField(10);
 		zoekenOrder.setText("Zoeken...");
@@ -396,7 +388,6 @@ public class MainScreen extends JFrame implements ActionListener {
 		JPanel selectedOrderScreen = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 		selectedOrderScreen.add(buttonAanpassenPickDatum);
-		selectedOrderScreen.add(buttonzoekenOrder);
 		selectedOrderScreen.add(zoekenOrder);
 
 		OrderPanel.add(selectedOrderScreen, BorderLayout.SOUTH);
