@@ -40,7 +40,7 @@ public class MainScreen extends JFrame implements ActionListener {
 	OrderLine selectedOrderLine;
 
 	JButton aanpassenOrderLine;
-
+	WeergaveDrawPanel drawPanel;
 
 
 	public MainScreen(){
@@ -423,16 +423,18 @@ public class MainScreen extends JFrame implements ActionListener {
 		JPanel HelpPanel = new JPanel();
 		JScrollPane scrollPaneHelpScreen = new JScrollPane(HelpPanel);
 
-		HelpPanel.setLayout(new BoxLayout(HelpPanel, BoxLayout.Y_AXIS));
-		HelpPanel.add(Box.createVerticalGlue());
 
-		scrollPaneHelpScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPaneHelpScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		drawPanel = new WeergaveDrawPanel();
 
-		JLabel HelpLabel = new JLabel("Help");
-		HelpPanel.add(HelpLabel);
+		HelpPanel.add(drawPanel);
 
-		root.add("Help", scrollPaneHelpScreen);
+		JButton testbutton = new JButton("Test");
+		testbutton.setActionCommand("UpdatePos");
+		testbutton.addActionListener(this);
+		HelpPanel.add(testbutton);
+
+
+		root.add("Help", HelpPanel);
 
 		setVisible(true);
 	}
@@ -462,6 +464,9 @@ public class MainScreen extends JFrame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("AanpassenPickDatum")) {
 			SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
+		} else if (e.getActionCommand().equals("UpdatePos")){
+			drawPanel.updatePos(250, 320, 200);
+			drawPanel.repaint();
 		}
 		this.voorraadList.revalidate();
 		this.orders.revalidate();

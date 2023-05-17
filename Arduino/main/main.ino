@@ -95,7 +95,7 @@ void loop() {
         }
       } else {
 
-        if (motorXgoTo(xPosBoxes[0])){
+        if (motorXgoTo(xPosBoxes[1])){
           Serial.println("Succes!");
         }
       }

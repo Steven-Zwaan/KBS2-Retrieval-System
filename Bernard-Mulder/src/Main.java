@@ -6,6 +6,7 @@ public class Main {
         ArduinoConnection arduino = new ArduinoConnection("COM3");
 
 
+
 //        Products products = new Products();
 //        products.storeProductsFromDatabase();
 //        products.storeProductFromDatabase(98);
