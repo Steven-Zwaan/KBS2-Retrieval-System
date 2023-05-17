@@ -10,8 +10,6 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MainScreen extends JFrame implements ActionListener {
 
@@ -41,6 +39,7 @@ public class MainScreen extends JFrame implements ActionListener {
 
 	JButton aanpassenOrderLine;
 	WeergaveDrawPanel drawPanel;
+	WeergavePanel weergavePanel;
 
 
 	public MainScreen(){
@@ -281,6 +280,9 @@ public class MainScreen extends JFrame implements ActionListener {
 		adressLinesPanel.add(adressLinesKnoppen, BorderLayout.SOUTH);
 
 		JButton pickOrder = new JButton("Order Picken");
+		pickOrder.addActionListener(e -> {
+			WeergavePanel.gepickteOrder = selectedOrder;
+		});
 		adressLinesKnoppen.add(pickOrder);
 
 		aanpassenOrderLine = new JButton("Product aanpassen");
@@ -302,7 +304,7 @@ public class MainScreen extends JFrame implements ActionListener {
 				adres.setText("Adres: " + selectedOrder.getCustomer().getAddressLine2());
 				postcode.setText("Postcode: " + selectedOrder.getCustomer().getPostalCode());
 				woonplaats.setText("Woonplaats: " + selectedOrder.getCustomer().getCity());
-				telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer().getName());
+				telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer());
 
 				ProductView.setVisible(true);
 				adressLinesPanel.setVisible(true);
@@ -404,20 +406,8 @@ public class MainScreen extends JFrame implements ActionListener {
 		root.add("Orders", OrderPanel);
 
 		// Setup WeergaveScreen
-		JPanel WeergavePanel = new JPanel();
-		JScrollPane scrollPaneWeergaveScreen = new JScrollPane(WeergavePanel);
-
-		WeergavePanel.setLayout(new BoxLayout(WeergavePanel, BoxLayout.Y_AXIS));
-		WeergavePanel.add(Box.createVerticalGlue());
-
-		scrollPaneWeergaveScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPaneWeergaveScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-
-		JLabel WeergaveLabel = new JLabel("Weergave");
-		WeergavePanel.add(WeergaveLabel);
-
-		root.add("Weergave", scrollPaneWeergaveScreen);
+		weergavePanel = new WeergavePanel();
+		root.add("Weergave", weergavePanel);
 
 		// Setup HelpScreen
 		JPanel HelpPanel = new JPanel();
@@ -447,6 +437,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("Orders")){
 			cardLayout.show(root, "Orders");
 		} else if (e.getActionCommand().equals("Weergave")){
+			weergavePanel.refreshPanel();
 			cardLayout.show(root, "Weergave");
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");
@@ -480,5 +471,6 @@ public class MainScreen extends JFrame implements ActionListener {
 			return string.substring(0, length) + "...";
 		}
 	}
+
 }
 
