@@ -16,8 +16,6 @@
 #define COMMAND_UP     0x04 // 00000100
 #define COMMAND_DOWN   0x08 // 00001000
 
-#define BUS 9
-
 ezButton joystickButton(SW_PIN);
 ezButton limitSwitchR(LS_RIGHT);
 ezButton limitSwitchL(LS_LEFT);
@@ -43,15 +41,15 @@ bool zAs = false;
 
 bool calibrate = true;
 
-bool manual = false;
+bool manual = true;
 
 bool Noodstop = false;
-int NoodstopIngedrukt = 4;
+int NOODSTOPBUTTON = 4;
 
 int xPos = 0;
 
 int xPosBoxes[] = {100, 800, 1600, 2300, 3000};
 
 int xValue = 0; // To store value of the X axis
-int bValue = 0; // To store value of the button
+int joystickButton = 0; // To store value of the button
 int command = COMMAND_NO; //stop

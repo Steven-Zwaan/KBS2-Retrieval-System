@@ -23,7 +23,7 @@ void setup() {
 
   pinMode(zPin, OUTPUT);
   
-  pinMode(NoodstopIngedrukt, INPUT_PULLUP);
+  pinMode(NOODSTOPBUTTON, INPUT_PULLUP);
 
   attachInterrupt(digitalPinToInterrupt(2), encoderXadd, RISING);
 }
@@ -33,10 +33,12 @@ void loop() {
   joystickButton.loop(); // MUST call the loop() function first
   
   //Noodstop check
-  if (!digitalRead(NoodstopIngedrukt) && !Noodstop)
+  if (!digitalRead(NOODSTOPBUTTON) && !Noodstop)
   {
     Noodstop = true;
-    sendTransmission("NT");  
+    Wire.beginTransmission(9);
+    Wire.write("NT");
+    Wire.endTransmission();    
     command;
   }
 
@@ -53,7 +55,11 @@ void loop() {
     if (calibrate) {
       if(!zAxisCalibrated){
         if (!zAxisMessageSent) {
-          sendTransmission("CSZ");
+          Serial.println("Test - Preparing transmission Z-axis");
+          Wire.beginTransmission(9);
+          Wire.write("CSZ");
+          Wire.endTransmission();
+          Serial.println("Test - Transmission send Z-axis");
           zAxisMessageSent = true;
         }
       } else {
@@ -63,9 +69,12 @@ void loop() {
           motorXstop();
           xPos = 0;
           if (yAxisCalibrated) {
-            sendTransmission("CF");
+            Wire.beginTransmission(9);
+            Wire.write("CF");
+            Wire.endTransmission();
             calibrate = false;
             zAs = false;
+            Serial.println("Calibration process complete");
           }
         }
       }
@@ -91,7 +100,7 @@ void loop() {
           }
         }
       } else {
-        if (motorXgoTo(xPosBoxes[0])){
+        if (motorXgoTo(xPosBoxes[2])){
           Serial.println("Succes!");
         }
       }
@@ -99,14 +108,18 @@ void loop() {
   }
   
 
-  bValue = joystickButton.getState();
+  joystickButton = joystickButton.getState();
 
   if (joystickButton.isPressed() && zAs == false) {
     zAs = true;
-    sendTransmission("ZT");
+    Wire.beginTransmission(9);
+    Wire.write("ZT");
+    Wire.endTransmission();
   } else if (joystickButton.isPressed()) {
     zAs = false;
-    sendTransmission("ZF");
+    Wire.beginTransmission(9);
+    Wire.write("ZF");
+    Wire.endTransmission();
   }
 
   limitSwitchR.loop();

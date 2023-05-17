@@ -15,3 +15,5 @@ int readIR();
 
 // Communication
 void sendTransmission(String message);
+
+void updateLEDS();  

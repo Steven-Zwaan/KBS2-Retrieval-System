@@ -30,6 +30,10 @@ void setup() {
   pinMode (YPWM, OUTPUT);
   pinMode(VRY_PIN, INPUT);  
 
+  pinMode(RED, OUTPUT);
+  pinMode(ORANGE, OUTPUT);
+  pinMode(GREEN, OUTPUT);
+
   attachInterrupt(digitalPinToInterrupt(2), encoderYadd, RISING);
 }
 
@@ -37,6 +41,9 @@ void loop() {
   // put your main code here, to run repeatedly:
   limitSwitchT.loop(); // MUST call the loop() function first
   limitSwitchB.loop();
+  modeSwitch.loop();
+
+  updateLEDS();
 
   // read analog Y analog values
   yValue = analogRead(VRY_PIN);
@@ -49,6 +56,7 @@ void loop() {
     command;
     motorZstop();
     motorYstop();
+    Serial.print("NOODSTOP");
   } else if (!noodstop) {
     if(calibrate){
       if (calibrateZ) {
@@ -121,7 +129,7 @@ void loop() {
         if (!done){
           motorYgoTo(yPosBoxes[4]);
         } 
-        else if(motorZpickUp(zPosBoxes[0]) && done){
+        else if(motorZpickUp(zPosBoxes[2]) && done){
           // Serial.println("Succes!");
         }
         // if(motorZpickUp(zPosBoxes[0])){
@@ -148,12 +156,13 @@ void loop() {
   {
     borderHitBottom = true;
     yPos = 0;
-
   } else if (borderHitBottom == true) {
     borderHitBottom = false;
   }
-  // Serial.print(" Y: ");
-  // Serial.println(yPos);
+
+  if (modeSwitch.isPressed()){
+    manual = !manual; 
+  }
 }
 
 void RequestEvent(){
@@ -174,6 +183,12 @@ void RecieveEvent(int howMany){
 
   if (recieved == "NT"){
     noodstop = true;
+    
+  } else if (recieved == "NF"){
+    noodstop = false;
+    calibrate = true;
+    calibrateZ = false;
+    calibrateY = false;
   }
 
   if(recieved == "CSZ"){
@@ -186,7 +201,6 @@ void RecieveEvent(int howMany){
 
   if (recieved == "CF"){
     calibrate = false;
-    Serial.println("Calibration process completed");
   }
 }
 
