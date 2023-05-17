@@ -10,8 +10,6 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MainScreen extends JFrame implements ActionListener {
 
@@ -392,20 +390,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		root.add("Orders", OrderPanel);
 
 		// Setup WeergaveScreen
-		JPanel WeergavePanel = new JPanel();
-		JScrollPane scrollPaneWeergaveScreen = new JScrollPane(WeergavePanel);
-
-		WeergavePanel.setLayout(new BoxLayout(WeergavePanel, BoxLayout.Y_AXIS));
-		WeergavePanel.add(Box.createVerticalGlue());
-
-		scrollPaneWeergaveScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPaneWeergaveScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-
-		JLabel WeergaveLabel = new JLabel("Weergave");
-		WeergavePanel.add(WeergaveLabel);
-
-		root.add("Weergave", scrollPaneWeergaveScreen);
+		root.add("Weergave", new WeergavePanel());
 
 		// Setup HelpScreen
 		JPanel HelpPanel = new JPanel();
