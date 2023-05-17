@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MainScreen extends JFrame implements ActionListener {
 
+	//menuBar variables
 	private JMenuBar menuBar;
 	private JMenuItem menuButtonVoorraad;
 	private JMenuItem menuButtonOrders;
@@ -40,7 +41,6 @@ public class MainScreen extends JFrame implements ActionListener {
 	OrderLine selectedOrderLine;
 
 	JButton aanpassenOrderLine;
-
 
 
 	public MainScreen(){
@@ -92,9 +92,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		menuBar.add(menuButton1);
 		menuBar.add(menuButton2);
 		menuBar.add(menuButtonHelp);
-
-
-
+/*
 		// Setup StockScreen
 		productList = new ProductList();
 		productList.getProductsFromDatabase();
@@ -208,9 +206,8 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		StockPanel.add(selectedStockScreen, BorderLayout.SOUTH);
 
-
 		root.add("Voorraad", StockPanel);
-
+*/
 		// Setup OrderScreen
 		orderList = new OrderList();
 		orderList.getOrdersFromDatabase();
@@ -440,7 +437,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");
 		} else if (e.getActionCommand().equals("AanpassenStock")){
-			StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProducts().get(index), "Change stock of '" + productList.getProducts().get(index).getName() + "'", productList.getProducts().get(index).getStock());
+//			StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProducts().get(index), "Change stock of '" + productList.getProducts().get(index).getName() + "'", productList.getProducts().get(index).getStock());
 //			productList.getProducts().get(index).setStockFromDatabase();
 //			this.voorraadList.revalidate();
 		} else if (e.getActionCommand().equals("AanpassenOrder")){
