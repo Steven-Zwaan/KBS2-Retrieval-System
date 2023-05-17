@@ -20,7 +20,6 @@ public class WeergavePanel extends JPanel implements ActionListener {
         viewPanel = new JPanel();
         viewPanel.setBackground(new Color(255, 0,0));
         this.add(viewPanel, BorderLayout.CENTER);
-
         gepickteOrder = new JList();
         orderLineScrollPane = new JScrollPane(gepickteOrder);
         this.add(orderLineScrollPane, BorderLayout.EAST);

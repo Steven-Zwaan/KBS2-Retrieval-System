@@ -460,5 +460,6 @@ public class MainScreen extends JFrame implements ActionListener {
 			return string.substring(0, length) + "...";
 		}
 	}
+
 }
 
