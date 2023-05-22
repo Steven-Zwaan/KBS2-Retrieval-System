@@ -1,6 +1,3 @@
-import Entities.Product;
-import Entities.ProductList;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

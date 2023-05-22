@@ -10,6 +10,7 @@ public class Main {
         arduino.sendData((byte) 'M', (byte) 5, (byte) 3);
 
 
+
 //        Products products = new Products();
 //        products.storeProductsFromDatabase();
 //        products.storeProductFromDatabase(98);

@@ -1,4 +1,4 @@
-package Entities;
+package Models;
 
 import Database.DatabaseConnector;
 
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ProductList {
-    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<Product> productList = new ArrayList<>();
     private DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public void getProductsFromDatabase(){
@@ -16,9 +16,9 @@ public class ProductList {
         try {
             PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
-            this.products.clear();
+            this.productList.clear();
             while(resultSet.next()){
-                this.products.add(new Product(resultSet.getInt("StockItemID"), resultSet.getString("StockItemName"), resultSet.getInt("QuantityOnHand")));
+                this.productList.add(new Product(resultSet.getInt("StockItemID"), resultSet.getString("StockItemName"), resultSet.getInt("QuantityOnHand")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -32,9 +32,9 @@ public class ProductList {
             PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            this.products.clear();
+            this.productList.clear();
             while(resultSet.next()){
-                this.products.add(new Product(resultSet.getInt("StockItemID"), resultSet.getString("StockItemName"), resultSet.getInt("QuantityOnHand")));
+                this.productList.add(new Product(resultSet.getInt("StockItemID"), resultSet.getString("StockItemName"), resultSet.getInt("QuantityOnHand")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,9 +48,9 @@ public class ProductList {
             PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
             statement.setString(1, "%" + name + "%");
             ResultSet resultSet = statement.executeQuery();
-            this.products.clear();
+            this.productList.clear();
             while (resultSet.next()) {
-                this.products.add(new Product(resultSet.getInt("StockItemID"), resultSet.getString("StockItemName"), resultSet.getInt("QuantityOnHand")));
+                this.productList.add(new Product(resultSet.getInt("StockItemID"), resultSet.getString("StockItemName"), resultSet.getInt("QuantityOnHand")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,7 +59,7 @@ public class ProductList {
         }
     }
 
-    public ArrayList<Product> getProducts() {
-        return products;
+    public ArrayList<Product> getProductList() {
+        return productList;
     }
 }

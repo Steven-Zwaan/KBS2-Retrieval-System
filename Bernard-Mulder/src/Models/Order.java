@@ -1,9 +1,8 @@
-package Entities;
+package Models;
 
 import Database.DatabaseConnector;
 
 import java.sql.*;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Order {

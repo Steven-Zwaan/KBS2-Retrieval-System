@@ -1,4 +1,4 @@
-import Entities.*;
+import Models.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -10,8 +10,6 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MainScreen extends JFrame implements ActionListener {
 
@@ -40,7 +38,8 @@ public class MainScreen extends JFrame implements ActionListener {
 	OrderLine selectedOrderLine;
 
 	JButton aanpassenOrderLine;
-
+	WeergaveDrawPanel drawPanel;
+	WeergavePanel weergavePanel;
 
 
 	public MainScreen(){
@@ -102,7 +101,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		JPanel StockPanel = new JPanel();
 		StockPanel.setLayout(new BorderLayout());
 
-		voorraadList = new JList(productList.getProducts().toArray());
+		voorraadList = new JList(productList.getProductList().toArray());
 		JScrollPane scrollPaneStockScreen = new JScrollPane(voorraadList);
 
 		scrollPaneStockScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -142,17 +141,17 @@ public class MainScreen extends JFrame implements ActionListener {
 		zoekenStock.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				filterStock(voorraadList, productList.getProducts());
+				filterStock(voorraadList, productList.getProductList());
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				filterStock(voorraadList, productList.getProducts());
+				filterStock(voorraadList, productList.getProductList());
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				filterStock(voorraadList, productList.getProducts());
+				filterStock(voorraadList, productList.getProductList());
 			}
 
 			public void filterStock(JList<Product> product, List<Product> productList) {
@@ -199,7 +198,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		voorraadList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				selectedProductLabel.setText(productList.getProducts().get(voorraadList.getSelectedIndex()).toString());
+				selectedProductLabel.setText(productList.getProductList().get(voorraadList.getSelectedIndex()).toString());
 				index = voorraadList.getSelectedIndex();
 			}
 		});
@@ -223,7 +222,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		JPanel OrderPanel = new JPanel();
 		OrderPanel.setLayout(new BorderLayout());
 
-		orderResult =orderList.getOrders();
+		orderResult =orderList.getOrderList();
 		orders = new JList(orderResult.toArray());
 		JScrollPane scrollPaneOrderScreen = new JScrollPane(orders);
 
@@ -240,7 +239,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		ProductView.setLayout(new BoxLayout(ProductView, BoxLayout.Y_AXIS));
 		OrderPanel.add(ProductView, BorderLayout.CENTER);
 
-		selectedOrder = orderList.getOrders().get(0);
+		selectedOrder = orderList.getOrderList().get(0);
 		JLabel OrderNummer = new JLabel();
 		ProductView.add(OrderNummer);
 
@@ -281,6 +280,9 @@ public class MainScreen extends JFrame implements ActionListener {
 		adressLinesPanel.add(adressLinesKnoppen, BorderLayout.SOUTH);
 
 		JButton pickOrder = new JButton("Order Picken");
+		pickOrder.addActionListener(e -> {
+			WeergavePanel.gepickteOrder = selectedOrder;
+		});
 		adressLinesKnoppen.add(pickOrder);
 
 		aanpassenOrderLine = new JButton("Product aanpassen");
@@ -294,7 +296,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		orders.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				selectedOrder = orderList.getOrders().get(orders.getSelectedIndex());
+				selectedOrder = orderList.getOrderList().get(orders.getSelectedIndex());
 				orderLines.clearSelection();
 				orderLines.setListData(selectedOrder.getOrderLines().toArray());
 				OrderNummer.setText("Ordernummer: " + selectedOrder.getId());
@@ -302,7 +304,7 @@ public class MainScreen extends JFrame implements ActionListener {
 				adres.setText("Adres: " + selectedOrder.getCustomer().getAddressLine2());
 				postcode.setText("Postcode: " + selectedOrder.getCustomer().getPostalCode());
 				woonplaats.setText("Woonplaats: " + selectedOrder.getCustomer().getCity());
-				telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer().getName());
+				telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer());
 
 				ProductView.setVisible(true);
 				adressLinesPanel.setVisible(true);
@@ -404,35 +406,25 @@ public class MainScreen extends JFrame implements ActionListener {
 		root.add("Orders", OrderPanel);
 
 		// Setup WeergaveScreen
-		JPanel WeergavePanel = new JPanel();
-		JScrollPane scrollPaneWeergaveScreen = new JScrollPane(WeergavePanel);
-
-		WeergavePanel.setLayout(new BoxLayout(WeergavePanel, BoxLayout.Y_AXIS));
-		WeergavePanel.add(Box.createVerticalGlue());
-
-		scrollPaneWeergaveScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPaneWeergaveScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-
-		JLabel WeergaveLabel = new JLabel("Weergave");
-		WeergavePanel.add(WeergaveLabel);
-
-		root.add("Weergave", scrollPaneWeergaveScreen);
+		weergavePanel = new WeergavePanel();
+		root.add("Weergave", weergavePanel);
 
 		// Setup HelpScreen
 		JPanel HelpPanel = new JPanel();
 		JScrollPane scrollPaneHelpScreen = new JScrollPane(HelpPanel);
 
-		HelpPanel.setLayout(new BoxLayout(HelpPanel, BoxLayout.Y_AXIS));
-		HelpPanel.add(Box.createVerticalGlue());
 
-		scrollPaneHelpScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPaneHelpScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		drawPanel = new WeergaveDrawPanel();
 
-		JLabel HelpLabel = new JLabel("Help");
-		HelpPanel.add(HelpLabel);
+		HelpPanel.add(drawPanel);
 
-		root.add("Help", scrollPaneHelpScreen);
+		JButton testbutton = new JButton("Test");
+		testbutton.setActionCommand("UpdatePos");
+		testbutton.addActionListener(this);
+		HelpPanel.add(testbutton);
+
+
+		root.add("Help", HelpPanel);
 
 		setVisible(true);
 	}
@@ -445,11 +437,12 @@ public class MainScreen extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("Orders")){
 			cardLayout.show(root, "Orders");
 		} else if (e.getActionCommand().equals("Weergave")){
+			weergavePanel.refreshPanel();
 			cardLayout.show(root, "Weergave");
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");
 		} else if (e.getActionCommand().equals("AanpassenStock")){
-			StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProducts().get(index), "Change stock of '" + productList.getProducts().get(index).getName() + "'", productList.getProducts().get(index).getStock());
+			StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProductList().get(index), "Change stock of '" + productList.getProductList().get(index).getName() + "'", productList.getProductList().get(index).getStock());
 //			productList.getProducts().get(index).setStockFromDatabase();
 //			this.voorraadList.revalidate();
 		} else if (e.getActionCommand().equals("AanpassenOrder")){
@@ -462,6 +455,9 @@ public class MainScreen extends JFrame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("AanpassenPickDatum")) {
 			SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
+		} else if (e.getActionCommand().equals("UpdatePos")){
+			drawPanel.updatePos(250, 320, 200);
+			drawPanel.repaint();
 		}
 		this.voorraadList.revalidate();
 		this.orders.revalidate();
@@ -475,5 +471,6 @@ public class MainScreen extends JFrame implements ActionListener {
 			return string.substring(0, length) + "...";
 		}
 	}
+
 }
 
