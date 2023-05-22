@@ -26,7 +26,8 @@ public class MainScreen extends JFrame implements ActionListener {
 	JList voorraadList;
 	JButton aanpassenOrderLine;
 	JList orders;
-	Order gezochteOrder;
+	OrderLine selectedOrderLine;
+	Order selectedOrder;
 
 
 	public MainScreen(){
