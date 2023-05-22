@@ -1,4 +1,4 @@
-import Entities.*;
+import Models.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -24,9 +24,12 @@ public class MainScreen extends JFrame implements ActionListener {
 	CardLayout cardLayout;
 	JPanel root;
 	JList voorraadList;
-	JButton aanpassenOrderLine;
 	JList orders;
 	OrderLine selectedOrderLine;
+
+	JButton aanpassenOrderLine;
+	WeergaveDrawPanel drawPanel;
+	WeergavePanel weergavePanel;
 	Order selectedOrder;
 
 
@@ -86,25 +89,118 @@ public class MainScreen extends JFrame implements ActionListener {
 		OrderScreen orderscreen = new OrderScreen();
 		root.add("Order", orderscreen);
 
+		orderLines.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				selectedOrderLine = selectedOrder.getOrderLines().get(orderLines.getSelectedIndex());
+			}
+		});
 
+		//setup zoekbalk
+		JButton buttonAanpassenPickDatum = new JButton("Pickdatum aanpassen");
+		buttonAanpassenPickDatum.setActionCommand("AanpassenPickDatum");
+		buttonAanpassenPickDatum.addActionListener(this);
+
+		JButton buttonzoekenOrder = new JButton("Zoeken");
+		buttonzoekenOrder.setActionCommand("Zoeken");
+		buttonzoekenOrder.addActionListener(this);
+
+		zoekenOrder = new JTextField(10);
+		zoekenOrder.setText("Zoeken...");
+		zoekenOrder.addFocusListener(new java.awt.event.FocusAdapter() {
+			public void focusGained(java.awt.event.FocusEvent evt) {
+				if (zoekenOrder.getText().equals("Zoeken...")) {
+					zoekenOrder.setText("");
+				}
+			}
+
+			public void focusLost(java.awt.event.FocusEvent evt) {
+				if (zoekenOrder.getText().isEmpty()) {
+					zoekenOrder.setText("Zoeken...");
+				}
+
+			}
+		});
+
+		zoekenOrder.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				filterOrder(orders, orderResult);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				filterOrder(orders, orderResult);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+
+				filterOrder(orders, orderResult);
+			}
+
+			public void filterOrder(JList<Order> order, List<Order> orderList) {
+				ArrayList<Order> foundOrders = new ArrayList<>();
+				try {
+					int orderID = Integer.parseInt(zoekenOrder.getText());
+					for (Order foundOrder : orderList) {
+						if (String.valueOf(foundOrder.getId()).contains(String.valueOf(orderID))) {
+							foundOrders.add(foundOrder);
+						}
+					}
+					order.setListData(foundOrders.toArray(new Order[0]));
+
+				} catch (NumberFormatException e) {
+					String orderNaam = zoekenOrder.getText();
+					if (orderNaam.equals("Zoeken...")) {
+						foundOrders.addAll(orderList);
+					}else if (orderNaam.equals("")){
+						foundOrders.addAll(orderList);
+					} else{
+						order.setListData(foundOrders.toArray(new Order[0]));
+					}
+				}
+				order.setListData(foundOrders.toArray(new Order[0]));
+				if(foundOrders.size() == 0) {
+					zoekenOrder.setBackground(Color.RED);
+				} else {
+					zoekenOrder.setBackground(Color.white);
+				}
+			}
+
+		});
+
+
+		JPanel selectedOrderScreen = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+		selectedOrderScreen.add(buttonAanpassenPickDatum);
+		selectedOrderScreen.add(buttonzoekenOrder);
+		selectedOrderScreen.add(zoekenOrder);
+
+		OrderPanel.add(selectedOrderScreen, BorderLayout.SOUTH);
+
+		root.add("Orders", OrderPanel);
 
 		// Setup WeergaveScreen
-		root.add("Weergave", new WeergavePanel());
+		weergavePanel = new WeergavePanel();
+		root.add("Weergave", weergavePanel);
 
 		// Setup HelpScreen
 		JPanel HelpPanel = new JPanel();
 		JScrollPane scrollPaneHelpScreen = new JScrollPane(HelpPanel);
 
-		HelpPanel.setLayout(new BoxLayout(HelpPanel, BoxLayout.Y_AXIS));
-		HelpPanel.add(Box.createVerticalGlue());
 
-		scrollPaneHelpScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPaneHelpScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		drawPanel = new WeergaveDrawPanel();
 
-		JLabel HelpLabel = new JLabel("Help");
-		HelpPanel.add(HelpLabel);
+		HelpPanel.add(drawPanel);
 
-		root.add("Help", scrollPaneHelpScreen);
+		JButton testbutton = new JButton("Test");
+		testbutton.setActionCommand("UpdatePos");
+		testbutton.addActionListener(this);
+		HelpPanel.add(testbutton);
+
+
+		root.add("Help", HelpPanel);
 
 		setVisible(true);
 	}
@@ -117,11 +213,12 @@ public class MainScreen extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("Orders")){
 			cardLayout.show(root, "Orders");
 		} else if (e.getActionCommand().equals("Weergave")){
+			weergavePanel.refreshPanel();
 			cardLayout.show(root, "Weergave");
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");
 		} else if (e.getActionCommand().equals("AanpassenStock")){
-//			StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProducts().get(index), "Change stock of '" + productList.getProducts().get(index).getName() + "'", productList.getProducts().get(index).getStock());
+			StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProductList().get(index), "Change stock of '" + productList.getProductList().get(index).getName() + "'", productList.getProductList().get(index).getStock());
 //			productList.getProducts().get(index).setStockFromDatabase();
 //			this.voorraadList.revalidate();
 		} else if (e.getActionCommand().equals("AanpassenOrder")){
@@ -134,6 +231,9 @@ public class MainScreen extends JFrame implements ActionListener {
 			}
 		} else if (e.getActionCommand().equals("AanpassenPickDatum")) {
 			SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
+		} else if (e.getActionCommand().equals("UpdatePos")){
+			drawPanel.updatePos(250, 320, 200);
+			drawPanel.repaint();
 		}
 		this.revalidate();
 	}
@@ -145,5 +245,6 @@ public class MainScreen extends JFrame implements ActionListener {
 			return string.substring(0, length) + "...";
 		}
 	}
+
 }
 

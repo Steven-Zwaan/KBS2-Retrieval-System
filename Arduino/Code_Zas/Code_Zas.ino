@@ -161,6 +161,7 @@ void loop() {
   }
 
   if (modeSwitch.isPressed()){
+    sendTransmission("MS");
     manual = !manual; 
   }
 }

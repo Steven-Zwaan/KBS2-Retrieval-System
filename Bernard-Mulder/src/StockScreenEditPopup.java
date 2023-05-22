@@ -1,4 +1,4 @@
-import Entities.*;
+import Models.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +19,7 @@ public class StockScreenEditPopup extends JDialog implements ActionListener{
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		this.setLayout(new GridLayout(2,2));
 		this.setModal(false);
+		this.setLocationRelativeTo(null);
 
 		this.setTitle(title);
 
