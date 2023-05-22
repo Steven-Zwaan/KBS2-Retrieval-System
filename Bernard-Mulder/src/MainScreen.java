@@ -135,8 +135,6 @@ public class MainScreen extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("AanpassenPickDatum")) {
 			SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
 		}
-		this.voorraadList.revalidate();
-		this.orders.revalidate();
 		this.revalidate();
 	}
 

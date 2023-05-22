@@ -21,9 +21,6 @@ public class OrderScreen extends JPanel implements ActionListener {
     JButton aanpassenOrderLine;
     Order selectedOrder;
     ArrayList<Order> orderResult;
-    Order gezochteOrder;
-
-    JList orderLines;
 
 
     //    OrderList orderList;
