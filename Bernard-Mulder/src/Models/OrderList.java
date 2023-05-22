@@ -1,4 +1,4 @@
-package Entities;
+package Models;
 
 import Database.DatabaseConnector;
 

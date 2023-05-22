@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import Entities.*;
+import Models.*;
 
 public class OrderScreenEditPopup extends JDialog implements ActionListener {
 

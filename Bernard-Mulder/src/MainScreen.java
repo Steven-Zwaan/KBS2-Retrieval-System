@@ -1,4 +1,4 @@
-import Entities.*;
+import Models.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

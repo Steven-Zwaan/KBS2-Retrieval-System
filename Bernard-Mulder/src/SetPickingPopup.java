@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import Entities.*;
+
 public class SetPickingPopup extends JDialog implements ActionListener {
 
     public SetPickingPopup(boolean setPickingDate, int orderID) {
