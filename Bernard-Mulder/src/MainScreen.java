@@ -101,7 +101,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		JPanel StockPanel = new JPanel();
 		StockPanel.setLayout(new BorderLayout());
 
-		voorraadList = new JList(productList.getProducts().toArray());
+		voorraadList = new JList(productList.getProductList().toArray());
 		JScrollPane scrollPaneStockScreen = new JScrollPane(voorraadList);
 
 		scrollPaneStockScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -141,17 +141,17 @@ public class MainScreen extends JFrame implements ActionListener {
 		zoekenStock.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				filterStock(voorraadList, productList.getProducts());
+				filterStock(voorraadList, productList.getProductList());
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				filterStock(voorraadList, productList.getProducts());
+				filterStock(voorraadList, productList.getProductList());
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				filterStock(voorraadList, productList.getProducts());
+				filterStock(voorraadList, productList.getProductList());
 			}
 
 			public void filterStock(JList<Product> product, List<Product> productList) {
@@ -198,7 +198,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		voorraadList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				selectedProductLabel.setText(productList.getProducts().get(voorraadList.getSelectedIndex()).toString());
+				selectedProductLabel.setText(productList.getProductList().get(voorraadList.getSelectedIndex()).toString());
 				index = voorraadList.getSelectedIndex();
 			}
 		});
@@ -222,7 +222,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		JPanel OrderPanel = new JPanel();
 		OrderPanel.setLayout(new BorderLayout());
 
-		orderResult =orderList.getOrders();
+		orderResult =orderList.getOrderList();
 		orders = new JList(orderResult.toArray());
 		JScrollPane scrollPaneOrderScreen = new JScrollPane(orders);
 
@@ -239,7 +239,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		ProductView.setLayout(new BoxLayout(ProductView, BoxLayout.Y_AXIS));
 		OrderPanel.add(ProductView, BorderLayout.CENTER);
 
-		selectedOrder = orderList.getOrders().get(0);
+		selectedOrder = orderList.getOrderList().get(0);
 		JLabel OrderNummer = new JLabel();
 		ProductView.add(OrderNummer);
 
@@ -296,7 +296,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		orders.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				selectedOrder = orderList.getOrders().get(orders.getSelectedIndex());
+				selectedOrder = orderList.getOrderList().get(orders.getSelectedIndex());
 				orderLines.clearSelection();
 				orderLines.setListData(selectedOrder.getOrderLines().toArray());
 				OrderNummer.setText("Ordernummer: " + selectedOrder.getId());
@@ -442,7 +442,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");
 		} else if (e.getActionCommand().equals("AanpassenStock")){
-			StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProducts().get(index), "Change stock of '" + productList.getProducts().get(index).getName() + "'", productList.getProducts().get(index).getStock());
+			StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProductList().get(index), "Change stock of '" + productList.getProductList().get(index).getName() + "'", productList.getProductList().get(index).getStock());
 //			productList.getProducts().get(index).setStockFromDatabase();
 //			this.voorraadList.revalidate();
 		} else if (e.getActionCommand().equals("AanpassenOrder")){
