@@ -16,7 +16,6 @@ public class MainScreen extends JFrame implements ActionListener {
 	CardLayout cardLayout;
 	JPanel root;
 	WeergaveDrawPanel drawPanel;
-	WeergavePanel weergavePanel;
 
 	public MainScreen(){
 		// Screen setup
@@ -68,22 +67,18 @@ public class MainScreen extends JFrame implements ActionListener {
 		menuBar.add(menuButton2);
 		menuBar.add(menuButtonHelp);
 
-		// Setup StockScreen
+		// Setup CardLayout cards
 		StockScreen stockScreen = new StockScreen();
 		root.add("Voorraad", stockScreen);
 
-		// Setup OrderScreen
 		OrderScreen orderScreen = new OrderScreen();
 		root.add("Orders", orderScreen);
 
-		// Setup WeergaveScreen
 		WeergavePanel weergavePanel = new WeergavePanel();
 		root.add("Weergave", weergavePanel);
 
-		// Setup HelpScreen
 		JPanel HelpPanel = new JPanel();
 		JScrollPane scrollPaneHelpScreen = new JScrollPane(HelpPanel);
-
 
 		drawPanel = new WeergaveDrawPanel();
 
