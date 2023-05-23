@@ -77,11 +77,12 @@ bool motorZpickUp(int zPosition){
        inPosition = true;
       }
     }
-    if(motorYgoTo(yPosBoxes[4] + 100)){
+    if(motorYgoTo(yPosBoxes[hmi_y] + 100)){
       if(readIR() != 5){
         motorZbackward();
       }
       packagePicked = true;
+      done = true;
       return 1;
     }
     

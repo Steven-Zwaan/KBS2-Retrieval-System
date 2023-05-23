@@ -96,19 +96,28 @@ void loop() {
       } else {
         if (Serial.available()) {
           Serial.readBytes(buf, BUFFER_SIZE);
-          for(int i = 0; i < BUFFER_SIZE; i++) {
+          if (hmi_action != (int)buf[0] || hmi_var1 != (int)buf[1] || hmi_var2 != (int)buf[2]) {
             hmi_action = (int)buf[0];
             hmi_var1 = (int)buf[1];
             hmi_var2 = (int)buf[2];
+            actionCompleted = false;
           }
           Serial.println(hmi_action);
-          Serial.println(hmi_var1);
-          
         }
         switch (hmi_action){
-            case 1:
-             motorXgoTo(xPosBoxes[hmi_var1]);
-             break;
+            case 1: //bewegen x en y as
+              message = "M" + (String)hmi_var2;
+              sendTransmission(message);
+              motorXgoTo(xPosBoxes[hmi_var1]);
+              actionCompleted = true;
+              break;
+            case 2: //oppakken
+              message = "G" + (String)hmi_var1;
+              if(!actionCompleted){
+                sendTransmission(message);
+                actionCompleted = true;
+              }
+            break;
           }
         // if (motorXgoTo(xPosBoxes[1])){
         //   Serial.println("Succes!");
@@ -167,6 +176,10 @@ void ReceiveEvent(int howMany){
   String recieved = "";
   for(int i = 0; i < howMany; i++){
     recieved += (char)Wire.read();
+  }
+
+  if (recieved == "MC") {
+    // Serial.println("COMPLETE");
   }
 
   if (recieved == "MS") {
