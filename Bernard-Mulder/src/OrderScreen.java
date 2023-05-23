@@ -1,6 +1,6 @@
-import Entities.Order;
-import Entities.OrderLine;
-import Entities.OrderList;
+import Models.Order;
+import Models.OrderLine;
+import Models.OrderList;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -22,6 +22,8 @@ public class OrderScreen extends JPanel implements ActionListener {
     Order selectedOrder;
     ArrayList<Order> orderResult;
 
+    JList orderLines;
+
 
     //    OrderList orderList;
     public OrderScreen() {
@@ -30,7 +32,7 @@ public class OrderScreen extends JPanel implements ActionListener {
         orderList = new OrderList();
         orderList.getOrdersFromDatabase();
 
-        orderResult = orderList.getOrders();
+        orderResult = orderList.getOrderList();
         orders = new JList(orderResult.toArray());
         JScrollPane scrollPaneOrderScreen = new JScrollPane(orders);
 
@@ -46,11 +48,11 @@ public class OrderScreen extends JPanel implements ActionListener {
         ProductView.setLayout(new BoxLayout(ProductView, BoxLayout.Y_AXIS));
         this.add(ProductView, BorderLayout.CENTER);
 
-        selectedOrder = orderList.getOrders().get(0);
+        selectedOrder = orderList.getOrderList().get(0);
         JLabel OrderNummer = new JLabel();
         ProductView.add(OrderNummer);
 
-        JList orderLines = new JList(selectedOrder.getOrderLines().toArray());
+        orderLines = new JList(selectedOrder.getOrderLines().toArray());
         JScrollPane scrollpaneOrderLines = new JScrollPane(orderLines);
         ProductView.add(scrollpaneOrderLines);
 
@@ -100,7 +102,7 @@ public class OrderScreen extends JPanel implements ActionListener {
         orders.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                selectedOrder = orderList.getOrders().get(orders.getSelectedIndex());
+                selectedOrder = orderList.getOrderList().get(orders.getSelectedIndex());
                 orderLines.clearSelection();
                 orderLines.setListData(selectedOrder.getOrderLines().toArray());
                 OrderNummer.setText("Ordernummer: " + selectedOrder.getId());
@@ -208,6 +210,18 @@ public class OrderScreen extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getActionCommand().equals("AanpassenOrder")){
+            try {
+                aanpassenOrderLine.setBackground(null);
+                int voorraad = selectedOrderLine.getProduct().getStock();
+                OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrderLine, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId(), voorraad);
+            } catch (NullPointerException npe) {
+                aanpassenOrderLine.setBackground(new Color(255, 0, 0));
+            }
+        } else if (e.getActionCommand().equals("AanpassenPickDatum")) {
+            SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
+        }
+        this.revalidate();
     }
 }
+

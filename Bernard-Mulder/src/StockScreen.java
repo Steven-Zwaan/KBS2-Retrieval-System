@@ -1,5 +1,5 @@
-import Entities.Product;
-import Entities.ProductList;
+import Models.Product;
+import Models.ProductList;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -23,7 +23,7 @@ public class StockScreen extends JPanel implements ActionListener {
         productList.getProductsFromDatabase();
 
 
-        voorraadList = new JList(productList.getProducts().toArray());
+        voorraadList = new JList(productList.getProductList().toArray());
         JScrollPane scrollPaneStockScreen = new JScrollPane(voorraadList);
 
         scrollPaneStockScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -59,17 +59,17 @@ public class StockScreen extends JPanel implements ActionListener {
         zoekenStock.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                filterStock(voorraadList, productList.getProducts());
+                filterStock(voorraadList, productList.getProductList());
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                filterStock(voorraadList, productList.getProducts());
+                filterStock(voorraadList, productList.getProductList());
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                filterStock(voorraadList, productList.getProducts());
+                filterStock(voorraadList, productList.getProductList());
             }
 
             public void filterStock(JList<Product> product, List<Product> productList) {
@@ -116,7 +116,7 @@ public class StockScreen extends JPanel implements ActionListener {
         voorraadList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                selectedProductLabel.setText(productList.getProducts().get(voorraadList.getSelectedIndex()).toString());
+                selectedProductLabel.setText(productList.getProductList().get(voorraadList.getSelectedIndex()).toString());
                 index = voorraadList.getSelectedIndex();
             }
         });
@@ -133,8 +133,8 @@ public class StockScreen extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProducts().get(index), "Change stock of '" + productList.getProducts().get(index).getName() + "'", productList.getProducts().get(index).getStock());
-        productList.getProducts().get(index).setStockFromDatabase();
+        StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProductList().get(index), "Change stock of '" + productList.getProductList().get(index).getName() + "'", productList.getProductList().get(index).getStock());
+        productList.getProductList().get(index).setStockFromDatabase();
         this.voorraadList.revalidate();
     }
 }
