@@ -11,7 +11,7 @@ public class ArduinoConnection {
     }
 
     SerialPort sp = SerialPort.getCommPort("COM5"); // device name
-    public static int PACKET_SIZE_IN_BYTES = 4;
+
     public void sendData (byte x, byte y, byte z) throws IOException {
         sp.setComPortParameters(9600, 8, 1, 0); // default connection settings for Arduino
         sp.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0); // block until bytes can be written

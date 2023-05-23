@@ -7,12 +7,12 @@ public class Main {
         ArduinoConnection arduino = new ArduinoConnection("COM5");
 
         arduino.openPort();
+        Thread.sleep(2000);
         arduino.receiveData();
         while (true) {
-            arduino.sendData((byte) 3, (byte) 4, (byte) 5);
+            arduino.sendData((byte) 1, (byte) 3, (byte) 5);
             Thread.sleep(1000);
         }
-
 
 
 

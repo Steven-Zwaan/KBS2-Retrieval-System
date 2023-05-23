@@ -97,12 +97,19 @@ void loop() {
         if (Serial.available()) {
           Serial.readBytes(buf, BUFFER_SIZE);
           for(int i = 0; i < BUFFER_SIZE; i++) {
-            if (buf[0] == 3 && buf[1] == 4 && buf[2] == 5) {
-              byte b = 1;
-              Serial.println(345);
-            }
+            hmi_action = (int)buf[0];
+            hmi_var1 = (int)buf[1];
+            hmi_var2 = (int)buf[2];
           }
+          Serial.println(hmi_action);
+          Serial.println(hmi_var1);
+          
         }
+        switch (hmi_action){
+            case 1:
+             motorXgoTo(xPosBoxes[hmi_var1]);
+             break;
+          }
         // if (motorXgoTo(xPosBoxes[1])){
         //   Serial.println("Succes!");
         // }
