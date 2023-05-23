@@ -15,9 +15,9 @@ public class StockScreenEditPopup extends JDialog implements ActionListener{
 		this.product = product;
 		this.currentstock = currentstock;
 		this.setSize(new Dimension(300,100));
+		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		this.setLayout(new GridLayout(2,2));
-		setVisible(true);
 		this.setModal(false);
 		this.setLocationRelativeTo(null);
 
@@ -44,6 +44,8 @@ public class StockScreenEditPopup extends JDialog implements ActionListener{
 		this.add(aantal);
 		this.add(buttonAccept);
 		this.add(buttonCancel);
+
+		setVisible(true);
 	}
 
 	@Override

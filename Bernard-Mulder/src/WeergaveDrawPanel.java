@@ -39,17 +39,17 @@ public class WeergaveDrawPanel extends JPanel {
 		// Z axis
 		g.setColor(new Color(255,100,100));
 //		g.setColor(new GradientPaint(0,0, new));
-		g.fillRect((int) (getHeight() * 1.1), (int) (getHeight() * 0.6) - zPos, 20,300);
-		g.fillRect((int) (getHeight() * 1.2),(int) (getHeight() * 0.6) - zPos, 20,300);
+		g.fillRect((int) (getHeight() * 1.1), (int) (getHeight() * 0.6) - zPos, (int) (getHeight() * 0.03),(int) (getHeight() * 0.5));
+		g.fillRect((int) (getHeight() * 1.2),(int) (getHeight() * 0.6) - zPos, (int) (getHeight() * 0.03),(int) (getHeight() * 0.5));
 		g.setColor(new Color(93, 93, 93));
-		g.fillRect((int) (getHeight() * 1.09),(int) (getHeight() * 0.95) - zPos,105,500);
+		g.fillRect((int) (getHeight() * 1.09),(int) (getHeight() * 0.95) - zPos,(int) (getHeight() * 0.15),(int) (getHeight() * 0.5));
 
 
 
 		// circle
 		g.setColor(new Color(255,100,100));
-		g.fillOval(xPos, yPos ,25,25);
-		g.fillOval(xPos + 50, yPos ,25,25);
+		g.fillOval(xPos, yPos ,(int) (getHeight() * 0.03),(int) (getHeight() * 0.03));
+		g.fillOval(xPos + (int) (getHeight() * 0.08), yPos ,(int) (getHeight() * 0.03),(int) (getHeight() * 0.03));
 	}
 
 	public void updatePos(int x, int y, int z){

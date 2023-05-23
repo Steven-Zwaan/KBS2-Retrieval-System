@@ -19,8 +19,8 @@ public class OrderScreenEditPopup extends JDialog implements ActionListener {
         this.orderLine = orderLine;
         this.setLocationRelativeTo(null);
 
-        JLabel gepickteAantalLabel = new JLabel("Gepickte aantal");
-        JLabel totaleAantalLabel = new JLabel("totale aantal");
+        JLabel gepickteAantalLabel = new JLabel("Gepickt aantal");
+        JLabel totaleAantalLabel = new JLabel("totaal aantal");
         gepickteAantalSpinner = new JSpinner(new SpinnerNumberModel(orderLine.getPickedQuantity(), 0, orderLine.getQuantity(), 1));
         totaleAantalSpinner = new JSpinner(new SpinnerNumberModel(orderLine.getQuantity(), 0, voorraad + orderLine.getQuantity(), 1));
         JButton annuleren = new JButton("Annuleren");
