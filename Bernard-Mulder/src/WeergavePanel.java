@@ -34,9 +34,15 @@ public class WeergavePanel extends JPanel implements ActionListener {
         JLabel yLabel = new JLabel("y-as: ");
         JLabel zLabel = new JLabel("Z-as: ");
 
+        JButton testbutton = new JButton("test");
+        testbutton.setActionCommand("test");
+        testbutton.addActionListener(this);
+
         coordinateBar.add(xLabel);
         coordinateBar.add(yLabel);
         coordinateBar.add(zLabel);
+        coordinateBar.add(testbutton);
+
 
     }
 
@@ -50,6 +56,9 @@ public class WeergavePanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getActionCommand().equals("test")){
+            ((WeergaveDrawPanel) viewPanel).updatePos(150, 200, 300);
+            viewPanel.repaint();
+        }
     }
 }
