@@ -51,7 +51,7 @@ void loop() {
 
   if(Noodstop) {
     motorXstop(); 
-    Serial.println("NOODSTOP");
+    //Serial.println("NOODSTOP");
   } else if (!Noodstop){
     if (calibrate) {
       if(!zAxisCalibrated){
@@ -94,10 +94,18 @@ void loop() {
           }
         }
       } else {
-
-        if (motorXgoTo(xPosBoxes[1])){
-          Serial.println("Succes!");
+        if (Serial.available()) {
+          Serial.readBytes(buf, BUFFER_SIZE);
+          for(int i = 0; i < BUFFER_SIZE; i++) {
+            if (buf[0] == 3 && buf[1] == 4 && buf[2] == 5) {
+              byte b = 1;
+              Serial.println(345);
+            }
+          }
         }
+        // if (motorXgoTo(xPosBoxes[1])){
+        //   Serial.println("Succes!");
+        // }
       }
     }
   }
@@ -160,11 +168,11 @@ void ReceiveEvent(int howMany){
 
   if (recieved == "CZF") {
     zAxisCalibrated = true;
-    Serial.println("CZF recieved");
+    //Serial.println("CZF recieved");
   }
 
   if (recieved == "CYF") {
     yAxisCalibrated = true;
-    Serial.println("CYF recieved");
+    //Serial.println("CYF recieved");
   }
 }

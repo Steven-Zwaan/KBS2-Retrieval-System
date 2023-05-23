@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 public final class PacketListener implements SerialPortPacketListener {
 
-    private int packetSize = 2;
+    private int packetSize = 3;
 
     @Override
     public int getListeningEvents() {

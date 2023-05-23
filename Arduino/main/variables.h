@@ -67,3 +67,6 @@ int xPosBoxes[] = {100, 800, 1600, 2300, 3000};
 int xValue = 0; // To store value of the X axis
 // int joystickButton = 0; // To store value of the button
 int command = COMMAND_NO; //stop
+
+const int BUFFER_SIZE = 3;
+char buf[BUFFER_SIZE];
