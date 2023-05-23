@@ -106,13 +106,9 @@ public class MainScreen extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("Orders")){
 			cardLayout.show(root, "Orders");
 		} else if (e.getActionCommand().equals("Weergave")){
-			weergavePanel.refreshPanel();
 			cardLayout.show(root, "Weergave");
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");
-		} else if (e.getActionCommand().equals("UpdatePos")){
-			drawPanel.updatePos(250, 320, 200);
-			drawPanel.repaint();
 		}
 		this.revalidate();
 	}
