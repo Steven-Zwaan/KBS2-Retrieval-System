@@ -10,15 +10,25 @@ public class ArduinoConnection {
         this.port = port;
     }
 
-    SerialPort sp = SerialPort.getCommPort("/dev/ttyACM0"); // device name
+    SerialPort sp = SerialPort.getCommPort("COM5"); // device name
 
-    public void sendData (byte x, byte y, byte z) throws IOException {
+    public void sendData (byte x, byte y, byte z) throws IOException, InterruptedException {
         sp.setComPortParameters(9600, 8, 1, 0); // default connection settings for Arduino
         sp.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0); // block until bytes can be written
-
         byte data[] = {x, y, z};
-        sp.getOutputStream().write(data);
-        sp.getOutputStream().flush();
+
+        receiveData();
+        while(true){
+            if(PacketListener.getIncoming_message().equals("200")){
+                PacketListener.setIncoming_message("");
+                break;
+            } else {
+                System.out.println("sending data");
+                sp.getOutputStream().write(data);
+                sp.getOutputStream().flush();
+                Thread.sleep(1000);
+            }
+        }
     }
 
     public void receiveData() {

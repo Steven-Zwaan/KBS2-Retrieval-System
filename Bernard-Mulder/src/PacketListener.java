@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 public final class PacketListener implements SerialPortPacketListener {
 
-    private int packetSize = 1;
+    private int packetSize = 3;
     private static String incoming_message = "";
 
     @Override
@@ -22,6 +22,10 @@ public final class PacketListener implements SerialPortPacketListener {
 
     public static String getIncoming_message() {
         return incoming_message;
+    }
+
+    public static void setIncoming_message(String incoming_message) {
+        PacketListener.incoming_message = incoming_message;
     }
 
     @Override

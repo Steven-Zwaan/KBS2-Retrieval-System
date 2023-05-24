@@ -67,8 +67,9 @@ int yPositionCurrent = 0;
 bool packagePicked = false;
 bool inPosition = false;
 bool done = false;
+bool moveCompleted = false;
 
-bool manual = true;
+bool manual = false;
 
 int yPosBoxes[] = {145, 625, 1160, 1650, 2200};
 int zPosBoxes[] = {17, 12, 9}; //12 might be 13 and 8 might be 9

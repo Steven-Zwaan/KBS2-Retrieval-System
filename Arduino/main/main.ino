@@ -94,22 +94,28 @@ void loop() {
           }
         }
       } else {
+        Serial.println(100);
         if (Serial.available()) {
+          Serial.println(300);
           Serial.readBytes(buf, BUFFER_SIZE);
-          if (hmi_action != (int)buf[0] || hmi_var1 != (int)buf[1] || hmi_var2 != (int)buf[2]) {
-            hmi_action = (int)buf[0];
-            hmi_var1 = (int)buf[1];
-            hmi_var2 = (int)buf[2];
-            actionCompleted = false;
-          }
+          hmi_action = (int)buf[0];
+          hmi_var1 = (int)buf[1];
+          hmi_var2 = (int)buf[2];
+          actionCompleted = false;
           Serial.println(200);
         }
         switch (hmi_action){
             case 1: //bewegen x en y as
               message = "M" + (String)hmi_var2;
+              if(!actionYCompleted){
               sendTransmission(message);
-              motorXgoTo(xPosBoxes[hmi_var1]);
-              actionCompleted = true;
+              }
+              if(motorXgoTo(xPosBoxes[hmi_var1])){
+                actionCompleted = true;
+              }
+              if(actionYCompleted && actionCompleted){
+                Serial.println(600);
+              }              
               break;
             case 2: //oppakken
               message = "G" + (String)hmi_var1;
@@ -117,10 +123,10 @@ void loop() {
                 sendTransmission(message);
                 actionCompleted = true;
               }
-            break;
+              break;
             default:
             //
-            break;
+              break;
           }
         // if (motorXgoTo(xPosBoxes[1])){
         //   Serial.println("Succes!");
@@ -182,6 +188,7 @@ void ReceiveEvent(int howMany){
   }
 
   if (recieved == "MC") {
+    actionYCompleted = true;
     // Serial.println("COMPLETE");
   }
 

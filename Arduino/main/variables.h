@@ -54,7 +54,7 @@ bool zAs = false;
 
 bool calibrate = true;
 
-bool manual = true;
+bool manual = false;
 
 bool Noodstop = false;
 // int NOODSTOPBUTTON = 4;
@@ -76,3 +76,4 @@ char buf[BUFFER_SIZE];
 String message = "";
 bool messageSent = false;
 bool actionCompleted = true;
+bool actionYCompleted = false;

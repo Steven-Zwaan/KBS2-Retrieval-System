@@ -130,9 +130,10 @@ void loop() {
         if (!done && (recieved == "M0" || recieved == "M1" || recieved == "M2" || recieved == "M3" || recieved == "M4")){
           motorYgoTo(yPosBoxes[hmi_y]);
         } 
-        else if(motorYgoTo(yPosBoxes[hmi_y]) && done){
+        else if(motorYgoTo(yPosBoxes[hmi_y]) && done && !moveCompleted){
           // Serial.println("Succes!");
           sendTransmission("MC");
+          moveCompleted = true;
         }
 
         if (!done && (recieved == "G0" || recieved == "G1" || recieved == "G2")){
