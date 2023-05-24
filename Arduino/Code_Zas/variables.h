@@ -77,3 +77,7 @@ int zPosBoxes[] = {17, 12, 9}; //12 might be 13 and 8 might be 9
 int yValue = 0; // To store value of the Y axis
 int bValue = 0; // To store value of the button
 int command = COMMAND_NO; //stop
+
+int hmi_y = 0;
+int hmi_z = 0;
+String recieved = "";

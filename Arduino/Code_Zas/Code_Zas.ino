@@ -56,7 +56,7 @@ void loop() {
     command;
     motorZstop();
     motorYstop();
-    Serial.print("NOODSTOP");
+    // Serial.print("NOODSTOP");
   } else if (!noodstop) {
     if(calibrate){
       if (calibrateZ) {
@@ -126,12 +126,21 @@ void loop() {
           }
         } 
       } else {
-        if (!done){
-          motorYgoTo(yPosBoxes[4]);
+        // Serial.println(hmi_y);
+        if (!done && (recieved == "M0" || recieved == "M1" || recieved == "M2" || recieved == "M3" || recieved == "M4")){
+          motorYgoTo(yPosBoxes[hmi_y]);
         } 
-        else if(motorZpickUp(zPosBoxes[2]) && done){
+        else if(motorYgoTo(yPosBoxes[hmi_y]) && done){
           // Serial.println("Succes!");
+          sendTransmission("MC");
         }
+
+        if (!done && (recieved == "G0" || recieved == "G1" || recieved == "G2")){
+          motorZpickUp(zPosBoxes[hmi_z]);
+        } 
+        // else if(motorZpickUp(zPosBoxes[hmi_z]) && done){
+        //   sendTransmission("MC");
+        // }
         // if(motorZpickUp(zPosBoxes[0])){
         //   // Serial.println("Succes!");
         // }
@@ -171,9 +180,44 @@ void RequestEvent(){
 }
 
 void RecieveEvent(int howMany){
-  String recieved = "";
+  recieved = "";
   for(int i = 0; i < howMany; i++){
     recieved += (char)Wire.read();
+  }
+  Serial.println(recieved);
+
+  if (recieved == "M0"){
+    hmi_y = 0;
+    done = false;
+  } else if (recieved == "M1"){
+    hmi_y = 1;
+    done = false;
+  } else if (recieved == "M2"){
+    hmi_y = 2;
+    done = false;
+  } else if (recieved == "M3"){
+    hmi_y = 3;
+    done = false;
+  } else if (recieved == "M4"){
+    hmi_y = 4;
+    done = false;
+  }
+
+  if (recieved == "G0"){
+    hmi_z = 0;
+    packagePicked = false;
+    inPosition = false;
+    done = false;
+  } else if (recieved == "G1"){
+    hmi_z = 1;
+    packagePicked = false;
+    inPosition = false;
+    done = false;
+  } else if (recieved == "G2"){
+    hmi_z = 2;
+    packagePicked = false;
+    inPosition = false;
+    done = false;
   }
   
   if (recieved == "ZT"){

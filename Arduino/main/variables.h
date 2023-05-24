@@ -73,3 +73,6 @@ int hmi_var1 = 0;
 int hmi_var2 = 0;
 const int BUFFER_SIZE = 3;
 char buf[BUFFER_SIZE];
+String message = "";
+bool messageSent = false;
+bool actionCompleted = true;

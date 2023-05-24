@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 public final class PacketListener implements SerialPortPacketListener {
 
     private int packetSize = 1;
+    private static String incoming_message = "";
 
     @Override
     public int getListeningEvents() {
@@ -19,10 +20,15 @@ public final class PacketListener implements SerialPortPacketListener {
         return packetSize;
     }
 
+    public static String getIncoming_message() {
+        return incoming_message;
+    }
+
     @Override
     public void serialEvent(SerialPortEvent event) {
         byte[] newData = event.getReceivedData();
         String str = new String(newData).split("\n", 2)[0].replaceAll("\\s+", "");
+        incoming_message = str;
         int byteSize = 0;
         try {
             byteSize = str.getBytes("UTF-8").length;
