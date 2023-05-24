@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class WeergavePanel extends JPanel implements ActionListener {
 
@@ -14,6 +15,10 @@ public class WeergavePanel extends JPanel implements ActionListener {
     JScrollPane orderLineScrollPane;
     JPanel coordinateBar;
     static Order gepickteOrder = null;
+
+    int x = 0;
+    int y = 0;
+    int z = 0;
 
     public WeergavePanel() {
         this.setLayout(new BorderLayout());
@@ -57,8 +62,42 @@ public class WeergavePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("test")){
-            ((WeergaveDrawPanel) viewPanel).updatePos(150, 200, 300);
-            viewPanel.repaint();
+            while (!(x == 150 &&  y == 200 && z == 300)){
+                if (x < 150) {
+                    x++;
+                } else if (x > 150){
+                    x--;
+                }
+
+                if (y < 200) {
+                    y++;
+                } else if (y > 200){
+                    y--;
+                }
+
+                if (z < 300) {
+                    z++;
+                } else if (z > 300){
+                    z--;
+                }
+
+                ((WeergaveDrawPanel) viewPanel).updatePos(x, y, z);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPanel.repaint();
+                    }
+                });
+
+                System.out.print(x + " ");
+                System.out.print(y + " ");
+                System.out.println(y);
+                try {
+                    TimeUnit.MILLISECONDS.sleep(100);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         }
     }
 }
