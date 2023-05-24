@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 public final class PacketListener implements SerialPortPacketListener {
 
     private int packetSize = 1;
-    private static String incoming_message = null;
+    private static String incoming_message = "";
 
     @Override
     public int getListeningEvents() {
