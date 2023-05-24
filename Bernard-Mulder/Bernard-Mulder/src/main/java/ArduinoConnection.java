@@ -10,13 +10,14 @@ public class ArduinoConnection {
         this.port = port;
     }
 
-    SerialPort sp = SerialPort.getCommPort("COM3"); // device name
-    public static int PACKET_SIZE_IN_BYTES = 2;
-    public void sendData (byte x, byte y) throws IOException {
+    SerialPort sp = SerialPort.getCommPort("COM5"); // device name
+
+    public void sendData (byte x, byte y, byte z) throws IOException {
         sp.setComPortParameters(9600, 8, 1, 0); // default connection settings for Arduino
         sp.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 0); // block until bytes can be written
-        sp.getOutputStream().write(x);
-        sp.getOutputStream().write(y);
+
+        byte data[] = {x, y, z};
+        sp.getOutputStream().write(data);
         sp.getOutputStream().flush();
     }
 
