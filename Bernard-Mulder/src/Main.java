@@ -2,7 +2,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
-        //MainScreen scherm = new MainScreen();
+        MainScreen scherm = new MainScreen();
         //Noodstop schermNoodstop = new Noodstop();
         ArduinoConnection arduino = new ArduinoConnection("COM5");
 

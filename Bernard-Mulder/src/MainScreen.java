@@ -16,6 +16,8 @@ public class MainScreen extends JFrame implements ActionListener {
 	CardLayout cardLayout;
 	JPanel root;
 	WeergaveDrawPanel drawPanel;
+	WeergavePanel weergavePanel;
+	StockScreenEditPopup popup;
 
 	public MainScreen(){
 		// Screen setup
@@ -74,7 +76,9 @@ public class MainScreen extends JFrame implements ActionListener {
 		OrderScreen orderScreen = new OrderScreen();
 		root.add("Orders", orderScreen);
 
+
 		WeergavePanel weergavePanel = new WeergavePanel();
+
 		root.add("Weergave", weergavePanel);
 
 		JPanel HelpPanel = new JPanel();
