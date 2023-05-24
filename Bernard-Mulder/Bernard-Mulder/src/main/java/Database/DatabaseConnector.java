@@ -1,7 +1,10 @@
 package Database;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+
 import java.sql.*;
 import java.util.Properties;
+
 public class DatabaseConnector {
     // init database constants
     private static final String DATABASE_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -28,15 +31,25 @@ public class DatabaseConnector {
 
     // connect database
     public Connection connect() {
-        if (connection == null) {
-            try {
-                Class.forName(DATABASE_DRIVER);
-                connection = DriverManager.getConnection(DATABASE_URL, getProperties());
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-            }
+//        if (connection == null) {
+//            try {
+//                Class.forName(DATABASE_DRIVER);
+//                connection = DriverManager.getConnection(DATABASE_URL, getProperties());
+//            } catch (ClassNotFoundException | SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        try {
+            BasicDataSource ds = new BasicDataSource();
+            ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            ds.setUrl(DATABASE_URL);
+            ds.setUsername(USERNAME);
+            ds.setPassword(PASSWORD);
+            return ds.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-        return connection;
     }
 
     // disconnect database
