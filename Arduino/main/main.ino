@@ -102,7 +102,7 @@ void loop() {
             hmi_var2 = (int)buf[2];
             actionCompleted = false;
           }
-          Serial.println(hmi_action);
+          Serial.println(200);
         }
         switch (hmi_action){
             case 1: //bewegen x en y as
@@ -117,6 +117,9 @@ void loop() {
                 sendTransmission(message);
                 actionCompleted = true;
               }
+            break;
+            default:
+            //
             break;
           }
         // if (motorXgoTo(xPosBoxes[1])){

@@ -9,10 +9,13 @@ public class Main {
         arduino.openPort();
         Thread.sleep(2000);
         arduino.receiveData();
-        while (true) {
-            arduino.sendData((byte) 1, (byte) 3, (byte) 5);
-            Thread.sleep(1000);
+        arduino.sendData((byte) 1, (byte) 3, (byte) 5);
+        if(PacketListener.getIncoming_message().equals("200")){
+
+        } else {
+
         }
+        Thread.sleep(1000);
 
     }
 }
