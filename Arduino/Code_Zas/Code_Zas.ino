@@ -128,16 +128,22 @@ void loop() {
       } else {
         // Serial.println(hmi_y);
         if (!done && (recieved == "M0" || recieved == "M1" || recieved == "M2" || recieved == "M3" || recieved == "M4")){
-          motorYgoTo(yPosBoxes[hmi_y]);
+          if (motorYgoTo(yPosBoxes[hmi_y]) && !messageSend) {
+            sendTransmission("MC");
+            messageSend = true;
+          }
         } 
-        else if(motorYgoTo(yPosBoxes[hmi_y]) && done && !moveCompleted){
-          // Serial.println("Succes!");
-          sendTransmission("MC");
-          moveCompleted = true;
-        }
+        // else if(motorYgoTo(yPosBoxes[hmi_y]) && done && !moveCompleted){
+        //   // Serial.println("Succes!");
+          
+        //   moveCompleted = true;
+        // }
 
         if (!done && (recieved == "G0" || recieved == "G1" || recieved == "G2")){
-          motorZpickUp(zPosBoxes[hmi_z]);
+          if (motorZpickUp(zPosBoxes[hmi_z]) && !messageSend) {
+              sendTransmission("GC");
+              messageSend = true;            
+          } 
         } 
         // else if(motorZpickUp(zPosBoxes[hmi_z]) && done){
         //   sendTransmission("MC");
@@ -190,18 +196,23 @@ void RecieveEvent(int howMany){
   if (recieved == "M0"){
     hmi_y = 0;
     done = false;
+    messageSend = false;
   } else if (recieved == "M1"){
     hmi_y = 1;
     done = false;
+    messageSend = false;
   } else if (recieved == "M2"){
     hmi_y = 2;
     done = false;
+    messageSend = false;
   } else if (recieved == "M3"){
     hmi_y = 3;
     done = false;
+    messageSend = false;
   } else if (recieved == "M4"){
     hmi_y = 4;
     done = false;
+    messageSend = false;
   }
 
   if (recieved == "G0"){
@@ -209,16 +220,19 @@ void RecieveEvent(int howMany){
     packagePicked = false;
     inPosition = false;
     done = false;
+    messageSend = false;
   } else if (recieved == "G1"){
     hmi_z = 1;
     packagePicked = false;
     inPosition = false;
     done = false;
+    messageSend = false;
   } else if (recieved == "G2"){
     hmi_z = 2;
     packagePicked = false;
     inPosition = false;
     done = false;
+    messageSend = false;
   }
   
   if (recieved == "ZT"){

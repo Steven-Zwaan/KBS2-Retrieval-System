@@ -49,6 +49,7 @@ bool zAxisCalibrated = false;
 bool yAxisCalibrated = false;
 
 bool zAxisMessageSent = false;
+bool messageYsend = false;
 
 bool zAs = false;
 
@@ -75,5 +76,6 @@ const int BUFFER_SIZE = 3;
 char buf[BUFFER_SIZE];
 String message = "";
 bool messageSent = false;
-bool actionCompleted = true;
+bool actionXCompleted = false;
 bool actionYCompleted = false;
+bool actionZCompleted = false;

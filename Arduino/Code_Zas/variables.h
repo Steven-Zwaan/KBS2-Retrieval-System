@@ -69,6 +69,8 @@ bool inPosition = false;
 bool done = false;
 bool moveCompleted = false;
 
+bool messageSend = false;
+
 bool manual = false;
 
 int yPosBoxes[] = {145, 625, 1160, 1650, 2200};

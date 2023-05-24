@@ -12,7 +12,6 @@ public class StockScreenEditPopup extends JDialog implements ActionListener{
 	private JPanel frame;
 
 	public StockScreenEditPopup(Product product, String title, int currentstock, JPanel frame){
-//		super(frame, true);
 		this.product = product;
 		this.currentstock = currentstock;
 		this.frame = frame;

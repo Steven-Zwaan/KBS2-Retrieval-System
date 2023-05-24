@@ -94,43 +94,26 @@ void loop() {
           }
         }
       } else {
-        Serial.println(100);
-        if (Serial.available()) {
-          Serial.println(300);
-          Serial.readBytes(buf, BUFFER_SIZE);
-          hmi_action = (int)buf[0];
-          hmi_var1 = (int)buf[1];
-          hmi_var2 = (int)buf[2];
-          actionCompleted = false;
-          Serial.println(200);
-        }
+
+        communcationHandler(); // executes when hmi sends message
+
         switch (hmi_action){
             case 1: //bewegen x en y as
-              message = "M" + (String)hmi_var2;
-              if(!actionYCompleted){
-              sendTransmission(message);
-              }
               if(motorXgoTo(xPosBoxes[hmi_var1])){
-                actionCompleted = true;
+                actionXCompleted = true;
               }
-              if(actionYCompleted && actionCompleted){
+              if(actionYCompleted && actionXCompleted){
                 Serial.println(600);
               }              
               break;
-            case 2: //oppakken
-              message = "G" + (String)hmi_var1;
-              if(!actionCompleted){
-                sendTransmission(message);
-                actionCompleted = true;
-              }
-              break;
+            case 2: // bewegen z as
+              if(actionZCompleted){
+                Serial.println(600);
+              }  
+              break;   
             default:
-            //
               break;
           }
-        // if (motorXgoTo(xPosBoxes[1])){
-        //   Serial.println("Succes!");
-        // }
       }
     }
   }
@@ -192,6 +175,11 @@ void ReceiveEvent(int howMany){
     // Serial.println("COMPLETE");
   }
 
+  if (recieved == "GC") {
+    actionZCompleted = true;
+    // Serial.println("COMPLETE");
+  }
+
   if (recieved == "MS") {
     manual = !manual; 
   }
@@ -204,5 +192,36 @@ void ReceiveEvent(int howMany){
   if (recieved == "CYF") {
     yAxisCalibrated = true;
     //Serial.println("CYF recieved");
+  }
+}
+
+void communcationHandler() {
+  if (Serial.available()) {
+    Serial.println(100); 
+
+    Serial.readBytes(buf, BUFFER_SIZE);
+    hmi_action = (int)buf[0];
+    hmi_var1 = (int)buf[1];
+    hmi_var2 = (int)buf[2];
+  
+
+    actionXCompleted = false;
+    actionYCompleted = false;
+    actionZCompleted = false;
+
+    switch(hmi_action){
+      case 1: // Bewegen naar vakje (x,y)
+        sendTransmission("M" + (String)hmi_var2);
+        break;
+      case 2: // oppakken product op huidige locatie (z)
+        sendTransmission("G" + (String)hmi_var1);
+        break;
+      default:
+
+        break;          
+    }
+    // actionCompleted = false;
+    // messageYsend = false;
+    // Serial.println(200);
   }
 }

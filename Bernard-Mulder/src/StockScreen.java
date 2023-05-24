@@ -133,8 +133,10 @@ public class StockScreen extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProductList().get(index), "Change stock of '" + productList.getProductList().get(index).getName() + "'", productList.getProductList().get(index).getStock(), this);
-        productList.getProductList().get(index).setStockFromDatabase();
-        this.voorraadList.revalidate();
+        if (e.getActionCommand().equals("AanpassenStock")) {
+            StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProductList().get(index), "Change stock of '" + productList.getProductList().get(index).getName() + "'", productList.getProductList().get(index).getStock(), this);
+            productList.getProductList().get(index).setStockFromDatabase();
+            this.voorraadList.revalidate();
+        }
     }
 }
