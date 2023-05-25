@@ -74,6 +74,8 @@ bool motorZpickUp(int zPosition){
        motorZbackward();
       } else {
        motorZstop();
+       yPositioned = false;
+       zReturned = false;
        inPosition = true;
       }
     }
@@ -87,7 +89,7 @@ bool motorZpickUp(int zPosition){
           motorZstop();
           zReturned = true;
           packagePicked = true;
-          done = true;
+          doneZ = true;
           return 1;
         }
       }
