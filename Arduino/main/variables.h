@@ -63,7 +63,7 @@ int bValue = 0;
 
 int xPos = 0;
 
-int xPosBoxes[] = {100, 800, 1600, 2300, 3000};
+int xPosBoxes[] = {150, 880, 1600, 2300, 3030};
 
 int xValue = 0; // To store value of the X axis
 // int joystickButton = 0; // To store value of the button

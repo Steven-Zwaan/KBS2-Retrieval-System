@@ -74,17 +74,27 @@ bool motorZpickUp(int zPosition){
        motorZbackward();
       } else {
        motorZstop();
+       yPositioned = false;
+       zReturned = false;
        inPosition = true;
       }
     }
     if(motorYgoTo(yPosBoxes[hmi_y] + 100)){
-      if(readIR() != 5){
-        motorZbackward();
-      }
-      packagePicked = true;
-      done = true;
-      return 1;
+      yPositioned = true;
     }
+    if(yPositioned){
+      while(!zReturned){
+      motorZbackward();
+        if(readIR() == 5){
+          motorZstop();
+          zReturned = true;
+          packagePicked = true;
+          doneZ = true;
+          return 1;
+        }
+      }
+    }
+    
     
   }
 }

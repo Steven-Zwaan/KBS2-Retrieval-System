@@ -73,10 +73,11 @@ bool moveCompleted = false;
 bool messageSend = false;
 
 bool manual = false;
-int zDefault = 5;
+bool zReturned = false;
+bool yPositioned = false;
 
-int yPosBoxes[] = {145, 625, 1160, 1650, 2200};
-int zPosBoxes[] = {17, 12, 9}; //12 might be 13 and 8 might be 9
+int yPosBoxes[] = {210, 730, 1250, 1760, 2270};
+int zPosBoxes[] = {18, 13, 9}; //12 might be 13 and 8 might be 9
 
 //int bValue = 0; // To store value of the button
 int yValue = 0; // To store value of the Y axis
