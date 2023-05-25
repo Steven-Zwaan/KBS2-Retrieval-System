@@ -133,13 +133,36 @@ void loop() {
             messageSend = true;
           }
         } 
+
+        if (!messageSend && (recieved == "T0" || recieved == "T1" || recieved == "T2" || recieved == "T3" || recieved == "T4")){
+          // if(motorYgoTo(yPosBoxes[hmi_y])){
+          //   if(x_arrived){
+          //     if(motorZpickUp(zPosBoxes[hmi_z])){
+          //     } 
+          //   }
+          // }
+          if (motorYgoTo(yPosBoxes[hmi_y])) {
+          }
+          if(done){
+            delay(100);
+            if(x_arrived){
+              Serial.println(1);
+              if (motorZpickUp(zPosBoxes[hmi_z])) {
+                  sendTransmission("TC");
+                  messageSend = true;  
+                  current_products++;        
+              } 
+            }
+          }
+            
+        } 
         // else if(motorYgoTo(yPosBoxes[hmi_y]) && done && !moveCompleted){
         //   // Serial.println("Succes!");
           
         //   moveCompleted = true;
         // }
 
-        if (!done && (recieved == "G0" || recieved == "G1" || recieved == "G2")){
+        if (!doneZ && (recieved == "G0" || recieved == "G1" || recieved == "G2")){
           if (motorZpickUp(zPosBoxes[hmi_z]) && !messageSend) {
               sendTransmission("GC");
               messageSend = true;            
@@ -215,23 +238,60 @@ void RecieveEvent(int howMany){
     messageSend = false;
   }
 
+  if (recieved == "T0"){
+    hmi_y = 0;
+    done = false;
+    doneZ = false;
+    messageSend = false;
+    x_arrived = false;
+    hmi_z = current_products;
+  } else if (recieved == "T1"){
+    hmi_y = 1;
+    done = false;
+    doneZ = false;
+    messageSend = false;
+    x_arrived = false;
+    hmi_z = current_products;
+  } else if (recieved == "T2"){
+    hmi_y = 2;
+    done = false;
+    doneZ = false;
+    messageSend = false;
+    x_arrived = false;
+    hmi_z = current_products;
+  } else if (recieved == "T3"){
+    hmi_y = 3;
+    done = false;
+    doneZ = false;
+    messageSend = false;
+    x_arrived = false;
+    hmi_z = current_products;
+  } else if (recieved == "T4"){
+    hmi_y = 4;
+    done = false;
+    doneZ = false;
+    messageSend = false;
+    x_arrived = false;
+    hmi_z = current_products;
+  }
+
   if (recieved == "G0"){
     hmi_z = 0;
     packagePicked = false;
     inPosition = false;
-    done = false;
+    doneZ = false;
     messageSend = false;
   } else if (recieved == "G1"){
     hmi_z = 1;
     packagePicked = false;
     inPosition = false;
-    done = false;
+    doneZ = false;
     messageSend = false;
   } else if (recieved == "G2"){
     hmi_z = 2;
     packagePicked = false;
-    inPosition = false;
-    done = false;
+    inPosition = false;;
+    doneZ = false;
     messageSend = false;
   }
   
@@ -261,6 +321,10 @@ void RecieveEvent(int howMany){
 
   if (recieved == "CF"){
     calibrate = false;
+  }
+
+  if (recieved == "TX"){
+    x_arrived = true;
   }
 }
 

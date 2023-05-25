@@ -67,11 +67,13 @@ int yPositionCurrent = 0;
 bool packagePicked = false;
 bool inPosition = false;
 bool done = false;
+bool doneZ = false;
 bool moveCompleted = false;
 
 bool messageSend = false;
 
 bool manual = false;
+int zDefault = 5;
 
 int yPosBoxes[] = {145, 625, 1160, 1650, 2200};
 int zPosBoxes[] = {17, 12, 9}; //12 might be 13 and 8 might be 9
@@ -84,3 +86,6 @@ int command = COMMAND_NO; //stop
 int hmi_y = 0;
 int hmi_z = 0;
 String recieved = "";
+
+bool x_arrived = false;
+int current_products = 0;

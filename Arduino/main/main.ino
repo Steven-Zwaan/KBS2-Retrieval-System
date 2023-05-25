@@ -111,6 +111,18 @@ void loop() {
                 Serial.println(600);
               }  
               break;   
+            case 3: // bewegeing x en y as en dan z as
+              if(motorXgoTo(xPosBoxes[hmi_var1])){
+                if(!messageSent){
+                  sendTransmission("TX");
+                  messageSent = true;
+                }
+                actionXCompleted = true;
+              }
+              if(actionZCompleted){
+                Serial.println(600);
+              }
+              break;
             default:
               break;
           }
@@ -170,6 +182,11 @@ void ReceiveEvent(int howMany){
     recieved += (char)Wire.read();
   }
 
+  if (recieved == "TC") {
+    actionZCompleted = true;
+    // Serial.println("COMPLETE");
+  }
+
   if (recieved == "MC") {
     actionYCompleted = true;
     // Serial.println("COMPLETE");
@@ -215,6 +232,9 @@ void communcationHandler() {
         break;
       case 2: // oppakken product op huidige locatie (z)
         sendTransmission("G" + (String)hmi_var1);
+        break;
+      case 3: // bewegen naar vakje (x,y) en dan oppakken product op huidige locatie (z)
+        sendTransmission("T" + (String)hmi_var2);
         break;
       default:
 
