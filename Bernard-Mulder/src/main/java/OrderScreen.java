@@ -91,6 +91,12 @@ public class OrderScreen extends JPanel implements ActionListener {
 
         JButton pickOrder = new JButton("Order Picken");
         adressLinesKnoppen.add(pickOrder);
+        pickOrder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PickOrderPopup popup = new PickOrderPopup(selectedOrder);
+            }
+        });
 
         aanpassenOrderLine = new JButton("Product aanpassen");
         aanpassenOrderLine.setActionCommand("AanpassenOrder");

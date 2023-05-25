@@ -102,6 +102,7 @@ public class MainScreen extends JFrame implements ActionListener {
 			cardLayout.show(root, "Orders");
 		} else if (e.getActionCommand().equals("Weergave")){
 			cardLayout.show(root, "Weergave");
+			weergavePanel.refreshPanel();
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");
 		}

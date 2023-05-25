@@ -9,49 +9,75 @@ import java.util.concurrent.TimeUnit;
 
 public class WeergavePanel extends JPanel {
 
-    JPanel viewPanel;
+    WeergaveDrawPanel viewPanel;
     JList pickOrderList;
-    private static ArrayList<OrderLine> pickOrders = new ArrayList<>();
+    private static ArrayList<PickOrder> pickOrders = new ArrayList<>();
     JScrollPane orderLineScrollPane;
     JPanel coordinateBar;
     static Order gepickteOrder = null;
+    JLabel xLabel;
+    JLabel yLabel;
 
     public WeergavePanel() {
         this.setLayout(new BorderLayout());
         viewPanel = new WeergaveDrawPanel();
 //        viewPanel.setBackground(new Color(255, 0,0));
         this.add(viewPanel, BorderLayout.CENTER);
+
+        JPanel eastPanel = new JPanel(new BorderLayout());
+        eastPanel.setPreferredSize(new Dimension(300, getHeight()));
+        this.add(eastPanel, BorderLayout.EAST);
+
         pickOrderList = new JList(pickOrders.toArray());
         orderLineScrollPane = new JScrollPane(pickOrderList);
-        this.add(orderLineScrollPane, BorderLayout.EAST);
+        eastPanel.add(orderLineScrollPane, BorderLayout.CENTER);
+
+        JButton deleteOrderLine = new JButton("Verwijderen");
+        eastPanel.add(deleteOrderLine, BorderLayout.SOUTH);
+        deleteOrderLine.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    pickOrders.remove(pickOrderList.getSelectedIndex());
+                    refreshPanel();
+                    deleteOrderLine.setBackground(null);
+                } catch(IndexOutOfBoundsException i) {
+                    deleteOrderLine.setBackground(Color.red);
+                }
+            }
+        });
 
         coordinateBar = new JPanel();
-        coordinateBar.setPreferredSize(new Dimension(this.getWidth(), 70));
-        coordinateBar.setLayout(new GridLayout(1, 3));
+        coordinateBar.setPreferredSize(new Dimension(this.getWidth(), 40));
+        coordinateBar.setLayout(new FlowLayout());
         this.add(coordinateBar, BorderLayout.SOUTH);
 
-        JLabel xLabel = new JLabel("X-as: ");
-        JLabel yLabel = new JLabel("y-as: ");
-        JLabel zLabel = new JLabel("Z-as: ");
+        xLabel = new JLabel("X-as: " + viewPanel.getxPos());
+        yLabel = new JLabel("y-as: " + viewPanel.getxPos());
 
         coordinateBar.add(xLabel);
         coordinateBar.add(yLabel);
-        coordinateBar.add(zLabel);
     }
 
     public void refreshPanel() {
-        if (gepickteOrder != null) {
-            pickOrderList.setListData(gepickteOrder.getOrderLines().toArray());
-        }
+        pickOrderList.setListData(pickOrders.toArray());
+        pickOrderList.revalidate();
+        pickOrderList.repaint();
+    }
+
+    public void updatePos(int x, int y) {
+        viewPanel.updatePos(x,y);
+        xLabel.setText("X-as: " + viewPanel.getxPos());
+        yLabel.setText("Y-as: " + viewPanel.getyPos());
         revalidate();
         repaint();
     }
 
-    public void updatePos(int x, int y) {
-        ((WeergaveDrawPanel) viewPanel).updatePos(x,y);
+    static void addPickOrder(PickOrder pickOrder) {
+        pickOrders.add(pickOrder);
     }
 
-    static void addOrderLine(OrderLine orderLine) {
-
+    static ArrayList<PickOrder> getPickOrders() {
+        return pickOrders;
     }
 }
