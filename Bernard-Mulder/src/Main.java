@@ -12,6 +12,7 @@ public class Main {
 
         arduino.sendData((byte) 3, (byte) 1, (byte) 1);
         arduino.sendData((byte) 3, (byte) 3, (byte) 2);
+        arduino.sendData((byte) 3, (byte) 4, (byte) 3);
 //        arduino.sendData((byte) 2, (byte) 0, (byte) 0);
 //        arduino.sendData((byte) 1, (byte) 2, (byte) 1);
     }

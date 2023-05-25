@@ -147,7 +147,9 @@ void loop() {
             delay(100);
             if(x_arrived){
               delay(100);
+              Serial.println(55);
               if(motorZpickUp(zPosBoxes[hmi_z])) {
+                  Serial.println(99);
                   sendTransmission("TC");
                   messageSend = true;  
                   current_products++;        
@@ -203,6 +205,7 @@ void loop() {
     sendTransmission("MS");
     manual = !manual; 
   }
+  // Serial.println(yPos);
 }
 
 void RequestEvent(){
@@ -245,6 +248,7 @@ void RecieveEvent(int howMany){
     messageSend = false;
     x_arrived = false;
     packagePicked = false;
+    inPosition = false;
     hmi_z = current_products;
   } else if (recieved == "T1"){
     hmi_y = 1;
@@ -253,6 +257,7 @@ void RecieveEvent(int howMany){
     messageSend = false;
     x_arrived = false;
     packagePicked = false;
+    inPosition = false;
     hmi_z = current_products;
   } else if (recieved == "T2"){
     hmi_y = 2;
@@ -261,6 +266,7 @@ void RecieveEvent(int howMany){
     messageSend = false;
     x_arrived = false;
     packagePicked = false;
+    inPosition = false;
     hmi_z = current_products;
   } else if (recieved == "T3"){
     hmi_y = 3;
@@ -269,6 +275,7 @@ void RecieveEvent(int howMany){
     messageSend = false;
     x_arrived = false;
     packagePicked = false;
+    inPosition = false;
     hmi_z = current_products;
   } else if (recieved == "T4"){
     hmi_y = 4;
@@ -277,6 +284,7 @@ void RecieveEvent(int howMany){
     messageSend = false;
     x_arrived = false;
     packagePicked = false;
+    inPosition = false;
     hmi_z = current_products;
   }
 

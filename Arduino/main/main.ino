@@ -173,7 +173,7 @@ void loop() {
     zAxisMessageSent = false;
     sendTransmission("NF");    
   }
-
+  // Serial.println(xPos);
 }
 
 void ReceiveEvent(int howMany){
@@ -221,7 +221,7 @@ void communcationHandler() {
     hmi_var1 = (int)buf[1];
     hmi_var2 = (int)buf[2];
   
-
+    messageSent = false;
     actionXCompleted = false;
     actionYCompleted = false;
     actionZCompleted = false;
