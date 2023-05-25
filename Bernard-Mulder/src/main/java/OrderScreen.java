@@ -10,11 +10,13 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderScreen extends JPanel implements ActionListener {
     OrderList orderList;
+    JButton pakbonPrinten;
     JList orders;
     JTextField zoekenOrder;
     OrderLine selectedOrderLine;
@@ -60,7 +62,6 @@ public class OrderScreen extends JPanel implements ActionListener {
 
         JPanel adressLines = new JPanel();
         adressLines.setLayout(new GridLayout(15, 1));
-        adressLines.setPreferredSize(new Dimension(this.getWidth()/4, this.getHeight()));
 
         JPanel adressLinesPanel = new JPanel();
         adressLinesPanel.setLayout(new BorderLayout());
@@ -96,13 +97,23 @@ public class OrderScreen extends JPanel implements ActionListener {
         aanpassenOrderLine.addActionListener(this);
         adressLinesKnoppen.add(aanpassenOrderLine);
 
+        pakbonPrinten = new JButton("Pakbon");
+        pakbonPrinten.setActionCommand("PakbonPrinten");
+        pakbonPrinten.addActionListener(this);
+        adressLinesKnoppen.add(pakbonPrinten);
+
 
         adressLinesPanel.setVisible(false);
 
         orders.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                selectedOrder = orderList.getOrderList().get(orders.getSelectedIndex());
+                int selectedIndex = orders.getSelectedIndex();
+                if(selectedIndex != 0) {
+                    selectedOrder = orderList.getOrderList().get(selectedIndex);
+                } else {
+                    selectedOrder = (Order) orders.getModel().getElementAt(0);
+                }
                 orderLines.clearSelection();
                 orderLines.setListData(selectedOrder.getOrderLines().toArray());
                 OrderNummer.setText("Ordernummer: " + selectedOrder.getId());
@@ -210,7 +221,7 @@ public class OrderScreen extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("AanpassenOrder")){
+        if (e.getActionCommand().equals("AanpassenOrder")) {
             try {
                 aanpassenOrderLine.setBackground(null);
                 int voorraad = selectedOrderLine.getProduct().getStock();
@@ -220,8 +231,14 @@ public class OrderScreen extends JPanel implements ActionListener {
             }
         } else if (e.getActionCommand().equals("AanpassenPickDatum")) {
             SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
+        } else if (e.getActionCommand().equals("PakbonPrinten")) {
+            try {
+                PakbonScreenPopup popup = new PakbonScreenPopup(selectedOrder, "Pakbon van ' " + selectedOrder.getId() + " ' ");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            this.revalidate();
         }
-        this.revalidate();
     }
 }
 
