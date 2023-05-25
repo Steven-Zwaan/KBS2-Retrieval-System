@@ -146,8 +146,8 @@ void loop() {
           if(done){
             delay(100);
             if(x_arrived){
-              Serial.println(1);
-              if (motorZpickUp(zPosBoxes[hmi_z])) {
+              delay(100);
+              if(motorZpickUp(zPosBoxes[hmi_z])) {
                   sendTransmission("TC");
                   messageSend = true;  
                   current_products++;        
@@ -244,6 +244,7 @@ void RecieveEvent(int howMany){
     doneZ = false;
     messageSend = false;
     x_arrived = false;
+    packagePicked = false;
     hmi_z = current_products;
   } else if (recieved == "T1"){
     hmi_y = 1;
@@ -251,6 +252,7 @@ void RecieveEvent(int howMany){
     doneZ = false;
     messageSend = false;
     x_arrived = false;
+    packagePicked = false;
     hmi_z = current_products;
   } else if (recieved == "T2"){
     hmi_y = 2;
@@ -258,6 +260,7 @@ void RecieveEvent(int howMany){
     doneZ = false;
     messageSend = false;
     x_arrived = false;
+    packagePicked = false;
     hmi_z = current_products;
   } else if (recieved == "T3"){
     hmi_y = 3;
@@ -265,6 +268,7 @@ void RecieveEvent(int howMany){
     doneZ = false;
     messageSend = false;
     x_arrived = false;
+    packagePicked = false;
     hmi_z = current_products;
   } else if (recieved == "T4"){
     hmi_y = 4;
@@ -272,6 +276,7 @@ void RecieveEvent(int howMany){
     doneZ = false;
     messageSend = false;
     x_arrived = false;
+    packagePicked = false;
     hmi_z = current_products;
   }
 

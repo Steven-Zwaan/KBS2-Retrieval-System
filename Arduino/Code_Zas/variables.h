@@ -73,7 +73,8 @@ bool moveCompleted = false;
 bool messageSend = false;
 
 bool manual = false;
-int zDefault = 5;
+bool zReturned = false;
+bool yPositioned = false;
 
 int yPosBoxes[] = {145, 625, 1160, 1650, 2200};
 int zPosBoxes[] = {17, 12, 9}; //12 might be 13 and 8 might be 9
