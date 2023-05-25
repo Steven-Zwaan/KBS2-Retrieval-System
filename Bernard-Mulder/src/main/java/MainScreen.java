@@ -77,16 +77,12 @@ public class MainScreen extends JFrame implements ActionListener {
 		root.add("Orders", orderScreen);
 
 
-		WeergavePanel weergavePanel = new WeergavePanel();
+		weergavePanel = new WeergavePanel();
 
 		root.add("Weergave", weergavePanel);
 
 		JPanel HelpPanel = new JPanel();
 		JScrollPane scrollPaneHelpScreen = new JScrollPane(HelpPanel);
-
-		drawPanel = new WeergaveDrawPanel();
-
-		HelpPanel.add(drawPanel);
 
 		JButton testbutton = new JButton("Test");
 		testbutton.setActionCommand("UpdatePos");
