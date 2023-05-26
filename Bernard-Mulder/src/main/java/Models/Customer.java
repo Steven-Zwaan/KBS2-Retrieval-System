@@ -8,8 +8,9 @@ public class Customer {
     private String addressLine1;
     private String addressLine2;
     private String postalCode;
+    private String phoneNumber;
 
-    public Customer(int id, String name, String city, String state, String addressLine1, String addressLine2, String postalCode) {
+    public Customer(int id, String name, String city, String state, String addressLine1, String addressLine2, String postalCode, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.city = city;
@@ -17,6 +18,8 @@ public class Customer {
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+
     }
 
     public int getId() {
@@ -46,6 +49,7 @@ public class Customer {
     public String getPostalCode() {
         return postalCode;
     }
+    public String getPhoneNumber() { return phoneNumber;}
 
     @Override
     public String toString() {
@@ -57,6 +61,7 @@ public class Customer {
                 ", addressLine1='" + addressLine1 + '\'' +
                 ", addressLine2='" + addressLine2 + '\'' +
                 ", postalCode='" + postalCode + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 }

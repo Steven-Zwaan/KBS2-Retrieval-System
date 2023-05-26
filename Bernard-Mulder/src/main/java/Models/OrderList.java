@@ -13,7 +13,7 @@ public class OrderList {
 
     public void getOrdersFromDatabase(){
         String sql = "SELECT orders.OrderID , orders.OrderDate, orders.PickingCompletedWhen, customers.CustomerID, customers.CustomerName, " +
-                "cities.CityName, stateprovinces.StateProvinceName, customers.DeliveryAddressLine1, customers.DeliveryAddressLine2, customers.DeliveryPostalCode " +
+                "cities.CityName, stateprovinces.StateProvinceName, customers.DeliveryAddressLine1, customers.DeliveryAddressLine2, customers.DeliveryPostalCode, customers.PhoneNumber " +
                 "FROM `orders` JOIN `customers` ON orders.CustomerID = customers.CustomerID JOIN `cities` ON customers.DeliveryCityID = cities.CityID " +
                 "JOIN `stateprovinces` ON cities.StateProvinceID = stateprovinces.StateProvinceID WHERE `PickingCompletedWhen` IS NULL ";
         try {
@@ -23,7 +23,7 @@ public class OrderList {
             while(resultSet.next()){
                 Customer customer = new Customer(resultSet.getInt("CustomerID"), resultSet.getString("CustomerName"),
                         resultSet.getString("CityName"), resultSet.getString("StateProvinceName"), resultSet.getString("DeliveryAddressLine1"),
-                        resultSet.getString("DeliveryAddressLine2"), resultSet.getString("DeliveryPostalCode"));
+                        resultSet.getString("DeliveryAddressLine2"), resultSet.getString("DeliveryPostalCode"), resultSet.getString("PhoneNumber"));
                 this.orderList.add(new Order(resultSet.getInt("OrderID"), customer, resultSet.getTimestamp("OrderDate"), resultSet.getTimestamp("PickingCompletedWhen")));
             }
         } catch (SQLException e) {
@@ -47,7 +47,7 @@ public class OrderList {
             while(resultSet.next()){
                 Customer customer = new Customer(resultSet.getInt("CustomerID"), resultSet.getString("CustomerName"),
                         resultSet.getString("CityName"), resultSet.getString("StateProvinceName"), resultSet.getString("DeliveryAddressLine1"),
-                        resultSet.getString("DeliveryAddressLine2"), resultSet.getString("DeliveryPostalCode"));
+                        resultSet.getString("DeliveryAddressLine2"), resultSet.getString("DeliveryPostalCode"), resultSet.getString("PhoneNumber"));
                 this.orderList.add(new Order(resultSet.getInt("OrderID"), customer, resultSet.getTimestamp("OrderDate"), resultSet.getTimestamp("PickingCompletedWhen")));
             }
         } catch (SQLException e) {

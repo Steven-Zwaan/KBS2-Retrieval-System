@@ -42,12 +42,12 @@ public class PakbonScreenPopup extends JDialog implements ActionListener {
         this.setModal(false);
 
         // panel
-        JPanel gegevens = new JPanel( new GridLayout(3,2));
+        JPanel gegevens = new JPanel( new GridLayout(4,2));
 
 
 
 
-        // buttons labels maken
+        // gegevens labels maken
         JLabel naam = new JLabel("Naam: " + customer.getName());
         gegevens.add(naam);
 
@@ -60,16 +60,22 @@ public class PakbonScreenPopup extends JDialog implements ActionListener {
         JLabel woonplaats = new JLabel("Woonplaats: " + customer.getCity());
         gegevens.add(woonplaats);
 
-//        JLabel telnr = new JLabel();
-//        gegevens.add(telnr);
+        JLabel telnr = new JLabel("Telefoonnummer: " + customer.getPhoneNumber());
+        gegevens.add(telnr);
 
-        JLabel artikelen = new JLabel("Artikelen:");
+        // filler label
+        JLabel filler = new JLabel(" ");
+        gegevens.add(filler);
+
+
+        JLabel artikelen = new JLabel("Artikelen: ");
         gegevens.add(artikelen);
 
 
         JList orderLineList = new JList(order.getOrderLines().toArray());
 
 
+        // panel met de buttons/layout/ aanmaak buttons
         JPanel buttons = new JPanel(new GridLayout(1, 2, 30, 30));
         buttons.setBorder(BorderFactory.createEmptyBorder(40,40,40,40));
 
@@ -106,27 +112,36 @@ public class PakbonScreenPopup extends JDialog implements ActionListener {
             this.setVisible(true);
             //Document aanmaken etcc.
             document.addPage( page );
-            // Create a new font object selecting one of the PDF base fonts
+            // font object aanmaken
             PDFont font = PDType1Font.HELVETICA_BOLD;
-            // Start a new content stream which will "hold" the to be created content
+            // contentstream bevat alle informatie die je wilt laten zien
             PDPageContentStream contentStream = null;
             try {
                 PDPageContentStream content = new PDPageContentStream(document, page);
+
+                //begint nieuwe lijn text
                 content.beginText();
                 PDFont hfont = PDType1Font.HELVETICA_BOLD;
                 content.setFont(hfont, 20);
+                //set de locatie van de text op de pagina
                 content.newLineAtOffset(20,750);
                 content.showText("Pakbon van ' " + order.getId() + " ' ");
                 content.endText();
 
+
+                //begint de text voor de gegevens v.d. klant
                 content.beginText();
                 content.setFont(font, 12);
+
+                //variabelen aanmaak voor de locatie van de 1e lijn
                 int  x=20;
                 int y=700;
                 content.newLineAtOffset(x, y);
 
                 int yVar1 = 0;
                 for (int i = 0; i < 1 ; i++) {
+
+                    //som om elk nieuw gegeven op een lijn y-25 onder de voorgaande lijn te zetten.
                     yVar1 = yVar1 - 25;
                     content.showText("Naam: " + customer.getName());
                     content.newLineAtOffset(0, yVar1);
@@ -136,19 +151,25 @@ public class PakbonScreenPopup extends JDialog implements ActionListener {
                     content.newLineAtOffset(0, yVar1);
                     content.showText("Woonplaats: " + customer.getCity());
                     content.newLineAtOffset(0, yVar1);
-                    System.out.println(yVar1);
+                    content.showText("Telefoonnummer: " + customer.getPhoneNumber());
+
+
+                    //test lijn
+                   // System.out.println(yVar1);
                 }
 
                 content.endText();
 
                 content.beginText();
                 content.setFont(font, 12);
-                content.newLineAtOffset(20, 575);
+                content.newLineAtOffset(20, 550);
                 content.showText("Artikelen: ");
                 content.endText();
 
+
+                //artikelen printen:
                 int  xO=20;
-                int yO=550;
+                int yO=525;
                 content.beginText();
                 content.setFont(font, 12);
                 content.newLineAtOffset(xO, yO);
@@ -166,7 +187,9 @@ public class PakbonScreenPopup extends JDialog implements ActionListener {
                 }
                 content.endText();
 
+                //contentstream closen
                 content.close();
+                //document opslaan en closen
                 document.save( "Pakbon_" + order.getId() + "_.pdf");
                 document.close();
             } catch (IOException ex) {

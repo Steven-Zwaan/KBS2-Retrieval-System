@@ -9,10 +9,12 @@ public class OrderScreenEditPopup extends JDialog implements ActionListener {
     OrderLine orderLine;
     JSpinner gepickteAantalSpinner;
     JSpinner totaleAantalSpinner;
+    private OrderScreen frame;
 
-    public OrderScreenEditPopup(OrderLine orderLine, String titel, int voorraad) {
+    public OrderScreenEditPopup(OrderLine orderLine, String titel, int voorraad, OrderScreen frame) {
+        this.frame= frame;
         this.setSize(new Dimension(300,100));
-        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLayout(new GridLayout(3,2));
         this.setModal(false);
         this.setTitle(titel);
@@ -44,9 +46,11 @@ public class OrderScreenEditPopup extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand() == "akkoord") {
+            this.setVisible(false);
             orderLine.setPickedQuantity((Integer) gepickteAantalSpinner.getValue());
             orderLine.setQuantity((Integer) totaleAantalSpinner.getValue());
-            this.dispose();
+            frame.refreshPanel();
+            //dispose();
         } else if (e.getActionCommand() == "annuleren") {
             this.dispose();
         }

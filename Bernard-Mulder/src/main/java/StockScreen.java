@@ -16,6 +16,7 @@ public class StockScreen extends JPanel implements ActionListener {
 
     JList<Product> voorraadList;
     ProductList productList;
+    ArrayList<Product> foundStocks;
     int index;
     public StockScreen() {
         this.setLayout(new BorderLayout());
@@ -73,9 +74,10 @@ public class StockScreen extends JPanel implements ActionListener {
             }
 
             public void filterStock(JList<Product> product, List<Product> productList) {
-                ArrayList<Product> foundStocks = new ArrayList<>();
+                foundStocks = new ArrayList<>();
                 try {
                     int orderID = Integer.parseInt(zoekenStock.getText());
+
                     for (Product foundStock : productList) {
                         if (String.valueOf(foundStock.getId()).contains(String.valueOf(orderID))) {
                             foundStocks.add(foundStock);
@@ -111,16 +113,11 @@ public class StockScreen extends JPanel implements ActionListener {
 
 
 
-        JLabel selectedProductLabel = new JLabel(" ");
+
 
         voorraadList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if(voorraadList.getSelectedIndex() != 0) {
-                    selectedProductLabel.setText(productList.getProductList().get(voorraadList.getSelectedIndex()).toString());
-                } else {
-                    selectedProductLabel.setText(String.valueOf(voorraadList.getModel().getElementAt(0)));
-                }
                 index = voorraadList.getSelectedIndex();
             }
         });
@@ -129,7 +126,7 @@ public class StockScreen extends JPanel implements ActionListener {
 
         selectedStockScreen.add(buttonAanpassenStock);
         selectedStockScreen.add(zoekenStock);
-        selectedStockScreen.add(selectedProductLabel);
+
 
         this.add(selectedStockScreen, BorderLayout.SOUTH);
 
@@ -138,9 +135,13 @@ public class StockScreen extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("AanpassenStock")) {
-            StockScreenEditPopup popup = new StockScreenEditPopup(productList.getProductList().get(index), "Change stock of '" + productList.getProductList().get(index).getName() + "'", productList.getProductList().get(index).getStock(), this);
+
+            //index = voorraadList.getSelectedIndex();
+            StockScreenEditPopup popup = new StockScreenEditPopup(foundStocks.get(index), "Change stock of '" + foundStocks.get(index).getId()+ "'", productList.getProductList().get(voorraadList.getSelectedIndex()).getStock(), this);
             productList.getProductList().get(index).setStockFromDatabase();
             this.voorraadList.revalidate();
+        //else if (e.getActionCommand().equals("AanpassenStock")){
+
         }
     }
 }

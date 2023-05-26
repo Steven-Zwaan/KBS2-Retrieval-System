@@ -127,7 +127,7 @@ public class OrderScreen extends JPanel implements ActionListener {
                 adres.setText("Adres: " + selectedOrder.getCustomer().getAddressLine2());
                 postcode.setText("Postcode: " + selectedOrder.getCustomer().getPostalCode());
                 woonplaats.setText("Woonplaats: " + selectedOrder.getCustomer().getCity());
-                telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer().getName());
+                telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer().getPhoneNumber());
 
                 ProductView.setVisible(true);
                 adressLinesPanel.setVisible(true);
@@ -152,6 +152,7 @@ public class OrderScreen extends JPanel implements ActionListener {
         zoekenOrder = new JTextField(10);
         zoekenOrder.setText("Zoeken...");
         zoekenOrder.addFocusListener(new java.awt.event.FocusAdapter() {
+            // kijkt of de textfield is aan geklikt/ eruit is geklikt en verandert de text
             public void focusGained(java.awt.event.FocusEvent evt) {
                 if (zoekenOrder.getText().equals("Zoeken...")) {
                     zoekenOrder.setText("");
@@ -167,6 +168,7 @@ public class OrderScreen extends JPanel implements ActionListener {
         });
 
         zoekenOrder.getDocument().addDocumentListener(new DocumentListener() {
+            //
             @Override
             public void insertUpdate(DocumentEvent e) {
                 filterOrder(orders, orderResult);
@@ -184,11 +186,12 @@ public class OrderScreen extends JPanel implements ActionListener {
             }
 
             public void filterOrder(JList<Order> order, List<Order> orderList) {
+                //array waarin de orders die je zoekt worden in opgeslagen
                 ArrayList<Order> foundOrders = new ArrayList<>();
                 try {
                     int orderID = Integer.parseInt(zoekenOrder.getText());
                     for (Order foundOrder : orderList) {
-                        if (String.valueOf(foundOrder.getId()).contains(String.valueOf(orderID))) {
+                        if (String.valueOf(foundOrder.getId()).equals(String.valueOf(orderID))) {
                             foundOrders.add(foundOrder);
                         }
                     }
@@ -206,6 +209,7 @@ public class OrderScreen extends JPanel implements ActionListener {
                 }
                 order.setListData(foundOrders.toArray(new Order[0]));
                 if(foundOrders.size() == 0) {
+                    //order niet aanwezig in de database maakt de textfield rood
                     zoekenOrder.setBackground(Color.RED);
                 } else {
                     zoekenOrder.setBackground(Color.white);
@@ -224,6 +228,11 @@ public class OrderScreen extends JPanel implements ActionListener {
 
     }
 
+    public void refreshPanel() {
+        orderLines.setListData(selectedOrder.getOrderLines().toArray());
+        orderLines.revalidate();
+        orderLines.repaint();
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -231,12 +240,14 @@ public class OrderScreen extends JPanel implements ActionListener {
             try {
                 aanpassenOrderLine.setBackground(null);
                 int voorraad = selectedOrderLine.getProduct().getStock();
-                OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrderLine, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId(), voorraad);
+                OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrderLine, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId(), voorraad, this);
+                this.orderLines.revalidate();
             } catch (NullPointerException npe) {
                 aanpassenOrderLine.setBackground(new Color(255, 0, 0));
             }
         } else if (e.getActionCommand().equals("AanpassenPickDatum")) {
             SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
+
         } else if (e.getActionCommand().equals("PakbonPrinten")) {
             try {
                 PakbonScreenPopup popup = new PakbonScreenPopup(selectedOrder, "Pakbon van ' " + selectedOrder.getId() + " ' ");
