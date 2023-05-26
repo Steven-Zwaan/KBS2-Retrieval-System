@@ -167,7 +167,8 @@ void loop() {
         if (!doneZ && (recieved == "G0" || recieved == "G1" || recieved == "G2")){
           if (motorZpickUp(zPosBoxes[hmi_z]) && !messageSend) {
               sendTransmission("GC");
-              messageSend = true;            
+              messageSend = true;
+              current_products++;            
           } 
         } 
         // else if(motorZpickUp(zPosBoxes[hmi_z]) && done){
