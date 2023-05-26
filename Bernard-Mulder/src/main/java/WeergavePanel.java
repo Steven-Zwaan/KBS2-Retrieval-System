@@ -7,97 +7,77 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class WeergavePanel extends JPanel implements ActionListener {
+public class WeergavePanel extends JPanel {
 
-    JPanel viewPanel;
-    JList gepickteOrderList;
-    ArrayList<OrderLine> orderLines;
+    WeergaveDrawPanel viewPanel;
+    JList pickOrderList;
+    private static ArrayList<PickOrder> pickOrders = new ArrayList<>();
     JScrollPane orderLineScrollPane;
     JPanel coordinateBar;
     static Order gepickteOrder = null;
-
-    int x = 0;
-    int y = 0;
-    int z = 0;
+    JLabel xLabel;
+    JLabel yLabel;
 
     public WeergavePanel() {
         this.setLayout(new BorderLayout());
-
         viewPanel = new WeergaveDrawPanel();
 //        viewPanel.setBackground(new Color(255, 0,0));
         this.add(viewPanel, BorderLayout.CENTER);
-        gepickteOrderList = new JList();
-        orderLineScrollPane = new JScrollPane(gepickteOrderList);
-        this.add(orderLineScrollPane, BorderLayout.EAST);
+
+        JPanel eastPanel = new JPanel(new BorderLayout());
+        eastPanel.setPreferredSize(new Dimension(300, getHeight()));
+        this.add(eastPanel, BorderLayout.EAST);
+
+        pickOrderList = new JList(pickOrders.toArray());
+        orderLineScrollPane = new JScrollPane(pickOrderList);
+        eastPanel.add(orderLineScrollPane, BorderLayout.CENTER);
+
+        JButton deleteOrderLine = new JButton("Verwijderen");
+        eastPanel.add(deleteOrderLine, BorderLayout.SOUTH);
+        deleteOrderLine.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    pickOrders.remove(pickOrderList.getSelectedIndex());
+                    refreshPanel();
+                    deleteOrderLine.setBackground(null);
+                } catch(IndexOutOfBoundsException i) {
+                    deleteOrderLine.setBackground(Color.red);
+                }
+            }
+        });
 
         coordinateBar = new JPanel();
-        coordinateBar.setPreferredSize(new Dimension(this.getWidth(), 70));
-        coordinateBar.setLayout(new GridLayout(1, 3));
+        coordinateBar.setPreferredSize(new Dimension(this.getWidth(), 40));
+        coordinateBar.setLayout(new FlowLayout());
         this.add(coordinateBar, BorderLayout.SOUTH);
 
-        JLabel xLabel = new JLabel("X-as: ");
-        JLabel yLabel = new JLabel("y-as: ");
-        JLabel zLabel = new JLabel("Z-as: ");
-
-        JButton testbutton = new JButton("test");
-        testbutton.setActionCommand("test");
-        testbutton.addActionListener(this);
+        xLabel = new JLabel("X-as: " + viewPanel.getxPos());
+        yLabel = new JLabel("y-as: " + viewPanel.getxPos());
 
         coordinateBar.add(xLabel);
         coordinateBar.add(yLabel);
-        coordinateBar.add(zLabel);
-        coordinateBar.add(testbutton);
-
-
     }
 
     public void refreshPanel() {
-        if (gepickteOrder != null) {
-            gepickteOrderList.setListData(gepickteOrder.getOrderLines().toArray());
-        }
+        pickOrderList.setListData(pickOrders.toArray());
+        pickOrderList.revalidate();
+        pickOrderList.repaint();
+    }
+
+    public void updatePos(int x, int y) {
+        viewPanel.updatePos(x,y);
+        xLabel.setText("X-as: " + viewPanel.getxPos());
+        yLabel.setText("Y-as: " + viewPanel.getyPos());
         revalidate();
         repaint();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("test")){
-            while (!(x == 150 &&  y == 200 && z == 300)){
-                if (x < 150) {
-                    x++;
-                } else if (x > 150){
-                    x--;
-                }
+    static void addPickOrder(PickOrder pickOrder) {
+        pickOrders.add(pickOrder);
+    }
 
-                if (y < 200) {
-                    y++;
-                } else if (y > 200){
-                    y--;
-                }
-
-                if (z < 300) {
-                    z++;
-                } else if (z > 300){
-                    z--;
-                }
-
-                ((WeergaveDrawPanel) viewPanel).updatePos(x, y, z);
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        viewPanel.repaint();
-                    }
-                });
-
-                System.out.print(x + " ");
-                System.out.print(y + " ");
-                System.out.println(y);
-                try {
-                    TimeUnit.MILLISECONDS.sleep(100);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
+    static ArrayList<PickOrder> getPickOrders() {
+        return pickOrders;
     }
 }

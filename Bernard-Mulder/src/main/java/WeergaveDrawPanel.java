@@ -2,11 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class WeergaveDrawPanel extends JPanel {
-//	int[] xPos = {25, 125, 225, 325, 425};
-//	int[] yPos = {25, 125, 225, 325, 425};
-	int xPos = 0;
-	int yPos = 0;
-	int zPos = 0;
+	private int xPos = 0;
+	private int yPos = 0;
+	private int zPos = 0;
+	private int xPositie = 0;
+	private int yPositie = 0;
+
 
 	public WeergaveDrawPanel() {
 		this.setBackground(Color.lightGray);
@@ -52,9 +53,23 @@ public class WeergaveDrawPanel extends JPanel {
 		g.fillOval(xPos + (int) (getHeight() * 0.08), yPos ,(int) (getHeight() * 0.03),(int) (getHeight() * 0.03));
 	}
 
-	public void updatePos(int x, int y, int z){
-		this.xPos = x;
-		this.yPos = y;
-		this.zPos = z;
+	public int getxPos() {
+		return xPositie;
+	}
+
+	public int getyPos() {
+		return yPositie;
+	}
+
+	public void updatePos(int x, int y){
+		xPositie = x + 1;
+		yPositie = y + 1;
+		int[] xPosList = {(int) (getHeight() * 0.045), (int) (getHeight() * 0.245), (int) (getHeight() * 0.445), (int) (getHeight() * 0.645), (int) (getHeight() * 0.845)};
+		int[] yPosList = {(int) (getHeight() * 0.1), (int) (getHeight() * 0.3), (int) (getHeight() * 0.5), (int) (getHeight() * 0.7), (int) (getHeight() * 0.9)};
+		this.xPos = xPosList[x];
+		this.yPos = yPosList[y];
+
+		revalidate();
+		repaint();
 	}
 }

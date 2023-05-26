@@ -77,16 +77,12 @@ public class MainScreen extends JFrame implements ActionListener {
 		root.add("Orders", orderScreen);
 
 
-		WeergavePanel weergavePanel = new WeergavePanel();
+		weergavePanel = new WeergavePanel();
 
 		root.add("Weergave", weergavePanel);
 
 		JPanel HelpPanel = new JPanel();
 		JScrollPane scrollPaneHelpScreen = new JScrollPane(HelpPanel);
-
-		drawPanel = new WeergaveDrawPanel();
-
-		HelpPanel.add(drawPanel);
 
 		JButton testbutton = new JButton("Test");
 		testbutton.setActionCommand("UpdatePos");
@@ -106,6 +102,7 @@ public class MainScreen extends JFrame implements ActionListener {
 			cardLayout.show(root, "Orders");
 		} else if (e.getActionCommand().equals("Weergave")){
 			cardLayout.show(root, "Weergave");
+			weergavePanel.refreshPanel();
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");
 		}
