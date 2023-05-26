@@ -6,15 +6,16 @@ public class PickOrder {
     private int weight;
     private int pickOrderID;
     private boolean isPicked;
+    private int orderNummer;
 
 
-    public PickOrder(OrderLine orderLine, int xPos, int yPos, int weight) {
+    public PickOrder(OrderLine orderLine, int xPos, int yPos, int weight, int orderNummer) {
         this.xPos = xPos;
         this.yPos = yPos;
         this.weight = weight;
         this.isPicked = false;
         this.orderLine = orderLine;
-
+        this.orderNummer = orderNummer;
     }
     public int getWeight() {
         return weight;
@@ -36,8 +37,16 @@ public class PickOrder {
         isPicked = true;
     }
 
+    public OrderLine getOrderLine() {
+        return orderLine;
+    }
+
+    public int getOrderNummer() {
+        return orderNummer;
+    }
+
     @Override
     public String toString() {
-        return "Pickorder ID: " + orderLine.getId() + ", X: " + xPos + ", Y: " + yPos + ", gewicht: " + weight;
+        return "Ordernummer: " + orderNummer + ", Pickorder ID: " + orderLine.getId() + ", X: " + xPos + ", Y: " + yPos + ", gewicht: " + weight;
     }
 }

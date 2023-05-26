@@ -66,6 +66,7 @@ public class OrderScreen extends JPanel implements ActionListener {
         JPanel adressLinesPanel = new JPanel();
         adressLinesPanel.setLayout(new BorderLayout());
         adressLinesPanel.add(adressLines, BorderLayout.CENTER);
+        adressLinesPanel.setPreferredSize(new Dimension(350, getHeight()));
 
         this.add(adressLinesPanel, BorderLayout.EAST);
 

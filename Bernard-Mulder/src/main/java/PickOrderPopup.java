@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class PickOrderPopup extends JDialog{
 
@@ -55,6 +56,12 @@ public class PickOrderPopup extends JDialog{
             orderLinePanel.add(weightComboBox.get(weightComboBox.size()-1));
         }
 
+        JLabel errorLabel = new JLabel("Deze orderlines worden al gepickt", SwingConstants.CENTER);
+        errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        errorLabel.setForeground(Color.red);
+        panel.add(errorLabel);
+        errorLabel.setVisible(false);
+
         JPanel buttonPanel = new JPanel(new FlowLayout());
         this.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -72,12 +79,18 @@ public class PickOrderPopup extends JDialog{
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                for (OrderLine orderLine : orderLines) {
+                    if (WeergavePanel.pickOrders.stream().filter(p -> p.getOrderLine().getId() == orderLine.getId()).findAny().isPresent()) {
+                        errorLabel.setVisible(true);
+                        return;
+                    }
+                }
                 for (int i = 0; i < orderLines.size(); i++) {
                     int selectedWeight = Integer.parseInt(weightComboBox.get(i).getSelectedItem().toString());
-                    PickOrder pickOrder = new PickOrder(orderLines.get(i), (Integer) xPosSpinners.get(i).getValue(), (Integer) yPosSpinners.get(i).getValue(),selectedWeight);
+                    PickOrder pickOrder = new PickOrder(orderLines.get(i), (Integer) xPosSpinners.get(i).getValue(), (Integer) yPosSpinners.get(i).getValue(),selectedWeight, selectedOrder.getId());
                     WeergavePanel.addPickOrder(pickOrder);
-                    System.out.println(WeergavePanel.getPickOrders().toString());
                 }
+                WeergavePanel.pickedOrderNummers.add(selectedOrder.getId());
                 dispose();
             }
         });
