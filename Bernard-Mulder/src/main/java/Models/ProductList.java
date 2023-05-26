@@ -12,7 +12,7 @@ public class ProductList {
     private DatabaseConnector databaseConnector = new DatabaseConnector();
 
     public void getProductsFromDatabase(){
-        String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID";
+        String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID ORDER BY stockitems.StockItemID";
         try {
             PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();

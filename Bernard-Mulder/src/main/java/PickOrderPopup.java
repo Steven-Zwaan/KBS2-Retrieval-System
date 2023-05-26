@@ -1,4 +1,6 @@
 import Models.*;
+import Route.Bruteforce;
+import Route.Point;
 
 import javax.sound.sampled.BooleanControl;
 import javax.swing.*;
@@ -8,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class PickOrderPopup extends JDialog{
 
@@ -55,6 +58,12 @@ public class PickOrderPopup extends JDialog{
             orderLinePanel.add(weightComboBox.get(weightComboBox.size()-1));
         }
 
+        JLabel errorLabel = new JLabel("Deze orderlines worden al gepickt", SwingConstants.CENTER);
+        errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        errorLabel.setForeground(Color.red);
+        panel.add(errorLabel);
+        errorLabel.setVisible(false);
+
         JPanel buttonPanel = new JPanel(new FlowLayout());
         this.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -72,12 +81,33 @@ public class PickOrderPopup extends JDialog{
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                for (OrderLine orderLine : orderLines) {
+                    if (WeergavePanel.pickOrders.stream().filter(p -> p.getOrderLine().getId() == orderLine.getId()).findAny().isPresent()) {
+                        errorLabel.setVisible(true);
+                        return;
+                    }
+                }
                 for (int i = 0; i < orderLines.size(); i++) {
                     int selectedWeight = Integer.parseInt(weightComboBox.get(i).getSelectedItem().toString());
-                    PickOrder pickOrder = new PickOrder(orderLines.get(i), (Integer) xPosSpinners.get(i).getValue(), (Integer) yPosSpinners.get(i).getValue(),selectedWeight);
+                    PickOrder pickOrder = new PickOrder(orderLines.get(i), (Integer) xPosSpinners.get(i).getValue(), (Integer) yPosSpinners.get(i).getValue(),selectedWeight, selectedOrder.getId());
                     WeergavePanel.addPickOrder(pickOrder);
-                    System.out.println(WeergavePanel.getPickOrders().toString());
                 }
+                WeergavePanel.pickedOrderNummers.add(selectedOrder.getId());
+                if (WeergavePanel.pickOrders.size() == 3){
+                    Route.Point p1 = new Route.Point(0,0);
+                    Route.Point p2 = new Route.Point(0, 0);
+                    Route.Point p3 = new Route.Point(0, 0);
+                    Route.Point p4 = new Route.Point(0, 0);
+                    Route.Point p5 = new Point(5,5);
+                    Bruteforce bruteforce = new Bruteforce(p1, p2 ,p3, p4, p5);
+
+                    System.out.println(bruteforce.calc());
+
+                    //Route.Point p3 = new Route.Point(WeergavePanel.getPickOrdersFromOrder(WeergavePanel.pickedOrderNummers.get(0)).get(0).getxPos(),WeergavePanel.getPickOrders().get(1).getyPos());
+                   // Route.Point p4 = new Route.Point(WeergavePanel.getPickOrders().get(2).getxPos(),WeergavePanel.getPickOrders().get(2).getyPos());
+
+                }
+
                 dispose();
             }
         });

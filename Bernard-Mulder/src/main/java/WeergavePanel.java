@@ -4,17 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class WeergavePanel extends JPanel {
 
     WeergaveDrawPanel viewPanel;
     JList pickOrderList;
-    private static ArrayList<PickOrder> pickOrders = new ArrayList<>();
+    static ArrayList<PickOrder> pickOrders = new ArrayList<>();
+    static ArrayList<Integer> pickedOrderNummers = new ArrayList<>();
     JScrollPane orderLineScrollPane;
     JPanel coordinateBar;
-    static Order gepickteOrder = null;
     JLabel xLabel;
     JLabel yLabel;
 
@@ -77,7 +79,7 @@ public class WeergavePanel extends JPanel {
         pickOrders.add(pickOrder);
     }
 
-    static ArrayList<PickOrder> getPickOrders() {
-        return pickOrders;
+    static ArrayList<PickOrder> getPickOrdersFromOrder(int orderID) {
+        return new ArrayList<>(pickOrders.stream().filter(p -> p.getOrderNummer() == orderID).collect(Collectors.toList()));
     }
 }

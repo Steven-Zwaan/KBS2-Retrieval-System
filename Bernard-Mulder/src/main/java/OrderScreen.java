@@ -66,6 +66,7 @@ public class OrderScreen extends JPanel implements ActionListener {
         JPanel adressLinesPanel = new JPanel();
         adressLinesPanel.setLayout(new BorderLayout());
         adressLinesPanel.add(adressLines, BorderLayout.CENTER);
+        adressLinesPanel.setPreferredSize(new Dimension(350, getHeight()));
 
         this.add(adressLinesPanel, BorderLayout.EAST);
 
@@ -116,11 +117,15 @@ public class OrderScreen extends JPanel implements ActionListener {
             public void valueChanged(ListSelectionEvent e) {
                 int selectedIndex = orders.getSelectedIndex();
                 if(selectedIndex != 0) {
-                    selectedOrder = orderList.getOrderList().get(selectedIndex);
+                    try {
+                        selectedOrder = orderList.getOrderList().get(selectedIndex);
+                    } catch (IndexOutOfBoundsException exception){
+                        selectedOrder = (Order) orders.getModel().getElementAt(0);
+                    }
                 } else {
                     selectedOrder = (Order) orders.getModel().getElementAt(0);
                 }
-                orderLines.clearSelection();
+//                orderLines.clearSelection();
                 orderLines.setListData(selectedOrder.getOrderLines().toArray());
                 OrderNummer.setText("Ordernummer: " + selectedOrder.getId());
                 naam.setText("Naam: " + selectedOrder.getCustomer().getName());
