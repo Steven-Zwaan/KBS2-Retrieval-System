@@ -117,7 +117,11 @@ public class StockScreen extends JPanel implements ActionListener {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if(voorraadList.getSelectedIndex() != 0) {
-                    selectedProductLabel.setText(productList.getProductList().get(voorraadList.getSelectedIndex()).toString());
+                    try {
+                        selectedProductLabel.setText(productList.getProductList().get(voorraadList.getSelectedIndex()).toString());
+                    } catch (IndexOutOfBoundsException exception) {
+                        selectedProductLabel.setText(String.valueOf(voorraadList.getModel().getElementAt(0)));
+                    }
                 } else {
                     selectedProductLabel.setText(String.valueOf(voorraadList.getModel().getElementAt(0)));
                 }

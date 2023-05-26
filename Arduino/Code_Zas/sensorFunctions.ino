@@ -21,7 +21,6 @@ void updateLEDS(){
     analogWrite(RED,1023);
     digitalWrite(ORANGE,LOW);
     digitalWrite(GREEN,LOW);
-
   } else {
     if (manual){
       analogWrite(RED,0);
@@ -33,5 +32,4 @@ void updateLEDS(){
       digitalWrite(GREEN,HIGH);
     }
   }
-  
 }
