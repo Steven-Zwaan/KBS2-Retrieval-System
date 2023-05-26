@@ -134,7 +134,7 @@ void loop() {
           }
         } 
 
-        if (!messageSend && (recieved == "T0" || recieved == "T1" || recieved == "T2" || recieved == "T3" || recieved == "T4")){
+        if (!doneZ && (recieved == "T0" || recieved == "T1" || recieved == "T2" || recieved == "T3" || recieved == "T4")){
           // if(motorYgoTo(yPosBoxes[hmi_y])){
           //   if(x_arrived){
           //     if(motorZpickUp(zPosBoxes[hmi_z])){
