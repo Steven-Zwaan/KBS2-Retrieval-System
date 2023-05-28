@@ -134,22 +134,20 @@ void loop() {
           }
         } 
 
+        // controlleer of z-as actie nog niet is uitgevoerd en of received gelijk is aan 1 van de go-to en grab acties
         if (!doneZ && (recieved == "T0" || recieved == "T1" || recieved == "T2" || recieved == "T3" || recieved == "T4")){
-          motorYgoTo(yPosBoxes[hmi_y]);
-          if(done){
-            delay(100);
-            if(x_arrived){
-              delay(100);
-              Serial.println(55);
-              if(motorZpickUp(zPosBoxes[hmi_z])) {
-                  Serial.println(99);
-                  sendTransmission("TC");
-                  messageSend = true;  
-                  current_products++;        
+          motorYgoTo(yPosBoxes[hmi_y]); // ga naar de meegegeven y-as positie
+          if(done){ // controlleer of de Y go to actie compleet is
+            delay(100); // kleine delay anders kans dat x niet uitgelezen wordt.
+            if(x_arrived){ // controleer of x-as op positie is
+              delay(100); // kleine delay om kans op problemen te verminderen
+              if(motorZpickUp(zPosBoxes[hmi_z])) { // controlleer of de grijp actie gedaan is
+                  sendTransmission("TC"); // verstuur actie klaar signaal
+                  messageSend = true;  // zet message verstuurd op true
+                  current_products++; // verhoog current products met 1; dit is het bijhouden van producten op de arm          
               } 
             }
-          }
-            
+          }  
         } 
         // else if(motorYgoTo(yPosBoxes[hmi_y]) && done && !moveCompleted){
         //   // Serial.println("Succes!");

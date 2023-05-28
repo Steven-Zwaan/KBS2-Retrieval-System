@@ -111,16 +111,16 @@ void loop() {
                 Serial.println(600);
               }  
               break;   
-            case 3: // bewegeing x en y as en dan z as
-              if(motorXgoTo(xPosBoxes[hmi_var1])){
-                if(!messageSent){
-                  sendTransmission("TX");
-                  messageSent = true;
+            case 3: // beweging x en y as en dan z as
+              if(motorXgoTo(xPosBoxes[hmi_var1])){ // ga naar de meegegeven x-as positie
+                if(!messageSent){ // controlleer of bericht nog niet verstuurd is
+                  sendTransmission("TX"); // verstuur T actie X compleet
+                  messageSent = true; // zet bericht verstuurd op true
                 }
-                actionXCompleted = true;
+                actionXCompleted = true; // zet X actie op compleet
               }
-              if(actionZCompleted){
-                Serial.println(600);
+              if(actionZCompleted){ // check of Z actie compleet is
+                Serial.println(600); // verstuur 600, oftewel actie compleet
               }
               break;
             default:
