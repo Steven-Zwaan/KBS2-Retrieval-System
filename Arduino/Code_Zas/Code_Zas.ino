@@ -135,14 +135,7 @@ void loop() {
         } 
 
         if (!doneZ && (recieved == "T0" || recieved == "T1" || recieved == "T2" || recieved == "T3" || recieved == "T4")){
-          // if(motorYgoTo(yPosBoxes[hmi_y])){
-          //   if(x_arrived){
-          //     if(motorZpickUp(zPosBoxes[hmi_z])){
-          //     } 
-          //   }
-          // }
-          if (motorYgoTo(yPosBoxes[hmi_y])) {
-          }
+          motorYgoTo(yPosBoxes[hmi_y])
           if(done){
             delay(100);
             if(x_arrived){
