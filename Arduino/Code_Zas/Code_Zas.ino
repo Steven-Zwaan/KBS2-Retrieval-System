@@ -164,11 +164,13 @@ void loop() {
         //   moveCompleted = true;
         // }
 
-        if (!doneZ && (recieved == "G0" || recieved == "G1" || recieved == "G2")){
+        // controlleer of z-as actie nog niet is uitgevoerd en of received gelijk is aan 1 van de grijp acties
+        if (!doneZ && (recieved == "G0" || recieved == "G1" || recieved == "G2")){ 
+          // controlleer of de grijp actie gedaan is en of het bericht nog niet gestuurd is
           if (motorZpickUp(zPosBoxes[hmi_z]) && !messageSend) {
-              sendTransmission("GC");
-              messageSend = true;
-              current_products++;            
+              sendTransmission("GC"); // verstuurd Grab Completed
+              messageSend = true; // zet message verstuurd op true
+              current_products++; // verhoog current products met 1; dit is het bijhouden van producten op de arm           
           } 
         } 
         // else if(motorZpickUp(zPosBoxes[hmi_z]) && done){

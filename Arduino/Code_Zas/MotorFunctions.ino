@@ -94,7 +94,5 @@ bool motorZpickUp(int zPosition){
         }
       }
     }
-    
-    
   }
 }
