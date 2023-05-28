@@ -53,22 +53,22 @@ void loop() {
     motorXstop(); 
     //Serial.println("NOODSTOP");
   } else if (!Noodstop){
-    if (calibrate) {
-      if(!zAxisCalibrated){
-        if (!zAxisMessageSent) {
-          sendTransmission("CSZ");
-          zAxisMessageSent = true;
+    if (calibrate) { // Kijk of kalibratie aan staat
+      if(!zAxisCalibrated){ // kijk of de z-as nog niet gekalibreerd is
+        if (!zAxisMessageSent) { // kijk of het z-as kalibratie bericht nog niet verstuurd is.
+          sendTransmission("CSZ"); // verstuur start z-as kalibratie.
+          zAxisMessageSent = true; // zet z-as kalibratie verstuurd op true
         }
-      } else {
-        if (!borderHitLeft){
-          motorXleft();
+      } else { // else als de z-as gekalibreerd is.
+        if (!borderHitLeft){ //kijk of de robot de linker knop niet aanraakt.
+          motorXleft(); // laat de robot naar links gaan.
         } else {
-          motorXstop();
-          xPos = 0;
-          if (yAxisCalibrated) {
-            sendTransmission("CF");
-            calibrate = false;
-            zAs = false;
+          motorXstop(); // stop de x-as motor.
+          xPos = 0; // zet xpositie op 0
+          if (yAxisCalibrated) {  // check of de y-as gekalibreerd is.
+            sendTransmission("CF"); // verstuur kalibratie klaar bericht. 
+            calibrate = false; // zet kalibratie uit/
+            zAs = false; // zet z-as uit.
           }
         }
       }

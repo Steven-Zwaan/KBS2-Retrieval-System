@@ -58,24 +58,24 @@ void loop() {
     motorYstop();
     // Serial.print("NOODSTOP");
   } else if (!noodstop) {
-    if(calibrate){
-      if (calibrateZ) {
-        if(readIR() != 5){
-          motorZbackward();
-        } else {
-          motorZstop();
-          sendTransmission("CZF");
-          calibrateZ = false;
-          zAs = false;
-          calibrateY = true;
+    if(calibrate){ // Kijk of kalibratie aan staat
+      if (calibrateZ) { // Kijk of z-as kalibratie aan staat
+        if(readIR() != 5){ // kijk of de afstand op z-as niet gelijk is aan 5cm oftewel het start punt
+          motorZbackward(); // Laat de z-as motor achteruit gaan.
+        } else { // else als de z-as gekalibreerd is.
+          motorZstop(); // Stop de z-as motor
+          sendTransmission("CZF"); // Verstuur data Z-as kalibratie klaar is
+          calibrateZ = false; // zet z-as kalibratie op uit
+          zAs = false; // zet besturing z-as uit.
+          calibrateY = true; // zet y-as kalibratie aan
         }
-      } else if (calibrateY) {
-        if(!borderHitBottom){
-          motorYdown();
+      } else if (calibrateY) { // kijk of y-as kalibratie aan staat
+        if(!borderHitBottom){ //kijk of de robot de bottom knop niet raakt.
+          motorYdown(); // laat de y-as naar beneden gaan.
         } else {
-          motorYstop();
-          sendTransmission("CYF");
-          calibrateY = false;
+          motorYstop(); // stop de y-as motor.
+          sendTransmission("CYF"); // vestuur dat y-as kalibratie klaar is.
+          calibrateY = false; // zet y-as kalibratie uit.
         }
       }
 
