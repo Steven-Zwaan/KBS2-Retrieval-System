@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Libraries">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Libraries/jSerialComm-2.9.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Libraries/mysql-connector-j-8.0.33.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

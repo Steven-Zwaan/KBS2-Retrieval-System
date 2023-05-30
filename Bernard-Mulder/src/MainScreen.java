@@ -10,7 +10,7 @@ public class MainScreen extends JFrame implements ActionListener {
 	private JMenuItem menuButtonVoorraad;
 	private JMenuItem menuButtonOrders;
 	private JMenuItem menuButtonWeergave;
-	private JMenuItem menuButton1;
+	private JMenuItem menuButtonInpakken;
 	private JMenuItem menuButton2;
 	private JMenuItem menuButtonHelp;
 	CardLayout cardLayout;
@@ -46,9 +46,9 @@ public class MainScreen extends JFrame implements ActionListener {
 		menuButtonWeergave.setActionCommand("Weergave");
 		menuButtonWeergave.addActionListener(this);
 
-		menuButton1 = new JMenuItem("-");
-		menuButton1.setActionCommand("button1");
-		menuButton1.addActionListener(this);
+		menuButtonInpakken = new JMenuItem("Inpakken");
+		menuButtonInpakken.setActionCommand("Inpakken");
+		menuButtonInpakken.addActionListener(this);
 
 		menuButton2 = new JMenuItem("-");
 		menuButton2.setActionCommand("button2");
@@ -63,7 +63,7 @@ public class MainScreen extends JFrame implements ActionListener {
 		menuBar.add(menuButtonVoorraad);
 		menuBar.add(menuButtonOrders);
 		menuBar.add(menuButtonWeergave);
-		menuBar.add(menuButton1);
+		menuBar.add(menuButtonInpakken);
 		menuBar.add(menuButton2);
 		menuBar.add(menuButtonHelp);
 
@@ -79,6 +79,9 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		JPanel HelpPanel = new JPanel();
 		JScrollPane scrollPaneHelpScreen = new JScrollPane(HelpPanel);
+
+		PackingScreen packingScreen = new PackingScreen();
+		root.add("Inpakken", packingScreen);
 
 		drawPanel = new WeergaveDrawPanel();
 
@@ -104,6 +107,8 @@ public class MainScreen extends JFrame implements ActionListener {
 			cardLayout.show(root, "Weergave");
 		} else if (e.getActionCommand().equals("Help")){
 			cardLayout.show(root, "Help");
+		} else if (e.getActionCommand().equals("Inpakken")){
+			cardLayout.show(root, "Inpakken");
 		}
 		this.revalidate();
 	}
