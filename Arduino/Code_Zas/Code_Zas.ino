@@ -199,6 +199,16 @@ void loop() {
     sendTransmission("MS");
     manual = !manual; 
   }
+
+  if(millis() - lastSentPositionTime >= SEND_POSITION_INTERVAL)
+	{
+		lastSentPositionTime += SEND_POSITION_INTERVAL;
+    // int yPosMapped = map(yPos, 0, 2600, 0, 255);
+    int yPosCalc = yPos / 520;
+
+    sendTransmission((String)'Y' + yPosCalc);
+    // Serial.println(YPosCalc);
+	}
   // Serial.println(yPos);
 }
 

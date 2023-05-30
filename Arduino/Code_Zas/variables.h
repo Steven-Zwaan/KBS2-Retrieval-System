@@ -90,3 +90,6 @@ String recieved = "";
 
 bool x_arrived = false;
 int current_products = 0;
+
+const unsigned long SEND_POSITION_INTERVAL = 500; // ms
+unsigned long lastSentPositionTime = 0;

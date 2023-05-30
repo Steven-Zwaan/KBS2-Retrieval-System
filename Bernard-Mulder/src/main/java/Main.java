@@ -10,6 +10,7 @@ public class Main {
 //        ArduinoConnection arduino = new ArduinoConnection("/dev/ttyACM1");
 //
 //        arduino.openPort();
+//        arduino.receiveData();
 //        Thread.sleep(2000);
 //
 //

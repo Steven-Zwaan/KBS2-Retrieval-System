@@ -12,7 +12,7 @@ void sendTransmission(String message) {
   Wire.beginTransmission(BUS);
   Wire.write(message.c_str());
   Wire.endTransmission();
-  Serial.println("Message send:" + message);
+  // Serial.println("Message send:" + message);
 }
 
 void updateLEDS(){

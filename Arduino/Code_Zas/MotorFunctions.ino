@@ -83,7 +83,7 @@ bool motorZpickUp(int zPosition){
       yPositioned = true; // zet y positie op true
     }
     if(yPositioned){ // controleer of y-as in positie is
-      while(!zReturned){ / loop als z-as niet op start positie is
+      while(!zReturned){ // loop als z-as niet op start positie is
       motorZbackward(); // laat z-as achteruit gaan
         if(readIR() == 5){ // actie als z-as op 5(cm) is oftewel op start positie
           motorZstop(); // stop z-as motor

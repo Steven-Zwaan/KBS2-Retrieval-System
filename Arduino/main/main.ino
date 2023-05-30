@@ -120,7 +120,7 @@ void loop() {
                 actionXCompleted = true; // zet X actie op compleet
               }
               if(actionZCompleted){ // check of Z actie compleet is
-                Serial.println(600); // verstuur 600, oftewel actie compleet
+                Serial.println(00); // verstuur 600, oftewel actie compleet
               }
               break;
             default:
@@ -173,6 +173,14 @@ void loop() {
     zAxisMessageSent = false;
     sendTransmission("NF");    
   }
+
+  if(millis() - lastSentPositionTime >= SEND_POSITION_INTERVAL)
+	{
+		lastSentPositionTime += SEND_POSITION_INTERVAL;
+    int xPosCalc = (xPos + 90) / 700;
+    String message = (String) 9 + (String) xPosCalc + (String) y_position;
+    Serial.println(message.toInt());
+  }
   // Serial.println(xPos);
 }
 
@@ -180,6 +188,11 @@ void ReceiveEvent(int howMany){
   String recieved = "";
   for(int i = 0; i < howMany; i++){
     recieved += (char)Wire.read();
+  }
+  
+  if (recieved.substring(0, 1) == "Y") {
+    String y_position_raw = recieved.substring(1);
+    y_position = y_position_raw.toInt();
   }
 
   if (recieved == "TC") {
