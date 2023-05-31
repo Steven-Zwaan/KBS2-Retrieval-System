@@ -20,6 +20,10 @@ public class PackingScreen extends JPanel implements ActionListener {
     JScrollPane orderLineScrollPane;
     JScrollPane boxScrollPane;
     BinPackingBoxPanel binPackingBoxPanel;
+    static ArrayList<PickOrder> pickOrders = new ArrayList<>();
+    static ArrayList<Integer> pickedOrderNummers = new ArrayList<>();
+    JList pickOrderList;
+
 
     public PackingScreen() {
         this.setLayout(new BorderLayout());
@@ -28,9 +32,18 @@ public class PackingScreen extends JPanel implements ActionListener {
         this.add(viewPanel, BorderLayout.CENTER);
         viewPanel.setPreferredSize(new Dimension(300, 500));
 
+        binPackingBoxPanel = new BinPackingBoxPanel();
+        this.add(binPackingBoxPanel, BorderLayout.WEST);
+
+
+        pickOrderList = new JList(pickOrders.toArray());
+        orderLineScrollPane = new JScrollPane(pickOrderList);
+        binPackingBoxPanel.add(orderLineScrollPane, BorderLayout.CENTER);
+
         gepickteOrderList = new JList();
         orderLineScrollPane = new JScrollPane(gepickteOrderList);
         this.add(orderLineScrollPane, BorderLayout.WEST);
+
         gepickteOrderList.setPreferredSize(new Dimension(400,780));
 
         BinPackingBoxPanel binPackingBoxPanel1 = new BinPackingBoxPanel();

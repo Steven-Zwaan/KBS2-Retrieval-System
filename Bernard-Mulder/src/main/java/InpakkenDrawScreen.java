@@ -11,12 +11,16 @@ public class InpakkenDrawScreen extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(Color.BLACK);
-        g.fillRect(495, 100, 3, 300);
-        g.fillRect(795, 100, 3, 300);
-        g.fillRect(495, 400, 303, 3);
-        g.fillRect(495, 500, 3, 300);
-        g.fillRect(795, 500, 3, 300);
-        g.fillRect(495, 800, 303, 3);
+
+        //Doos 1, boven
+        g.fillRect((int)(this.getWidth() * 0.35), 100, 3, 230);
+        g.fillRect((int)(this.getWidth() * 0.65), 100, 3, 230);
+        g.fillRect((int)(this.getHeight() * 0.404), 330, 284, 3);
+
+        //Doos 2, onder
+        g.fillRect((int)(this.getWidth() * 0.35), 500, 3, 230);
+        g.fillRect((int)(this.getWidth() * 0.65), 500, 3, 230);
+        g.fillRect((int)(this.getHeight() * 0.404), 730, 284, 3);
 
         this.setVisible(true);
     }
