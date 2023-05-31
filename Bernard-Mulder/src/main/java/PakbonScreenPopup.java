@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +24,7 @@ public class PakbonScreenPopup extends JDialog implements ActionListener {
 
     PDDocument document = new PDDocument();
     PDPage page = new PDPage();
+    PDImageXObject pdImage = PDImageXObject.createFromFile("C://Users//enteb//OneDrive//Documents//Karolien school//logo.png", document);
 
 
 
@@ -128,14 +130,27 @@ public class PakbonScreenPopup extends JDialog implements ActionListener {
                 content.showText("Pakbon van ' " + order.getId() + " ' ");
                 content.endText();
 
+                content.drawImage(pdImage, 475, 675, 100, 100);
+
+
+
+
+
+                content.beginText();
+                content.setFont(font, 12);
+                content.newLineAtOffset(20, 700);
+                content.showText("Klant: ");
+                content.endText();
+
+
 
                 //begint de text voor de gegevens v.d. klant
                 content.beginText();
-                content.setFont(font, 12);
+                content.setFont(font, 10);
 
                 //variabelen aanmaak voor de locatie van de 1e lijn
                 int  x=20;
-                int y=700;
+                int y=675;
                 content.newLineAtOffset(x, y);
 
                 int yVar1 = 0;
@@ -161,19 +176,31 @@ public class PakbonScreenPopup extends JDialog implements ActionListener {
                 content.endText();
 
                 content.beginText();
-                content.setFont(font, 12);
-                content.newLineAtOffset(20, 550);
+                content.setFont(font, 10);
+                content.newLineAtOffset(20, 525);
+                content.showText("Hierbij ontvangt u de pakbon voor orderID " + order.getId() + " en onderstaande bestelling.");
+                content.endText();
+
+                content.beginText();
+                content.setFont(font, 15);
+                content.newLineAtOffset(20, 475);
                 content.showText("Artikelen: ");
                 content.endText();
 
 
                 //artikelen printen:
-                int  xO=20;
-                int yO=525;
-                content.beginText();
-                content.setFont(font, 12);
-                content.newLineAtOffset(xO, yO);
 
+                content.moveTo(20, 470);
+                content.lineTo(590, 470);
+                content.stroke();
+
+
+
+                int  xO=20;
+                int yO=450;
+                content.beginText();
+                content.setFont(font, 10);
+                content.newLineAtOffset(xO, yO);
                 // gaat door de orderlines heen en print ze
 
                 int yVar = 0;
@@ -186,12 +213,42 @@ public class PakbonScreenPopup extends JDialog implements ActionListener {
 
                 }
                 content.endText();
+                System.out.println(yVar);
+                System.out.println(yO-yVar+5);
+                content.moveTo(20, yO+yVar+5);
+                content.lineTo(590, yO+yVar+5);
+                content.stroke();
+
+                content.moveTo(20, 40);
+                content.lineTo(590, 40);
+                content.stroke();
+
+                content.beginText();
+                content.setFont(font, 8);
+                content.newLineAtOffset(20, 30);
+                content.showText("Kiezenstraat 40");
+                content.endText();
+                content.beginText();
+                content.newLineAtOffset(20, 20);
+                content.showText("9165 HT");
+                content.endText();
+                content.beginText();
+                content.newLineAtOffset(20, 10);
+                content.showText("Nederland");
+                content.endText();
+
+                content.beginText();
+                content.setFont(font, 8);
+                content.newLineAtOffset(250, 20);
+                content.showText("NerdyGadgets");
+                content.endText();
 
                 //contentstream closen
                 content.close();
                 //document opslaan en closen
                 document.save( "Pakbon_" + order.getId() + "_.pdf");
                 document.close();
+                this.setVisible(false);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
