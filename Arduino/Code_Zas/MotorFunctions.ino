@@ -1,14 +1,12 @@
 // Z
 void motorZforward()
 {
-  // int motorSpeed = 255 - map(yValue, 0, 512, 0, 255);
     digitalWrite(ZDir, LOW);
     analogWrite(ZPWM, 255);
 }
 
 void motorZbackward()
 {
-  //  int motorSpeed = map(yValue, 513, 1023, 0, 255);
     digitalWrite(ZDir, HIGH);
     analogWrite(ZPWM, 255);
 }
@@ -21,7 +19,6 @@ void motorZstop()
 
 // Y
 void motorYup(){
-  //  int motorSpeed = 255 - map(yValue, 0, 512, 0, 255);
       digitalWrite(YDir, LOW);
       analogWrite(YPWM, 255);
       Omhoog = true;
@@ -29,7 +26,6 @@ void motorYup(){
 }
 
 void motorYdown(){
-  // int motorSpeed = map(yValue, 513, 1023, 0, 255);
       digitalWrite(YDir, HIGH);
       analogWrite(YPWM, 255);
       Omhoog = false;
@@ -50,7 +46,6 @@ void encoderYadd(){
 }
 
 bool motorYgoTo(int yPosition){
-  // Serial.println("in automatic motor");
   if (yPos < yPosition - 22){
     motorYup();
     return 0;
@@ -83,7 +78,7 @@ bool motorZpickUp(int zPosition){
       yPositioned = true; // zet y positie op true
     }
     if(yPositioned){ // controleer of y-as in positie is
-      while(!zReturned){ / loop als z-as niet op start positie is
+      while(!zReturned){ // loop als z-as niet op start positie is
       motorZbackward(); // laat z-as achteruit gaan
         if(readIR() == 5){ // actie als z-as op 5(cm) is oftewel op start positie
           motorZstop(); // stop z-as motor

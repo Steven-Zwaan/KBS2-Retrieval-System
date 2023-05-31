@@ -56,7 +56,6 @@ void loop() {
     command;
     motorZstop();
     motorYstop();
-    // Serial.print("NOODSTOP");
   } else if (!noodstop) {
     if(calibrate){ // Kijk of kalibratie aan staat
       if (calibrateZ) { // Kijk of z-as kalibratie aan staat
@@ -113,13 +112,9 @@ void loop() {
           // print command to serial and process command 
           if (((command & COMMAND_UP) & COMMAND_UP) && !borderHitTop) {
             motorYup();
-            // Serial.print(" Y: ");
-            // Serial.println(yPos);
 
           } else if (((command & COMMAND_DOWN) & COMMAND_DOWN) && !borderHitBottom) {
             motorYdown();
-            // Serial.print(" Y: ");
-            // Serial.println(yPos);
 
           } else  {
             motorYstop();
@@ -149,12 +144,6 @@ void loop() {
             }
           }  
         } 
-        // else if(motorYgoTo(yPosBoxes[hmi_y]) && done && !moveCompleted){
-        //   // Serial.println("Succes!");
-          
-        //   moveCompleted = true;
-        // }
-
         // controlleer of z-as actie nog niet is uitgevoerd en of received gelijk is aan 1 van de grijp acties
         if (!doneZ && (recieved == "G0" || recieved == "G1" || recieved == "G2")){ 
           // controlleer of de grijp actie gedaan is en of het bericht nog niet gestuurd is
@@ -164,12 +153,6 @@ void loop() {
               current_products++; // verhoog current products met 1; dit is het bijhouden van producten op de arm           
           } 
         } 
-        // else if(motorZpickUp(zPosBoxes[hmi_z]) && done){
-        //   sendTransmission("MC");
-        // }
-        // if(motorZpickUp(zPosBoxes[0])){
-        //   // Serial.println("Succes!");
-        // }
       }
     }
   }
@@ -199,6 +182,13 @@ void loop() {
     sendTransmission("MS");
     manual = !manual; 
   }
+
+  if(millis() - lastSentPositionTime >= SEND_POSITION_INTERVAL)
+	{
+		lastSentPositionTime += SEND_POSITION_INTERVAL;
+    int yPosCalc = yPos / 520;
+    sendTransmission((String)'Y' + yPosCalc);
+	}
   // Serial.println(yPos);
 }
 

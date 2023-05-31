@@ -79,3 +79,7 @@ bool messageSent = false;
 bool actionXCompleted = false;
 bool actionYCompleted = false;
 bool actionZCompleted = false;
+
+int y_position = 0;
+const unsigned long SEND_POSITION_INTERVAL = 1000; // ms
+unsigned long lastSentPositionTime = 0;
