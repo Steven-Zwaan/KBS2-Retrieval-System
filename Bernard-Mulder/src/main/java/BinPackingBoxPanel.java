@@ -1,8 +1,11 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class BinPackingBoxPanel extends JPanel {
+
+    static ArrayList<PickOrder> pickOrders = new ArrayList<>();
 
     public BinPackingBoxPanel(){
         this.setLayout(new GridLayout(2,1));
