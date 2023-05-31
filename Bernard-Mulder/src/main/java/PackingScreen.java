@@ -15,25 +15,25 @@ import java.util.List;
 
 public class PackingScreen extends JPanel implements ActionListener {
 
-    JPanel viewpanel;
+    JPanel viewPanel;
     JList gepickteOrderList;
-    JList boxList;
     JScrollPane orderLineScrollPane;
     JScrollPane boxScrollPane;
-    binPackingBoxPanel binPackingBoxPanel;
+    BinPackingBoxPanel binPackingBoxPanel;
 
     public PackingScreen() {
         this.setLayout(new BorderLayout());
 
-        viewpanel = new InpakkenDrawScreen();
-        this.add(viewpanel, BorderLayout.CENTER);
-
+        viewPanel = new InpakkenDrawScreen();
+        this.add(viewPanel, BorderLayout.CENTER);
+        viewPanel.setPreferredSize(new Dimension(300, 500));
 
         gepickteOrderList = new JList();
         orderLineScrollPane = new JScrollPane(gepickteOrderList);
         this.add(orderLineScrollPane, BorderLayout.WEST);
+        gepickteOrderList.setPreferredSize(new Dimension(400,780));
 
-        binPackingBoxPanel binPackingBoxPanel1 = new binPackingBoxPanel();
+        BinPackingBoxPanel binPackingBoxPanel1 = new BinPackingBoxPanel();
 
         boxScrollPane = new JScrollPane(binPackingBoxPanel1);
         binPackingBoxPanel1.setPreferredSize(new Dimension(400, 800));

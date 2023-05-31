@@ -17,6 +17,7 @@ public class InpakkenDrawScreen extends JPanel {
         g.fillRect(495, 500, 3, 300);
         g.fillRect(795, 500, 3, 300);
         g.fillRect(495, 800, 303, 3);
+
         this.setVisible(true);
     }
 }
