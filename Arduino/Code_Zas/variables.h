@@ -26,7 +26,7 @@ SharpIR irSensor = SharpIR(IR_PIN, model); // new SharpIR object
 #define COMMAND_FORWARD    0x04
 #define COMMAND_BACKWARD   0x08
 
-#define BUS 1
+#define BUS 1 // bus voor wire communicatie
 
 #define RED A0
 #define ORANGE 4
@@ -37,8 +37,6 @@ SharpIR irSensor = SharpIR(IR_PIN, model); // new SharpIR object
 ezButton limitSwitchT(LS_TOP);
 ezButton limitSwitchB(LS_BOTTOM);
 ezButton modeSwitch(MODE);
-
-//ezButton button(SW_PIN);
 
 // Variabelen
 const int zPin = A4;
@@ -60,9 +58,9 @@ bool calibrate = true;
 bool calibrateZ = false;
 bool calibrateY = false;
 
-bool zAs = false;
+bool zAs = false; // bool of z-as actief is; true = z-as; false = y-as;
 
-int yPos = 0;
+int yPos = 0; // huidige yPos positie
 int yPositionCurrent = 0;
 bool packagePicked = false;
 bool inPosition = false;
@@ -76,10 +74,9 @@ bool manual = false;
 bool zReturned = false;
 bool yPositioned = false;
 
-int yPosBoxes[] = {210, 730, 1250, 1760, 2270};
-int zPosBoxes[] = {18, 13, 9}; //12 might be 13 and 8 might be 9
+int yPosBoxes[] = {210, 730, 1250, 1760, 2270}; // yPos coordinaten voor de verschillende posities in de stellage
+int zPosBoxes[] = {18, 13, 9}; // z-as afstanded voor de verschillende grab punten
 
-//int bValue = 0; // To store value of the button
 int yValue = 0; // To store value of the Y axis
 int bValue = 0; // To store value of the button
 int command = COMMAND_NO; //stop
@@ -92,4 +89,4 @@ bool x_arrived = false;
 int current_products = 0;
 
 const unsigned long SEND_POSITION_INTERVAL = 500; // ms
-unsigned long lastSentPositionTime = 0;
+unsigned long lastSentPositionTime = 0; // tijd laatst verstuurde locatie in millisecondes
