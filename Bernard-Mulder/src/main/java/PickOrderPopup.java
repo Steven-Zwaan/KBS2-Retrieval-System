@@ -9,12 +9,14 @@ import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class PickOrderPopup extends JDialog{
 
     PickOrder pickOrder;
+    Order order;
     int xAs = 0;
     int yAs = 0;
     int weight = 0;
@@ -38,6 +40,7 @@ public class PickOrderPopup extends JDialog{
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         this.add(panel, BorderLayout.CENTER);
 
+        order = selectedOrder;
         orderLines = selectedOrder.getOrderLines();
         String[] weightOptions = {"2", "5", "7"};
 
@@ -93,19 +96,48 @@ public class PickOrderPopup extends JDialog{
                     WeergavePanel.addPickOrder(pickOrder);
                 }
                 WeergavePanel.pickedOrderNummers.add(selectedOrder.getId());
-                if (WeergavePanel.pickOrders.size() == 3){
-                    Route.Point p1 = new Route.Point(0,0);
-                    Route.Point p2 = new Route.Point(0, 0);
-                    Route.Point p3 = new Route.Point(0, 0);
-                    Route.Point p4 = new Route.Point(0, 0);
-                    Route.Point p5 = new Point(5,5);
-                    Bruteforce bruteforce = new Bruteforce(p1, p2 ,p3, p4, p5);
+                if (selectedOrder.getOrderLines().size() >= 4) {
+
+                    Route.Point Startpoint = new Route.Point(0,0);
+                    ArrayList<Point> points = new ArrayList<>();
+                    for (int i = 0; i < selectedOrder.getOrderLines().size(); i++){
+                        points.add(new Route.Point((Integer) xPosSpinners.get(i).getValue(), (Integer) yPosSpinners.get(i).getValue()));
+                    }
+                    Route.Point Endpoint = new Point(5,5);
+
+                    for (int i = 0; i <= (points.size() / 3); i++){
+                        if ((points.size() / 3) == 1){
+
+                        }
+                        Bruteforce bruteforce = new Bruteforce(Startpoint, points.get(0), points.get(1), points.get(2), Endpoint);
+                        points.remove(0);
+                        points.remove(1);
+                        points.remove(2);
+
+
+                        System.out.println(bruteforce.calc());
+                    }
+
+                } else if (selectedOrder.getOrderLines().size() == 3){
+                    Route.Point Startpoint = new Route.Point(0,0);
+                    Route.Point p1 = new Route.Point((Integer) xPosSpinners.get(0).getValue(), (Integer) yPosSpinners.get(0).getValue());
+                    Route.Point p2 = new Route.Point((Integer) xPosSpinners.get(1).getValue(), (Integer) yPosSpinners.get(1).getValue());
+                    Route.Point p3 = new Route.Point((Integer) xPosSpinners.get(2).getValue(), (Integer) yPosSpinners.get(2).getValue());
+                    Route.Point Endpoint = new Point(5,5);
+                    Bruteforce bruteforce = new Bruteforce(Startpoint, p1 ,p2, p3, Endpoint);
 
                     System.out.println(bruteforce.calc());
 
-                    //Route.Point p3 = new Route.Point(WeergavePanel.getPickOrdersFromOrder(WeergavePanel.pickedOrderNummers.get(0)).get(0).getxPos(),WeergavePanel.getPickOrders().get(1).getyPos());
-                   // Route.Point p4 = new Route.Point(WeergavePanel.getPickOrders().get(2).getxPos(),WeergavePanel.getPickOrders().get(2).getyPos());
+                } else if (selectedOrder.getOrderLines().size() == 2) {
+                    Route.Point Startpoint = new Route.Point(0,0);
+                    Route.Point p1 = new Route.Point((Integer) xPosSpinners.get(0).getValue(), (Integer) yPosSpinners.get(0).getValue());
+                    Route.Point p2 = new Route.Point((Integer) xPosSpinners.get(1).getValue(), (Integer) yPosSpinners.get(1).getValue());
+                    Route.Point Endpoint = new Point(5,5);
+                    Bruteforce bruteforce = new Bruteforce(Startpoint, p1 ,p2, Endpoint);
 
+                    System.out.println(bruteforce.calc());
+                } else if (selectedOrder.getOrderLines().size() == 1) {
+                    System.out.println(new Route.Point((Integer) xPosSpinners.get(0).getValue(), (Integer) yPosSpinners.get(0).getValue()));
                 }
 
                 dispose();

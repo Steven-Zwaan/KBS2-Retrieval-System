@@ -18,6 +18,7 @@ public class MainScreen extends JFrame implements ActionListener {
 	WeergaveDrawPanel drawPanel;
 	WeergavePanel weergavePanel;
 	StockScreenEditPopup popup;
+	PackingScreen packingScreen;
 
 	public MainScreen(){
 		// Screen setup
@@ -78,6 +79,7 @@ public class MainScreen extends JFrame implements ActionListener {
 
 
 		weergavePanel = new WeergavePanel();
+
 		root.add("Weergave", weergavePanel);
 
 		PackingScreen packingScreen = new PackingScreen();
@@ -105,10 +107,10 @@ public class MainScreen extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("Weergave")){
 			cardLayout.show(root, "Weergave");
 			weergavePanel.refreshPanel();
-		} else if (e.getActionCommand().equals("Help")){
-			cardLayout.show(root, "Help");
 		} else if (e.getActionCommand().equals("Inpakken")){
-			cardLayout.show(root,"Inpakken");
+			cardLayout.show(root, "Inpakken");
+		}else if (e.getActionCommand().equals("Help")){
+			cardLayout.show(root, "Help");
 		}
 		this.revalidate();
 	}
