@@ -237,7 +237,7 @@ void communcationHandler() {
         sendTransmission("M" + (String)hmi_var2);
         break;
       case 2: // oppakken product op huidige locatie (z)
-        sendTransmission("G" + (String)hmi_var1);
+        sendTransmission("G" + (String) hmi_var1);
         break;
       case 3: // bewegen naar vakje (x,y) en dan oppakken product op huidige locatie (z)
         sendTransmission("T" + (String)hmi_var2);
