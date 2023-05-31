@@ -10,9 +10,9 @@ public class PackingScreen extends JPanel implements ActionListener {
    // JList gepickteOrderList;  ?
     JList pickOrderList;  //bevat de orders die gepicked worden
     JList doos1List;
-    ArrayList<PickOrder> doos1Array;
+  //  ArrayList<PickOrder> doos1Array;
     JList doos2List;
-    ArrayList<PickOrder> doos2Array;
+  //  ArrayList<PickOrder> doos2Array;
 
   //  JList boxList; ?
 
@@ -40,13 +40,13 @@ public class PackingScreen extends JPanel implements ActionListener {
 
         //panel voor doos 1
         dozenWeergave.add(new JLabel("Doos 1"));
-        doos1List = new JList(doos1Array.toArray());
+      //  doos1List = new JList();
         doos1ScrollPane = new JScrollPane();
         dozenWeergave.add(doos1ScrollPane);
 
         //panel voor doos 2
         dozenWeergave.add(new JLabel("Doos 2"));
-        doos2List = new JList(doos2Array.toArray());
+        //doos2List = new JList();
         doos2ScrollPane = new JScrollPane();
         dozenWeergave.add(doos2ScrollPane);
 

@@ -82,7 +82,7 @@ public class MainScreen extends JFrame implements ActionListener {
 
 		root.add("Weergave", weergavePanel);
 
-		PackingScreen packingScreen = new PackingScreen();
+		packingScreen = new PackingScreen();
 		root.add("Inpakken", packingScreen);
 
 		JPanel HelpPanel = new JPanel();
