@@ -1,7 +1,6 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class BinPackingBoxPanel extends JPanel {
 
@@ -23,7 +22,6 @@ public class BinPackingBoxPanel extends JPanel {
         jPanel2.setLayout(new BoxLayout(jPanel2, BoxLayout.Y_AXIS));
         jPanel2.add(new JLabel("Doos 2"));
         jPanel2.add(jScrollPane2);
-
 
         this.add(jPanel);
         this.add(jPanel2);
