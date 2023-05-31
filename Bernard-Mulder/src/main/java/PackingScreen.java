@@ -1,60 +1,71 @@
-import Models.Order;
-import Models.OrderLine;
-import Models.OrderList;
-
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PackingScreen extends JPanel implements ActionListener {
 
     JPanel viewPanel;
-    JList gepickteOrderList;
-    JScrollPane orderLineScrollPane;
-    JScrollPane boxScrollPane;
-    BinPackingBoxPanel binPackingBoxPanel;
-    static ArrayList<PickOrder> pickOrders = new ArrayList<>();
-    static ArrayList<Integer> pickedOrderNummers = new ArrayList<>();
-    JList pickOrderList;
+   // JList gepickteOrderList;  ?
+    JList pickOrderList;  //bevat de orders die gepicked worden
+    JList doos1List;
+    ArrayList<PickOrder> doos1Array;
+    JList doos2List;
+    ArrayList<PickOrder> doos2Array;
 
+  //  JList boxList; ?
+
+    JScrollPane orderLineScrollPane;   //ScrollPane voor de Jlist pickOrderList
+    JScrollPane doos1ScrollPane;
+    JScrollPane doos2ScrollPane;
+   // JScrollPane boxScrollPane;  ??
 
     public PackingScreen() {
         this.setLayout(new BorderLayout());
 
         viewPanel = new InpakkenDrawScreen();
         this.add(viewPanel, BorderLayout.CENTER);
-        viewPanel.setPreferredSize(new Dimension(300, 500));
 
-        binPackingBoxPanel = new BinPackingBoxPanel();
-        this.add(binPackingBoxPanel, BorderLayout.WEST);
-
-
-        pickOrderList = new JList(pickOrders.toArray());
+        //print de order in de Linker Panel
+        pickOrderList = new JList(WeergavePanel.pickOrders.toArray());
         orderLineScrollPane = new JScrollPane(pickOrderList);
-        binPackingBoxPanel.add(orderLineScrollPane, BorderLayout.CENTER);
-
-        gepickteOrderList = new JList();
-        orderLineScrollPane = new JScrollPane(gepickteOrderList);
         this.add(orderLineScrollPane, BorderLayout.WEST);
 
-        gepickteOrderList.setPreferredSize(new Dimension(400,780));
+        //Panel voor de visuele weergave van de 2 dozen aan de rechter kant
+        JPanel dozenWeergave = new JPanel();
+        dozenWeergave.setLayout(new BoxLayout(dozenWeergave, BoxLayout.Y_AXIS));
+        dozenWeergave.setPreferredSize(new Dimension(400, this.getHeight()));
+        this.add(dozenWeergave, BorderLayout.EAST);
 
-        BinPackingBoxPanel binPackingBoxPanel1 = new BinPackingBoxPanel();
+        //panel voor doos 1
+        dozenWeergave.add(new JLabel("Doos 1"));
+        doos1List = new JList(doos1Array.toArray());
+        doos1ScrollPane = new JScrollPane();
+        dozenWeergave.add(doos1ScrollPane);
 
-        boxScrollPane = new JScrollPane(binPackingBoxPanel1);
-        binPackingBoxPanel1.setPreferredSize(new Dimension(400, 800));
-        this.add(boxScrollPane, BorderLayout.EAST);
+        //panel voor doos 2
+        dozenWeergave.add(new JLabel("Doos 2"));
+        doos2List = new JList(doos2Array.toArray());
+        doos2ScrollPane = new JScrollPane();
+        dozenWeergave.add(doos2ScrollPane);
+
+    }
+
+    public void refreshPanel(){
+        pickOrderList.setListData(WeergavePanel.pickOrders.toArray());
+        pickOrderList.revalidate();
+        pickOrderList.repaint();
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
+
+//    static void addOrderLineDoos(PickOrder ) {
+//        .add(pickOrder);
+//    }
 }
+

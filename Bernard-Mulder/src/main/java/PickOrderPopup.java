@@ -94,6 +94,7 @@ public class PickOrderPopup extends JDialog{
                     int selectedWeight = Integer.parseInt(weightComboBox.get(i).getSelectedItem().toString());
                     PickOrder pickOrder = new PickOrder(orderLines.get(i), (Integer) xPosSpinners.get(i).getValue(), (Integer) yPosSpinners.get(i).getValue(),selectedWeight, selectedOrder.getId());
                     WeergavePanel.addPickOrder(pickOrder);
+                   // PackingScreen.addPickOrder(pickOrder);
                 }
                 WeergavePanel.pickedOrderNummers.add(selectedOrder.getId());
                 if (selectedOrder.getOrderLines().size() >= 4) {
