@@ -120,7 +120,7 @@ void loop() {
                 actionXCompleted = true; // zet X actie op compleet
               }
               if(actionZCompleted){ // check of Z actie compleet is
-                Serial.println(00); // verstuur 600, oftewel actie compleet
+                Serial.println(600); // verstuur 600, oftewel actie compleet
               }
               break;
             default:
@@ -191,8 +191,7 @@ void ReceiveEvent(int howMany){
   }
   
   if (recieved.substring(0, 1) == "Y") {
-    String y_position_raw = recieved.substring(1);
-    y_position = y_position_raw.toInt();
+    y_position = recieved.substring(1).toInt();
   }
 
   if (recieved == "TC") {
