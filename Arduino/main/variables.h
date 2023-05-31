@@ -16,7 +16,7 @@
 #define COMMAND_UP     0x04 // 00000100
 #define COMMAND_DOWN   0x08 // 00001000
 
-#define BUS 9
+#define BUS 9 // bus voor wire communicatie
 
 #define NOODSTOP 10
 #define RESET 4
@@ -34,11 +34,6 @@ ezButton noodstopButton(NOODSTOP);
 ezButton resetButton(RESET);
 
 // Variabelen
-// const int zPin = A5;
-// int XPWM = 11;
-// int XDir = 13;
-// int xEnc = 2;
-
 bool Links = LOW;
 bool Rechts = HIGH;
 
@@ -58,15 +53,13 @@ bool calibrate = true;
 bool manual = false;
 
 bool Noodstop = false;
-// int NOODSTOPBUTTON = 4;
 int bValue = 0;
 
-int xPos = 0;
+int xPos = 0; // huidige xPos positie
 
-int xPosBoxes[] = {150, 880, 1600, 2300, 3030};
+int xPosBoxes[] = {150, 880, 1600, 2300, 3030}; // xPos coordinaten voor de verschillende posities in de stellage
 
 int xValue = 0; // To store value of the X axis
-// int joystickButton = 0; // To store value of the button
 int command = COMMAND_NO; //stop
 
 int hmi_action = 0;
@@ -80,6 +73,6 @@ bool actionXCompleted = false;
 bool actionYCompleted = false;
 bool actionZCompleted = false;
 
-int y_position = 0;
+int y_position = 0; // huidige locatie Y-as
 const unsigned long SEND_POSITION_INTERVAL = 1000; // ms
-unsigned long lastSentPositionTime = 0;
+unsigned long lastSentPositionTime = 0; // tijd laatst verstuurde locatie in millisecondes
