@@ -35,7 +35,7 @@ public final class PacketListener implements SerialPortPacketListener {
         incoming_message = str;
         int byteSize = 0;
         try {
-            byteSize = str.getBytes("UTF-8").length;
+            byteSize = str.getBytes("ASCII").length;
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(PacketListener.class.getName()).log(Level.SEVERE, null, ex);
         }
