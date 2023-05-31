@@ -173,12 +173,13 @@ void loop() {
     sendTransmission("NF");    
   }
 
+  // Als hudige tijd in millisecondes - de laatste tijd in millisecondes gelijk og groter is dan de interval
   if(millis() - lastSentPositionTime >= SEND_POSITION_INTERVAL)
 	{
-		lastSentPositionTime += SEND_POSITION_INTERVAL;
-    int xPosCalc = (xPos + 90) / 700;
-    String message = (String) 9 + (String) xPosCalc + (String) y_position;
-    Serial.println(message.toInt());
+		lastSentPositionTime += SEND_POSITION_INTERVAL; //de laatste tijd in millisecondes is huidge + interval
+    int xPosCalc = (xPos + 90) / 700; //reken de huidge xPositie uit, xPos + offset gedeeld door de breedte van 1 vakje
+    String message = (String) 9 + (String) xPosCalc + (String) y_position; //message = 9 = x positie + y positie
+    Serial.println(message.toInt()); //maak bericht een integer en vestuur het
   }
   // Serial.println(xPos);
 }
@@ -189,8 +190,9 @@ void ReceiveEvent(int howMany){
     recieved += (char)Wire.read();
   }
   
-  if (recieved.substring(0, 1) == "Y") {
-    y_position = recieved.substring(1).toInt();
+  { //als het eerste character in received gelijk is aan Y
+  if (recieved.substring(0, 1) == "Y") 
+    y_position = recieved.substring(1).toInt(); //pak het resterende bericht en maak het een integer
   }
 
   if (recieved == "TC") {

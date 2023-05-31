@@ -183,11 +183,12 @@ void loop() {
     manual = !manual; 
   }
 
+  // Als hudige tijd in millisecondes - de laatste tijd in millisecondes gelijk og groter is dan de interval
   if(millis() - lastSentPositionTime >= SEND_POSITION_INTERVAL)
 	{
-		lastSentPositionTime += SEND_POSITION_INTERVAL;
-    int yPosCalc = yPos / 520;
-    sendTransmission((String)'Y' + yPosCalc);
+		lastSentPositionTime += SEND_POSITION_INTERVAL; //de laatste tijd in millisecondes is huidge + interval
+    int yPosCalc = yPos / 520; //reken de huidge yPositie uit, yPos gedeeld door de hoogte van 1 vakje
+    sendTransmission((String)'Y' + yPosCalc); //verstuur het bericht Y + de yPositie
 	}
   // Serial.println(yPos);
 }
