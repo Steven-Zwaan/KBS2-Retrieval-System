@@ -51,7 +51,6 @@ void loop() {
 
   if(Noodstop) {
     motorXstop(); 
-    //Serial.println("NOODSTOP");
   } else if (!Noodstop){
     if (calibrate) { // Kijk of kalibratie aan staat
       if(!zAxisCalibrated){ // kijk of de z-as nog niet gekalibreerd is
@@ -196,17 +195,14 @@ void ReceiveEvent(int howMany){
 
   if (recieved == "TC") {
     actionZCompleted = true;
-    // Serial.println("COMPLETE");
   }
 
   if (recieved == "MC") {
     actionYCompleted = true;
-    // Serial.println("COMPLETE");
   }
 
   if (recieved == "GC") {
     actionZCompleted = true;
-    // Serial.println("COMPLETE");
   }
 
   if (recieved == "MS") {
@@ -215,12 +211,10 @@ void ReceiveEvent(int howMany){
 
   if (recieved == "CZF") {
     zAxisCalibrated = true;
-    //Serial.println("CZF recieved");
   }
 
   if (recieved == "CYF") {
     yAxisCalibrated = true;
-    //Serial.println("CYF recieved");
   }
 }
 
@@ -252,8 +246,5 @@ void communcationHandler() {
 
         break;          
     }
-    // actionCompleted = false;
-    // messageYsend = false;
-    // Serial.println(200);
   }
 }
