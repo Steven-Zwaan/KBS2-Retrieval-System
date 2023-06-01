@@ -31,9 +31,11 @@ public class PackingScreen extends JPanel implements ActionListener {
         //print de order in de Linker Panel
         pickOrderList = new JList(getSelectedOrderLines().toArray());
         orderLineScrollPane = new JScrollPane(pickOrderList);
+        orderLineScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        orderLineScrollPane.setPreferredSize(new Dimension(380,getHeight()));
         this.add(orderLineScrollPane, BorderLayout.WEST);
 
-        //Panel voor de visuele weergave van de 2 dozen aan de rechter kant
+        //Panel voor de visuele weergave van de 2 dozen aan de rechterkant
         JPanel dozenWeergave = new JPanel();
         dozenWeergave.setLayout(new BoxLayout(dozenWeergave, BoxLayout.Y_AXIS));
         dozenWeergave.setPreferredSize(new Dimension(400, this.getHeight()));

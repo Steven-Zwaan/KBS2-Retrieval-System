@@ -6,8 +6,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         MainScreen scherm = new MainScreen();
-//        Noodstop schermNoodstop = new Noodstop();
-//        ArduinoConnection arduino = new ArduinoConnection("COM8");
+//        ArduinoConnection arduino = new ArduinoConnection("/dev/ttyACM1");
 //
 //        arduino.openPort();
 //        arduino.receiveData();

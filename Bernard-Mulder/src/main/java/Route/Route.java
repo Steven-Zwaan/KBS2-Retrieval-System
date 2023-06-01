@@ -1,6 +1,4 @@
-package Route;
-
-import java.util.ArrayList;
+package Route;import java.util.ArrayList;
 
 public class Route {
 	private ArrayList<Line> route = new ArrayList<>();
