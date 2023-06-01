@@ -5,15 +5,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Queue {
-	ArrayList<ArrayList<Route.Point>> queue = new ArrayList<>();
+	ArrayList<ArrayList<Route.Point>> queue = new ArrayList<>(); // arraylist met routes
 	boolean active = false;
 	boolean messageNotSend = true;
-	public static Queue instance = null;
+	public static Queue instance = null; // instance opslaan
 
-	MainScreen scherm;
+	public static Queue getInstance() { // instance ophalen
+		if(instance == null) { // als er nog geen instance is een nieuwe aanmaken
 
-	public static Queue getInstance() {
-		if(instance == null) {
 			instance = new Queue();
 		}
 		return instance;
@@ -23,8 +22,8 @@ public class Queue {
 
 		ArduinoConnection arduino = new ArduinoConnection("COM8");
 
-		arduino.openPort();
-		arduino.receiveData();
+		arduino.openPort(); // Openen arduino port
+		arduino.receiveData(); // Check for message
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -63,12 +62,12 @@ public class Queue {
 		}).start();
 	}
 
-	public void AddQueue(ArrayList<Point> PickupRoute) {
+	public void AddQueue(ArrayList<Point> PickupRoute) { // toevoegen van route aan wachtrij
 		queue.add(PickupRoute);
 //		System.out.println(queue.get(0));
 	}
 
-	public void checkQueue(){
+	public void checkQueue(){ // controleren of er iets in de wachtrij zit
 		if (queue.size() == 0) {
 			active = false;
 		} else {

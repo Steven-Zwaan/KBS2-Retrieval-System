@@ -24,7 +24,7 @@ public class StockScreen extends JPanel implements ActionListener {
         productList.getProductsFromDatabase();
 
 
-        voorraadList = new JList(productList.getProductList().toArray());
+        voorraadList = new JList(productList.getProductList().toArray());// producten uit database in array zetten
         JScrollPane scrollPaneStockScreen = new JScrollPane(voorraadList);
 
         scrollPaneStockScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

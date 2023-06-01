@@ -15,14 +15,14 @@ public class Line {
 		return length;
 	}
 
-	public Line(Point p1, Point p2){
+	public Line(Point p1, Point p2){ // aanmaken lijn met punten
 		line.add(p1);
 		line.add(p2);
 
 		int dx = ( line.get(1).getX() ) - ( line.get(0).getX() );
 		int dy = ( line.get(1).getY() ) - ( line.get(0).getY() );
 
-		length = Math.sqrt( ( dx * dx ) + ( dy * dy ) );
+		length = Math.sqrt( ( dx * dx ) + ( dy * dy ) ); // berekenen lengte tussen de punten met pythagoras
 	}
 
 	@Override
