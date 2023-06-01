@@ -1,19 +1,17 @@
 package Models;
 
-import Models.*;
-public class PickOrder {
+public class PickOrder { //in deze klasse worden pickorders opgeslagen zodat deze klaar zijn om gepickt te worden
     private OrderLine orderLine;
     private int xPos;
     private int yPos;
     private int weight;
-    private int pickOrderID;
     private boolean isPicked;
     private int orderNummer;
 
     private int doos;
 
 
-    public PickOrder(OrderLine orderLine, int xPos, int yPos, int weight, int orderNummer) {
+    public PickOrder(OrderLine orderLine, int xPos, int yPos, int weight, int orderNummer) { //de pickorder krijgt de bijbehorende orderline mee, de locatie en het gewicht. daarnaast krijgt de pickorder ook een int mee om te bepalen in welke doos deze komt
         this.xPos = xPos;
         this.yPos = yPos;
         this.weight = weight;

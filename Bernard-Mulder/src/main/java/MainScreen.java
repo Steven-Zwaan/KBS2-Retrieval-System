@@ -54,13 +54,11 @@ public class MainScreen extends JFrame implements ActionListener {
 		menuButtonOrders.setFont(new Font("Arial", Font.BOLD, 14));
 		menuButtonOrders.setBorder(new MatteBorder(1,1,0,1, Color.lightGray));
 
-
 		menuButtonWeergave = new JMenuItem("Weergave");
 		menuButtonWeergave.setActionCommand("Weergave");
 		menuButtonWeergave.addActionListener(this);
 		menuButtonWeergave.setFont(new Font("Arial", Font.BOLD, 14));
 		menuButtonWeergave.setBorder(new MatteBorder(1,1,0,1, Color.lightGray));
-
 
 		menuButtonInpakken = new JMenuItem("Inpakken");
 		menuButtonInpakken.setActionCommand("Inpakken");
@@ -68,21 +66,11 @@ public class MainScreen extends JFrame implements ActionListener {
 		menuButtonInpakken.setFont(new Font("Arial", Font.BOLD, 14));
 		menuButtonInpakken.setBorder(new MatteBorder(1,1,0,0, Color.lightGray));
 
-
 		menuButton2 = new JMenuItem(" ");
 		menuButton2.setActionCommand("button2");
 		menuButton2.addActionListener(this);
 		menuButton2.setBorder(new MatteBorder(1,0,0,0, Color.lightGray));
 		menuButton2.setOpaque(true);
-
-		menuButtonHelp = new JMenuItem(" ");
-		menuButtonHelp.setActionCommand("Help");
-		menuButtonHelp.addActionListener(this);
-		menuButtonHelp.setFont(new Font("Arial", Font.BOLD, 14));
-		menuButtonHelp.setBorder(new MatteBorder(1,0,0,1, Color.lightGray));
-		menuButtonHelp.setOpaque(true);
-
-
 
 		// Add buttons to menu bar
 		menuBar.add(menuButtonVoorraad);
@@ -90,7 +78,6 @@ public class MainScreen extends JFrame implements ActionListener {
 		menuBar.add(menuButtonWeergave);
 		menuBar.add(menuButtonInpakken);
 		menuBar.add(menuButton2);
-		menuBar.add(menuButtonHelp);
 
 		// Setup CardLayout cards
 		StockScreen stockScreen = new StockScreen();
@@ -107,20 +94,10 @@ public class MainScreen extends JFrame implements ActionListener {
 		packingScreen = new PackingScreen();
 		root.add("Inpakken", packingScreen);
 
-		JPanel HelpPanel = new JPanel();
-		JScrollPane scrollPaneHelpScreen = new JScrollPane(HelpPanel);
-
-		JButton testbutton = new JButton("Test");
-		testbutton.setActionCommand("UpdatePos");
-		testbutton.addActionListener(this);
-		HelpPanel.add(testbutton);
-
-		root.add("Help", HelpPanel);
-
 		setVisible(true);
 	}
 
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) { //in deze actionlistener worden de knoppen van de menubalk afgehandeld zodat er tussen pagina's geswitched kan worden
 		if (e.getActionCommand().equals("Voorraad")){
 			cardLayout.show(root, "Voorraad");
 			System.out.println(cardLayout);
@@ -132,24 +109,8 @@ public class MainScreen extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("Inpakken")){
 			cardLayout.show(root, "Inpakken");
 			packingScreen.refreshPanel();
-		}else if (e.getActionCommand().equals("Help")){
-			cardLayout.show(root, "Help");
 		}
 		this.revalidate();
 	}
-
-//	public void getAantalPixels() {
-//		aantalPixelsHeight = getHeight();
-//		aantalPixelsWidth = getWidth();
-//	}
-
-	public String ShortenString(String string, int length){
-		if (string.length() < length){
-			return string;
-		} else {
-			return string.substring(0, length) + "...";
-		}
-	}
-
 }
 

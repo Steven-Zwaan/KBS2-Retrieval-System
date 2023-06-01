@@ -19,19 +19,21 @@ public class WeergavePanel extends JPanel {
     JLabel yLabel;
 
     public WeergavePanel() {
+
+        //in deze klasse wordt de paneel gemaakt voor het weergeven van de robot
         this.setLayout(new BorderLayout());
         viewPanel = new WeergaveDrawPanel();
-//        viewPanel.setBackground(new Color(255, 0,0));
         this.add(viewPanel, BorderLayout.CENTER);
 
+        //de rechter paneel wordt aangemaakt en de lijst van de pickorders wordt getoond
         JPanel eastPanel = new JPanel(new BorderLayout());
         eastPanel.setPreferredSize(new Dimension(375, getHeight()));
         this.add(eastPanel, BorderLayout.EAST);
-
         pickOrderList = new JList(pickOrders.toArray());
         orderLineScrollPane = new JScrollPane(pickOrderList);
         eastPanel.add(orderLineScrollPane, BorderLayout.CENTER);
 
+        //knop die van de geselecteerde orderline de order verwijdert doormiddel van de removeOrderFromQueue methode
         JButton deleteOrderLine = new JButton("Verwijderen");
         eastPanel.add(deleteOrderLine, BorderLayout.SOUTH);
         deleteOrderLine.addActionListener(e -> {
@@ -44,6 +46,7 @@ public class WeergavePanel extends JPanel {
             }
         });
 
+        //hier wordt de balk met coordinaten in het onderste gedeelte van de borderlayout geplaatst met labels voor de x en y positie
         coordinateBar = new JPanel();
         coordinateBar.setPreferredSize(new Dimension(this.getWidth(), 40));
         coordinateBar.setLayout(new FlowLayout());
@@ -56,12 +59,14 @@ public class WeergavePanel extends JPanel {
         coordinateBar.add(yLabel);
     }
 
+    //deze methode herlaadt de listdata van de jlist en ververst daarna het scherm
     public void refreshPanel() {
         pickOrderList.setListData(pickOrders.toArray());
         pickOrderList.revalidate();
         pickOrderList.repaint();
     }
 
+    //met deze methode kan de positie van de robot in de HMI worden geupdate
     public void updatePos(int x, int y) {
         viewPanel.updatePos(x,y);
         xLabel.setText("X-as: " + viewPanel.getxPos());
@@ -70,6 +75,7 @@ public class WeergavePanel extends JPanel {
         repaint();
     }
 
+    //deze methode verwijdert alle pickorders van het meegegeven ordernummer
     public static void removeOrderFromQueue(int orderNummer) {
         pickOrders.removeAll(pickOrders.stream().filter(p -> p.getOrderNummer() == orderNummer).collect(Collectors.toList()));
         pickedOrderNummers.remove(pickedOrderNummers.indexOf(orderNummer));

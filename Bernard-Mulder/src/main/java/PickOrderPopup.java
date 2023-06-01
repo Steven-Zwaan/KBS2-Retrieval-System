@@ -4,26 +4,18 @@ import Route.Point;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class PickOrderPopup extends JDialog{
+public class PickOrderPopup extends JDialog{ //deze popup dient ervoor orders toe te voegen aan de wachtrij
 
-    PickOrder pickOrder;
     Order order;
-    int xAs = 0;
-    int yAs = 0;
-    int weight = 0;
-
-    int[] weightOptions = {2, 5, 7};
     ArrayList<OrderLine> orderLines = new ArrayList<>();
     ArrayList<JSpinner> xPosSpinners = new ArrayList<>();
     ArrayList<JSpinner> yPosSpinners = new ArrayList<>();
     ArrayList<JComboBox> weightComboBox = new ArrayList<>();
 
 
-    public PickOrderPopup(Order selectedOrder) {
+    public PickOrderPopup(Order selectedOrder) { //het geselecteerde order wordt bij het aanmaken van een popup meegegeven voor het verkrijgen van de orderlines
         this.setSize(new Dimension(400,250));
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.setModal(false);
@@ -31,14 +23,20 @@ public class PickOrderPopup extends JDialog{
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
 
+        //een nieuwe jpanel wordt aangemaakt met een boxlayout
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         this.add(panel, BorderLayout.CENTER);
 
+        //de meegegeven order en de bijbehorende orderlines worden in een locale variabele gestopt
         order = selectedOrder;
         orderLines = selectedOrder.getOrderLines();
+
+        //de opties voor het gewicht van een product
         String[] weightOptions = {"2", "5", "7"};
 
+        //deze foreach voegt een rij toe voor het instellen van de locatie en het gewicht voor elke index van de arraylist met orderlines
+        //de spinners en comboboxen zitten allemaal in een aparte arraylist, zodat via de index voor elke orderline de ingevulde waarden opgehaald kunnen worden
         for (OrderLine orderLine : orderLines) {
             JPanel orderLinePanel = new JPanel();
             orderLinePanel.setLayout(new FlowLayout());
@@ -56,38 +54,47 @@ public class PickOrderPopup extends JDialog{
             orderLinePanel.add(weightComboBox.get(weightComboBox.size()-1));
         }
 
+        //er wordt een error laten zien wanneer er een order geselecteerd is die al gepickt wordt
         JLabel errorLabel = new JLabel("Deze orderlines worden al gepickt", SwingConstants.CENTER);
         errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         errorLabel.setForeground(Color.red);
         panel.add(errorLabel);
         errorLabel.setVisible(false);
 
+        //paneel met de knoppen
         JPanel buttonPanel = new JPanel(new FlowLayout());
         this.add(buttonPanel, BorderLayout.SOUTH);
 
+        //afsluiten van de popup
         JButton cancelButton = new JButton("Annuleren");
         cancelButton.addActionListener(e -> dispose());
-
         buttonPanel.add(cancelButton);
 
+        //toevoegen van de pickorders
         JButton addButton = new JButton("Toevoegen");
         addButton.addActionListener(e -> {
+            //er word teen tijdelijke arraylist toegevoegd voor het opslaan van de pickorders
             ArrayList<PickOrder> pickOrders = new ArrayList<>();
+            //deze foreach checkt of een van de orderlines al in een pickorder is gezet en laat de error zien als dat het geval is
             for (OrderLine orderLine : orderLines) {
                 if (WeergavePanel.pickOrders.stream().anyMatch(p -> p.getOrderLine().getId() == orderLine.getId())) {
                     errorLabel.setVisible(true);
                     return;
                 }
             }
+            //deze foreach voegt voor elke orderline een pickroder toe aan de tijdelijke array met de waarden uit de spinners en combobox
             for (int i = 0; i < orderLines.size(); i++) {
                 int selectedWeight = Integer.parseInt(weightComboBox.get(i).getSelectedItem().toString());
                 PickOrder pickOrder = new PickOrder(orderLines.get(i), (Integer) xPosSpinners.get(i).getValue(), (Integer) yPosSpinners.get(i).getValue(),selectedWeight, selectedOrder.getId());
                 pickOrders.add(pickOrder);
             }
+            //hier wordt het bin packing algoritme toegepast om de pickorders in te delen in dozen
             allocateItems(pickOrders);
+            //de pickorders worden toegevoegd aan de lijst met pickorders en het ordernummer wordt toegevoegd aan de wachtrij
             WeergavePanel.pickOrders.addAll(pickOrders);
             WeergavePanel.pickedOrderNummers.add(selectedOrder.getId());
 
+            //hier wordt het travelling salesman algoritme toegepast
             if (selectedOrder.getOrderLines().size() >= 4) {
 
                 Point Startpoint = new Point(0,0);
@@ -140,6 +147,7 @@ public class PickOrderPopup extends JDialog{
         setVisible(true);
     }
 
+    //deze methode deelt de pickorders in dozen op doormiddel van het best-fit algoritme
     public void allocateItems(ArrayList<PickOrder> pickOrders) {
         Doos doos1 = new Doos();
         Doos doos2 = new Doos();

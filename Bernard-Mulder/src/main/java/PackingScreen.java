@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class PackingScreen extends JPanel implements ActionListener {
+public class PackingScreen extends JPanel {
 
     JPanel viewPanel;
    // JList gepickteOrderList;  ?
@@ -55,7 +55,7 @@ public class PackingScreen extends JPanel implements ActionListener {
 
     }
 
-    public void refreshPanel(){
+    public void refreshPanel(){ //met deze methode kunnen de jlists worden herladen
         pickOrderList.setListData(getSelectedOrderLines().toArray());
         doos1List.setListData(getSelectedOrderLines().stream().filter(p -> p.getDoos() == 1).collect(Collectors.toList()).toArray());
         doos2List.setListData(getSelectedOrderLines().stream().filter(p -> p.getDoos() == 2).collect(Collectors.toList()).toArray());
@@ -64,18 +64,8 @@ public class PackingScreen extends JPanel implements ActionListener {
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
-
-    public ArrayList<PickOrder> getSelectedOrderLines() {
+    public ArrayList<PickOrder> getSelectedOrderLines() { //deze methode filtert doormiddel van een stream de pickorders van de order die op het moment wordt gepickt
         return new ArrayList(WeergavePanel.pickOrders.stream().filter(p->p.getOrderNummer() == WeergavePanel.pickedOrderNummers.get(0)).collect(Collectors.toList()));
     }
-
-
-//    static void addOrderLineDoos(Models.PickOrder ) {
-//        .add(pickOrder);
-//    }
 }
 

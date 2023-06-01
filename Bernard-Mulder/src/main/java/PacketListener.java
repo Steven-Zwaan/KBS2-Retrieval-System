@@ -5,9 +5,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class PacketListener implements SerialPortPacketListener {
+public final class PacketListener implements SerialPortPacketListener { //deze klasse is verantwoordelijk voor het ontvangen van data
 
-    private int packetSize = 3;
+    private int packetSize = 3; //hier wordt de grootte van de ontvangen data gespecificeerd. 3 betekent dat de data in stukejs van 3 bytes wordt opgedeeld
     private static String incoming_message = "";
 
     @Override
@@ -15,8 +15,9 @@ public final class PacketListener implements SerialPortPacketListener {
         return SerialPort.LISTENING_EVENT_DATA_RECEIVED;
     }
 
+
     @Override
-    public int getPacketSize() {
+    public int getPacketSize() { //deze methode geeft het aantal bytes terug dat er per bericht worden ontvangen
         return packetSize;
     }
 
@@ -29,9 +30,9 @@ public final class PacketListener implements SerialPortPacketListener {
     }
 
     @Override
-    public void serialEvent(SerialPortEvent event) {
-        byte[] newData = event.getReceivedData();
-        String str = new String(newData).split("\n", 2)[0].replaceAll("\\s+", "");
+    public void serialEvent(SerialPortEvent event) { //deze methode handelt het ontvangen van een bericht af bij het ontvangen van nieuwe seriele data
+        byte[] newData = event.getReceivedData(); //in deze array worden de ontvangen bytes opgeslagen
+        String str = new String(newData).split("\n", 2)[0].replaceAll("\\s+", ""); //hier wordt de array van bytes omgezet naar een string
         incoming_message = str;
         int byteSize = 0;
         try {
@@ -39,7 +40,7 @@ public final class PacketListener implements SerialPortPacketListener {
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(PacketListener.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (byteSize == packetSize) {
+        if (byteSize == packetSize) { //nadat er wordt gecontroleerd of de grootte van het bericht net zo groot is als de gespecificeerde packetsize wordt het bericht geprint
             System.out.println("Received data: " + str);
         }
     }

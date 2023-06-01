@@ -9,6 +9,7 @@ public class Queue {
 	boolean active = false;
 	boolean messageNotSend = true;
 	public static Queue instance = null; // instance opslaan
+	private MainScreen scherm;
 
 	public static Queue getInstance() { // instance ophalen
 		if(instance == null) { // als er nog geen instance is een nieuwe aanmaken
@@ -20,7 +21,7 @@ public class Queue {
 
 	private Queue() {
 
-		ArduinoConnection arduino = new ArduinoConnection("COM8");
+		ArduinoConnection arduino = new ArduinoConnection();
 
 		arduino.openPort(); // Openen arduino port
 		arduino.receiveData(); // Check for message
@@ -45,10 +46,10 @@ public class Queue {
 							System.out.println(queue.get(0).get(i));
 						}
 						queue.remove(0);
-						WeergavePanel.pickedOrderNummers.remove(0);
-						WeergavePanel.removeOrderFromQueue(WeergavePanel.pickedOrderNummers.get(0));
+						WeergavePanel.pickedOrderNummers.remove(0); //het ordernummer wordt uit de wachtrij verwijderd nadat deze gepickt is
+						WeergavePanel.removeOrderFromQueue(WeergavePanel.pickedOrderNummers.get(0)); //de pickorders worden uit de wachtrij verwijderd
 						messageNotSend = false;
-						scherm.weergavePanel.refreshPanel();
+						scherm.weergavePanel.refreshPanel(); //de schermen worden herladen
 						scherm.packingScreen.refreshPanel();
 					}
 				}
