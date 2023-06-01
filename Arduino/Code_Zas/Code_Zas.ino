@@ -131,7 +131,9 @@ void loop() {
 
         // controlleer of z-as actie nog niet is uitgevoerd en of received gelijk is aan 1 van de go-to en grab acties
         if (!doneZ && (recieved == "T0" || recieved == "T1" || recieved == "T2" || recieved == "T3" || recieved == "T4")){
-          motorYgoTo(yPosBoxes[hmi_y]); // ga naar de meegegeven y-as positie
+          if(motorYgoTo(yPosBoxes[hmi_y])){
+            
+          } // ga naar de meegegeven y-as positie
           if(done){ // controlleer of de Y go to actie compleet is
             delay(100); // kleine delay anders kans dat x niet uitgelezen wordt.
             if(x_arrived){ // controleer of x-as op positie is

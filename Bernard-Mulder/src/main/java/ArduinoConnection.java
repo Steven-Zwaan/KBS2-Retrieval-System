@@ -6,12 +6,15 @@ import com.fazecast.jSerialComm.*;
 public class ArduinoConnection {
 
     private String port;
+    private boolean messageReceived = false;
+    private boolean messageCompletedReceived = false;
+
     public ArduinoConnection(String port) {
         this.port = port;
     }
 
 
-    SerialPort sp = SerialPort.getCommPort("COM8"); // device name
+    SerialPort sp = SerialPort.getCommPort("/dev/ttyACM0"); // device name
 
     public void sendData (byte x, byte y, byte z) throws IOException, InterruptedException {
         sp.setComPortParameters(9600, 8, 1, 0); // default connection settings for Arduino
@@ -19,10 +22,10 @@ public class ArduinoConnection {
         byte data[] = {x, y, z};
 
         receiveData();
-        while(true){
+        while(!messageReceived){
             if(PacketListener.getIncoming_message().equals("100")){
                 PacketListener.setIncoming_message("");
-                break;
+                messageReceived = true;
             } else {
                 System.out.println("sending data");
                 sp.getOutputStream().write(data);
@@ -30,13 +33,14 @@ public class ArduinoConnection {
                 Thread.sleep(750);
             }
         }
-        while(true){
-            Thread.sleep(100);
+        while(!messageCompletedReceived){
             if(PacketListener.getIncoming_message().equals("600")) {
                 System.out.println("Switch mode");
-                break;
+                messageCompletedReceived = true;
             }
         }
+        messageReceived = false;
+        messageCompletedReceived = false;
     }
 
     public void receiveData() {
