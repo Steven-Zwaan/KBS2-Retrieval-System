@@ -74,65 +74,11 @@ public class PickOrderPopup extends JDialog{
         addButton.addActionListener(e -> {
             ArrayList<PickOrder> pickOrders = new ArrayList<>();
             for (OrderLine orderLine : orderLines) {
-                if (WeergavePanel.pickOrders.stream().filter(p -> p.getOrderLine().getId() == orderLine.getId()).findAny().isPresent()) {
+                if (WeergavePanel.pickOrders.stream().anyMatch(p -> p.getOrderLine().getId() == orderLine.getId())) {
                     errorLabel.setVisible(true);
                     return;
                 }
-                for (int i = 0; i < orderLines.size(); i++) {
-                    int selectedWeight = Integer.parseInt(weightComboBox.get(i).getSelectedItem().toString());
-                    PickOrder pickOrder = new PickOrder(orderLines.get(i), (Integer) xPosSpinners.get(i).getValue(), (Integer) yPosSpinners.get(i).getValue(),selectedWeight, selectedOrder.getId());
-                    WeergavePanel.addPickOrder(pickOrder);
-                   // PackingScreen.addPickOrder(pickOrder);
-                }
-                WeergavePanel.pickedOrderNummers.add(selectedOrder.getId());
-                if (selectedOrder.getOrderLines().size() >= 4) {
-
-                    Route.Point Startpoint = new Route.Point(0, 0);
-                    ArrayList<Point> points = new ArrayList<>();
-                    for (int i = 0; i < selectedOrder.getOrderLines().size(); i++) {
-                        points.add(new Route.Point((Integer) xPosSpinners.get(i).getValue(), (Integer) yPosSpinners.get(i).getValue()));
-                    }
-                    Route.Point Endpoint = new Point(5, 5);
-
-                    for (int i = 0; i <= (points.size() / 3); i++) {
-                        if ((points.size() / 3) == 1) {
-
-                        }
-                        Bruteforce bruteforce = new Bruteforce(Startpoint, points.get(0), points.get(1), points.get(2), Endpoint);
-                        points.remove(0);
-                        points.remove(1);
-                        points.remove(2);
-
-
-                        Queue.getInstance().AddQueue(bruteforce.calc());
-                    }
-
-                } else if (selectedOrder.getOrderLines().size() == 3){
-                    Route.Point Startpoint = new Route.Point(0,0);
-                    Route.Point p1 = new Route.Point((Integer) xPosSpinners.get(0).getValue(), (Integer) yPosSpinners.get(0).getValue());
-                    Route.Point p2 = new Route.Point((Integer) xPosSpinners.get(1).getValue(), (Integer) yPosSpinners.get(1).getValue());
-                    Route.Point p3 = new Route.Point((Integer) xPosSpinners.get(2).getValue(), (Integer) yPosSpinners.get(2).getValue());
-                    Route.Point Endpoint = new Point(5,5);
-                    Bruteforce bruteforce = new Bruteforce(Startpoint, p1 ,p2, p3, Endpoint);
-
-                    Queue.getInstance().AddQueue(bruteforce.calc());
-
-                } else if (selectedOrder.getOrderLines().size() == 2) {
-                    Route.Point Startpoint = new Route.Point(0,0);
-                    Route.Point p1 = new Route.Point((Integer) xPosSpinners.get(0).getValue(), (Integer) yPosSpinners.get(0).getValue());
-                    Route.Point p2 = new Route.Point((Integer) xPosSpinners.get(1).getValue(), (Integer) yPosSpinners.get(1).getValue());
-                    Route.Point Endpoint = new Point(5,5);
-                    Bruteforce bruteforce = new Bruteforce(Startpoint, p1 ,p2, Endpoint);
-
-                   Queue.getInstance().AddQueue(bruteforce.calc());
-
-                } else if (selectedOrder.getOrderLines().size() == 1) {
-                    System.out.println(new Route.Point((Integer) xPosSpinners.get(0).getValue(), (Integer) yPosSpinners.get(0).getValue()));
-                }
-
-                dispose();
             }
-
             for (int i = 0; i < orderLines.size(); i++) {
                 int selectedWeight = Integer.parseInt(weightComboBox.get(i).getSelectedItem().toString());
                 PickOrder pickOrder = new PickOrder(orderLines.get(i), (Integer) xPosSpinners.get(i).getValue(), (Integer) yPosSpinners.get(i).getValue(),selectedWeight, selectedOrder.getId());
