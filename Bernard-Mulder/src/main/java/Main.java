@@ -9,6 +9,7 @@ public class Main {
 
         // ArduinoConnection arduino = new ArduinoConnection("COM8");
        Queue instance = Queue.getInstance();
+       instance.setScreen(scherm);
 
         // arduino.openPort();
         // arduino.receiveData();

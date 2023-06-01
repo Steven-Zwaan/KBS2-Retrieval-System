@@ -10,6 +10,8 @@ public class Queue {
 	boolean messageNotSend = true;
 	public static Queue instance = null;
 
+	MainScreen scherm;
+
 	public static Queue getInstance() {
 		if(instance == null) {
 			instance = new Queue();
@@ -29,33 +31,34 @@ public class Queue {
 			throw new RuntimeException(e);
 		}
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while(true) {
-					if (active){
-						if (messageNotSend){
-							for (int i = 0; i < queue.get(0).size(); i++) {
-								try {
-									arduino.sendData((byte) 3, (byte) queue.get(0).get(i).getX(), (byte) queue.get(0).get(i).getY());
-								} catch (IOException e) {
-									throw new RuntimeException(e);
-								} catch (InterruptedException e) {
-									throw new RuntimeException(e);
-								}
-								System.out.println(queue.get(0).get(i));
+		new Thread(() -> {
+			while(true) {
+				if (active){
+					if (messageNotSend){
+						for (int i = 0; i < queue.get(0).size(); i++) {
+							try {
+								arduino.sendData((byte) 3, (byte) queue.get(0).get(i).getX(), (byte) queue.get(0).get(i).getY());
+							} catch (IOException e) {
+								throw new RuntimeException(e);
+							} catch (InterruptedException e) {
+								throw new RuntimeException(e);
 							}
-							queue.remove(0);
-							messageNotSend = false;
+							System.out.println(queue.get(0).get(i));
 						}
+						queue.remove(0);
+						WeergavePanel.pickedOrderNummers.remove(0);
+						WeergavePanel.removeOrderFromQueue(WeergavePanel.pickedOrderNummers.get(0));
+						messageNotSend = false;
+						scherm.weergavePanel.refreshPanel();
+						scherm.packingScreen.refreshPanel();
 					}
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						throw new RuntimeException(e);
-					}
-					checkQueue();
 				}
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+				checkQueue();
 			}
 		}).start();
 	}
@@ -71,5 +74,9 @@ public class Queue {
 		} else {
 			active = true;
 		}
+	}
+
+	public void setScreen(MainScreen scherm) {
+		this.scherm = scherm;
 	}
 }

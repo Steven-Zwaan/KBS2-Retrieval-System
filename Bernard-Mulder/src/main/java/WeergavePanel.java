@@ -34,16 +34,13 @@ public class WeergavePanel extends JPanel {
 
         JButton deleteOrderLine = new JButton("Verwijderen");
         eastPanel.add(deleteOrderLine, BorderLayout.SOUTH);
-        deleteOrderLine.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    pickOrders.remove(pickOrderList.getSelectedIndex());
-                    refreshPanel();
-                    deleteOrderLine.setBackground(null);
-                } catch(IndexOutOfBoundsException i) {
-                    deleteOrderLine.setBackground(Color.red);
-                }
+        deleteOrderLine.addActionListener(e -> {
+            try {
+                removeOrderFromQueue(pickOrders.get(pickOrderList.getSelectedIndex()).getOrderNummer());
+                refreshPanel();
+                deleteOrderLine.setBackground(null);
+            } catch(IndexOutOfBoundsException i) {
+                deleteOrderLine.setBackground(Color.red);
             }
         });
 
@@ -71,5 +68,10 @@ public class WeergavePanel extends JPanel {
         yLabel.setText("Y-as: " + viewPanel.getyPos());
         revalidate();
         repaint();
+    }
+
+    public static void removeOrderFromQueue(int orderNummer) {
+        pickOrders.removeAll(pickOrders.stream().filter(p -> p.getOrderNummer() == orderNummer).collect(Collectors.toList()));
+        pickedOrderNummers.remove(pickedOrderNummers.indexOf(orderNummer));
     }
 }
