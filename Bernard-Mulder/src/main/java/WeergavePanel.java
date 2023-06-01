@@ -25,7 +25,7 @@ public class WeergavePanel extends JPanel {
         this.add(viewPanel, BorderLayout.CENTER);
 
         JPanel eastPanel = new JPanel(new BorderLayout());
-        eastPanel.setPreferredSize(new Dimension(300, getHeight()));
+        eastPanel.setPreferredSize(new Dimension(375, getHeight()));
         this.add(eastPanel, BorderLayout.EAST);
 
         pickOrderList = new JList(pickOrders.toArray());
@@ -71,13 +71,5 @@ public class WeergavePanel extends JPanel {
         yLabel.setText("Y-as: " + viewPanel.getyPos());
         revalidate();
         repaint();
-    }
-
-    static void addPickOrder(PickOrder pickOrder) {
-        pickOrders.add(pickOrder);
-    }
-
-    static ArrayList<PickOrder> getPickOrdersFromOrder(int orderID) {
-        return new ArrayList<>(pickOrders.stream().filter(p -> p.getOrderNummer() == orderID).collect(Collectors.toList()));
     }
 }
