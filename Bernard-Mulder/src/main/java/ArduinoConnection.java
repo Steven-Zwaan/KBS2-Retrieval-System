@@ -11,7 +11,7 @@ public class ArduinoConnection {
     }
 
 
-    SerialPort sp = SerialPort.getCommPort("COM8"); // device name
+    SerialPort sp = SerialPort.getCommPort("/dev/ttyACM0"); // device name
 
     public void sendData (byte x, byte y, byte z) throws IOException, InterruptedException {
         sp.setComPortParameters(9600, 8, 1, 0); // default connection settings for Arduino
