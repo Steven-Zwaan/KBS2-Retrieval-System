@@ -92,11 +92,8 @@ public class OrderScreen extends JPanel implements ActionListener {
 
         JButton pickOrder = new JButton("Order Picken");
         adressLinesKnoppen.add(pickOrder);
-        pickOrder.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                PickOrderPopup popup = new PickOrderPopup(selectedOrder);
-            }
+        pickOrder.addActionListener(e -> {
+            PickOrderPopup popup = new PickOrderPopup(selectedOrder);
         });
 
         aanpassenOrderLine = new JButton("Product aanpassen");
@@ -112,33 +109,30 @@ public class OrderScreen extends JPanel implements ActionListener {
 
         adressLinesPanel.setVisible(false);
 
-        orders.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int selectedIndex = orders.getSelectedIndex();
-                if(selectedIndex != 0) {
-                    try {
-                        selectedOrder = orderList.getOrderList().get(selectedIndex);
-                    } catch (IndexOutOfBoundsException exception){
-                        selectedOrder = (Order) orders.getModel().getElementAt(0);
-                    }
-                } else {
+        orders.addListSelectionListener(e -> {
+            int selectedIndex = orders.getSelectedIndex();
+            if(selectedIndex != 0) {
+                try {
+                    selectedOrder = orderList.getOrderList().get(selectedIndex);
+                } catch (IndexOutOfBoundsException exception){
                     selectedOrder = (Order) orders.getModel().getElementAt(0);
                 }
-//                orderLines.clearSelection();
-                orderLines.setListData(selectedOrder.getOrderLines().toArray());
-                OrderNummer.setText("Ordernummer: " + selectedOrder.getId());
-                naam.setText("Naam: " + selectedOrder.getCustomer().getName());
-                adres.setText("Adres: " + selectedOrder.getCustomer().getAddressLine2());
-                postcode.setText("Postcode: " + selectedOrder.getCustomer().getPostalCode());
-                woonplaats.setText("Woonplaats: " + selectedOrder.getCustomer().getCity());
-                telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer().getPhoneNumber());
-
-                ProductView.setVisible(true);
-                adressLinesPanel.setVisible(true);
-                revalidate();
-                repaint();
+            } else {
+                selectedOrder = (Order) orders.getModel().getElementAt(0);
             }
+//                orderLines.clearSelection();
+            orderLines.setListData(selectedOrder.getOrderLines().toArray());
+            OrderNummer.setText("Ordernummer: " + selectedOrder.getId());
+            naam.setText("Naam: " + selectedOrder.getCustomer().getName());
+            adres.setText("Adres: " + selectedOrder.getCustomer().getAddressLine2());
+            postcode.setText("Postcode: " + selectedOrder.getCustomer().getPostalCode());
+            woonplaats.setText("Woonplaats: " + selectedOrder.getCustomer().getCity());
+            telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer().getPhoneNumber());
+
+            ProductView.setVisible(true);
+            adressLinesPanel.setVisible(true);
+            revalidate();
+            repaint();
         });
 
         orderLines.addListSelectionListener(new ListSelectionListener() {

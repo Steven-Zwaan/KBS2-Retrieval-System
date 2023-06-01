@@ -1,3 +1,5 @@
+package Models;
+
 import Models.*;
 public class PickOrder {
     private OrderLine orderLine;
@@ -7,6 +9,8 @@ public class PickOrder {
     private int pickOrderID;
     private boolean isPicked;
     private int orderNummer;
+
+    private int doos;
 
 
     public PickOrder(OrderLine orderLine, int xPos, int yPos, int weight, int orderNummer) {
@@ -43,6 +47,14 @@ public class PickOrder {
 
     public int getOrderNummer() {
         return orderNummer;
+    }
+
+    public int getDoos() {
+        return doos;
+    }
+
+    public void setDoos(int doos) {
+        this.doos = doos;
     }
 
     @Override

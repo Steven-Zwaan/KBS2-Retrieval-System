@@ -5,7 +5,7 @@
 //
 //public class BinPackingBoxPanel extends JPanel {
 //
-//    static ArrayList<PickOrder> pickOrders = new ArrayList<>();
+//    static ArrayList<Models.PickOrder> pickOrders = new ArrayList<>();
 //
 //    public BinPackingBoxPanel(){
 //        this.setLayout(new GridLayout(2,1));
