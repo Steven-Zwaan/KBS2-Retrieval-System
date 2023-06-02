@@ -96,6 +96,11 @@ public class MainScreen extends JFrame implements ActionListener {
 		root.add("Help", HelpPanel);
 
 		setVisible(true);
+
+
+
+
+
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -115,6 +120,8 @@ public class MainScreen extends JFrame implements ActionListener {
 		}
 		this.revalidate();
 	}
+
+
 
 	public String ShortenString(String string, int length){
 		if (string.length() < length){

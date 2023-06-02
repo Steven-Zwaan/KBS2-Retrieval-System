@@ -76,24 +76,22 @@ public class StockScreen extends JPanel implements ActionListener {
             public void filterStock(JList<Product> product, List<Product> productList) {
                 foundStocks = new ArrayList<>();
                 try {
-                    int orderID = Integer.parseInt(zoekenStock.getText());
+                    int stockID = Integer.parseInt(zoekenStock.getText());
 
                     for (Product foundStock : productList) {
-                        if (String.valueOf(foundStock.getId()).contains(String.valueOf(orderID))) {
+                        if (String.valueOf(foundStock.getId()).contains(String.valueOf(stockID))) {
                             foundStocks.add(foundStock);
                         }
                     }
-//					if (foundStocks.size() >0){
+
                     product.setListData(foundStocks.toArray(new Product[0]));
-//
-//					}
                 } catch (NumberFormatException e) {
-                    String orderNaam = zoekenStock.getText();
-                    if (orderNaam.equals("Zoeken...")) {
+                    String artikelNaam = zoekenStock.getText();
+                    if (artikelNaam.equals("Zoeken...")) {
                         foundStocks.addAll(productList);
                     } else {
                         for (Product foundStock : productList) {
-                            if (String.valueOf(foundStock.getName()).contains(String.valueOf(orderNaam))) {
+                            if (String.valueOf(foundStock.getName()).contains(artikelNaam)) {
                                 foundStocks.add(foundStock);
                             }
                         }

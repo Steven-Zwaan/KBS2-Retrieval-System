@@ -21,10 +21,11 @@ public class PakbonScreenPopup extends JDialog implements ActionListener {
     private Order order;
     private Customer customer;
     private int aantal;
+    private String imagePath =  "src/main/java/Image/logo.png";
 
     PDDocument document = new PDDocument();
     PDPage page = new PDPage();
-    PDImageXObject pdImage = PDImageXObject.createFromFile("C://Users//enteb//OneDrive//Documents//Karolien school//logo.png", document);
+    PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath, document);
 
 
 
