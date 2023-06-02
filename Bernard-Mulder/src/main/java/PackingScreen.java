@@ -1,18 +1,19 @@
+import Models.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
-public class PackingScreen extends JPanel implements ActionListener {
+public class PackingScreen extends JPanel {
 
     JPanel viewPanel;
    // JList gepickteOrderList;  ?
     JList pickOrderList;  //bevat de orders die gepicked worden
     JList doos1List;
-  //  ArrayList<PickOrder> doos1Array;
     JList doos2List;
-  //  ArrayList<PickOrder> doos2Array;
 
   //  JList boxList; ?
 
@@ -28,11 +29,13 @@ public class PackingScreen extends JPanel implements ActionListener {
         this.add(viewPanel, BorderLayout.CENTER);
 
         //print de order in de Linker Panel
-        pickOrderList = new JList(WeergavePanel.pickOrders.toArray());
+        pickOrderList = new JList(getSelectedOrderLines().toArray());
         orderLineScrollPane = new JScrollPane(pickOrderList);
+        orderLineScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        orderLineScrollPane.setPreferredSize(new Dimension(380,getHeight()));
         this.add(orderLineScrollPane, BorderLayout.WEST);
 
-        //Panel voor de visuele weergave van de 2 dozen aan de rechter kant
+        //Panel voor de visuele weergave van de 2 dozen aan de rechterkant
         JPanel dozenWeergave = new JPanel();
         dozenWeergave.setLayout(new BoxLayout(dozenWeergave, BoxLayout.Y_AXIS));
         dozenWeergave.setPreferredSize(new Dimension(400, this.getHeight()));
@@ -40,32 +43,29 @@ public class PackingScreen extends JPanel implements ActionListener {
 
         //panel voor doos 1
         dozenWeergave.add(new JLabel("Doos 1"));
-      //  doos1List = new JList();
-        doos1ScrollPane = new JScrollPane();
+        doos1List = new JList(getSelectedOrderLines().stream().filter(p -> p.getDoos() == 1).collect(Collectors.toList()).toArray());
+        doos1ScrollPane = new JScrollPane(doos1List);
         dozenWeergave.add(doos1ScrollPane);
 
         //panel voor doos 2
         dozenWeergave.add(new JLabel("Doos 2"));
-        //doos2List = new JList();
-        doos2ScrollPane = new JScrollPane();
+        doos2List = new JList(getSelectedOrderLines().stream().filter(p -> p.getDoos() == 2).collect(Collectors.toList()).toArray());
+        doos2ScrollPane = new JScrollPane(doos2List);
         dozenWeergave.add(doos2ScrollPane);
 
     }
 
-    public void refreshPanel(){
-        pickOrderList.setListData(WeergavePanel.pickOrders.toArray());
+    public void refreshPanel(){ //met deze methode kunnen de jlists worden herladen
+        pickOrderList.setListData(getSelectedOrderLines().toArray());
+        doos1List.setListData(getSelectedOrderLines().stream().filter(p -> p.getDoos() == 1).collect(Collectors.toList()).toArray());
+        doos2List.setListData(getSelectedOrderLines().stream().filter(p -> p.getDoos() == 2).collect(Collectors.toList()).toArray());
         pickOrderList.revalidate();
         pickOrderList.repaint();
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
+    public ArrayList<PickOrder> getSelectedOrderLines() { //deze methode filtert doormiddel van een stream de pickorders van de order die op het moment wordt gepickt
+        return new ArrayList(WeergavePanel.pickOrders.stream().filter(p->p.getOrderNummer() == WeergavePanel.pickedOrderNummers.get(0)).collect(Collectors.toList()));
     }
-
-//    static void addOrderLineDoos(PickOrder ) {
-//        .add(pickOrder);
-//    }
 }
 

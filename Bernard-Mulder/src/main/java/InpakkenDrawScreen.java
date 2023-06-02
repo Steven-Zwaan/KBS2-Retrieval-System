@@ -1,30 +1,50 @@
 import java.awt.*;
-import javax.swing.JPanel;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import java.security.ProtectionDomain;
+
 
 public class InpakkenDrawScreen extends JPanel {
     public InpakkenDrawScreen() {
-        this.setLayout(new FlowLayout(0));
+        this.setLayout(new GridLayout(2,1));
+        this.setBorder(BorderFactory.createMatteBorder(3,3,3,3,Color.black)); //top,left,bottom,right
+
+        //stukje voor het label van doos 1
+        JLabel doos1 = new JLabel("Doos 1:");
+        JLabel doos1Max = new JLabel("max 10");
+        doos1.setBorder(new EmptyBorder(0,100,0,0));
+        doos1.setFont(new Font("Arial", Font.PLAIN, 18));
+        doos1Max.setBorder(new EmptyBorder(0,140,0,0));
+        doos1Max.setFont(new Font("Arial", Font.PLAIN, 16));
+
+        //stukje voor het label van doos 2
+        JLabel doos2 = new JLabel("Doos 2:");
+        JLabel doos2Max = new JLabel("max 10");
+        doos2.setBorder(new EmptyBorder(0,100,0,0));
+        doos2.setFont(new Font("Arial", Font.PLAIN, 18));
+        doos2Max.setBorder(new EmptyBorder(0,140,0,0));
+        doos2Max.setFont(new Font("Arial", Font.PLAIN, 16));
+
+        this.add(doos1);
+        this.add(doos1Max);
+        this.add(doos2);
+        this.add(doos2Max);
+
     }
 
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.BLACK);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double width = screenSize.getWidth();
-        double height = screenSize.getHeight();
+        g.setColor(Color.black);
 
-        // int x= de width van het scherm /4
-        // int y = de height deelt door / 4
+        //Doos 1, boven (x, y, width, height)
+        g.drawRect((int)(this.getHeight() * 0.3), (int)(this.getWidth() /9.2),(int)(this.getWidth() /3),(int)(this.getHeight() /3));
 
-        //Doos 1, boven
-        g.fillRect(((int)(width * 0.35)), (int)(height * 0.2), 3, 230);   // Linker lijn
-        g.fillRect((int) (width * 0.50), (int)(height * 0.1), 3, 200);   // rechter lijn
-        g.fillRect((int)(height * 0.404), (int) (height *0.1), 284, 3); // onderkant
+        //lijn in midden
+        g.drawLine(0, (int)(this.getHeight() /2),(int)(this.getWidth()),(int)(this.getHeight() /2));
 
         //Doos 2, onder
-        g.fillRect((int)(width * 0.35), 500, 3, 230);   //
-        g.fillRect((int)(width * 0.65), 500, 3, 230);   //
-        g.fillRect((int)(height * 0.404), 730, 284, 3); // onderkant
+        g.drawRect((int)(this.getHeight() * 0.3),(int)(this.getWidth() /1.8), (int)(this.getWidth() /3),(int)(this.getHeight() /3));
 
         this.setVisible(true);
     }

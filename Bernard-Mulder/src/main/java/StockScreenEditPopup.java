@@ -52,7 +52,7 @@ public class StockScreenEditPopup extends JDialog implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Change")){
-			product.setStock((int) aantal.getValue());
+			product.setStock((int) aantal.getValue()); // waarde uit spinner halen en updaten
 			frame.repaint();
 			frame.revalidate();
 			this.setVisible(false);

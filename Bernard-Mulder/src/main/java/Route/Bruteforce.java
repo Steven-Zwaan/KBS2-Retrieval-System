@@ -7,9 +7,9 @@ public class Bruteforce {
 	double shortestLenght;
 	Route shortestRoute;
 
-	public Bruteforce(Point start, Point p1, Point p2, Point p3, Point end){
+	public Bruteforce(Point start, Point p1, Point p2, Point p3, Point end){ // aanmaken algoritme met 3 punten
 
-
+		// aanmaken alle mogelijke lijnen
 		Line start1 = new Line(start, p1);
 		Line start2 = new Line(start, p2);
 		Line start3 = new Line(start, p3);
@@ -27,6 +27,8 @@ public class Bruteforce {
 		Line end2 = new Line(p2, end);
 		Line end3 = new Line(p3, end);
 
+
+		// aanmaken alle mogelijke routes
 		Route r1 = new Route(start1, p1_p2, p2_p3, end3);
 		Route r2 = new Route(start1, p1_p3, p3_p2, end2);
 
@@ -36,17 +38,19 @@ public class Bruteforce {
 		Route r5 = new Route(start3, p3_p2, p2_p1, end1);
 		Route r6 = new Route(start3, p3_p1, p1_p2, end2);
 
+		// routes toevoegen aan arraylist
 		options.add(r1);
 		options.add(r2);
 		options.add(r3);
 		options.add(r4);
 		options.add(r5);
 		options.add(r6);
-		shortestLenght = options.get(0).getLength();
-		shortestRoute = options.get(0);
+		shortestLenght = options.get(0).getLength(); // lengte eerste route als kortste route zetten
+		shortestRoute = options.get(0); // lengte eerste route als kortste route zetten
 	}
 
-	public Bruteforce(Point start, Point p1, Point p2, Point end){
+	public Bruteforce(Point start, Point p1, Point p2, Point end){ // aanmaken algoritme 2 punten
+		// aanmaken alle mogelijke lijnen
 		Line start1 = new Line(start, p1);
 		Line start2 = new Line(start, p2);
 
@@ -56,24 +60,26 @@ public class Bruteforce {
 		Line end1 = new Line(p1, end);
 		Line end2 = new Line(p2, end);
 
+		// aanmaken alle mogelijke routes
 		Route r1 = new Route(start1, p1_p2, end2);
-		Route r2 = new Route(start1, p2_p1, end1);
+		Route r2 = new Route(start2, p2_p1, end1);
 
+		// routes toevoegen aan lijst
 		options.add(r1);
 		options.add(r2);
-		shortestLenght = options.get(0).getLength();
-		shortestRoute = options.get(0);
+		shortestLenght = options.get(0).getLength(); // lengte eerste route als kortste route zetten
+		shortestRoute = options.get(0); // eerste route als kortste route zetten
 	}
 
-	public ArrayList<Point> calc(){
+	public ArrayList<Point> calc(){ // vergelijken van lengtes van routes
 		for (int i = 0; i < options.size(); i++){
-			if(shortestLenght > options.get(i).getLength()) {
-				shortestLenght = options.get(i).getLength();
-				shortestRoute = options.get(i);
+			if(shortestLenght > options.get(i).getLength()) { // als nieuwe route korter is dan oude route
+				shortestLenght = options.get(i).getLength(); // kortste route updaten
+				shortestRoute = options.get(i); // kortste route updaten
 			}
 		}
 		ArrayList<Point> points = new ArrayList<>();
-		for (int i = 1; i < shortestRoute.getRoute().size(); i++){
+		for (int i = 1; i < shortestRoute.getRoute().size(); i++){ // punten van kortste opslaan in een tijdelijke array
 			points.add(shortestRoute.getRoute().get(i).getLine().get(0));
 		}
 

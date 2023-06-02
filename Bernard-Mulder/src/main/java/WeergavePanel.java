@@ -4,9 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class WeergavePanel extends JPanel {
@@ -21,34 +19,34 @@ public class WeergavePanel extends JPanel {
     JLabel yLabel;
 
     public WeergavePanel() {
+
+        //in deze klasse wordt de paneel gemaakt voor het weergeven van de robot
         this.setLayout(new BorderLayout());
         viewPanel = new WeergaveDrawPanel();
-//        viewPanel.setBackground(new Color(255, 0,0));
         this.add(viewPanel, BorderLayout.CENTER);
 
+        //de rechter paneel wordt aangemaakt en de lijst van de pickorders wordt getoond
         JPanel eastPanel = new JPanel(new BorderLayout());
-        eastPanel.setPreferredSize(new Dimension(300, getHeight()));
+        eastPanel.setPreferredSize(new Dimension(375, getHeight()));
         this.add(eastPanel, BorderLayout.EAST);
-
         pickOrderList = new JList(pickOrders.toArray());
         orderLineScrollPane = new JScrollPane(pickOrderList);
         eastPanel.add(orderLineScrollPane, BorderLayout.CENTER);
 
+        //knop die van de geselecteerde orderline de order verwijdert doormiddel van de removeOrderFromQueue methode
         JButton deleteOrderLine = new JButton("Verwijderen");
         eastPanel.add(deleteOrderLine, BorderLayout.SOUTH);
-        deleteOrderLine.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    pickOrders.remove(pickOrderList.getSelectedIndex());
-                    refreshPanel();
-                    deleteOrderLine.setBackground(null);
-                } catch(IndexOutOfBoundsException i) {
-                    deleteOrderLine.setBackground(Color.red);
-                }
+        deleteOrderLine.addActionListener(e -> {
+            try {
+                removeOrderFromQueue(pickOrders.get(pickOrderList.getSelectedIndex()).getOrderNummer());
+                refreshPanel();
+                deleteOrderLine.setBackground(null);
+            } catch(IndexOutOfBoundsException i) {
+                deleteOrderLine.setBackground(Color.red);
             }
         });
 
+        //hier wordt de balk met coordinaten in het onderste gedeelte van de borderlayout geplaatst met labels voor de x en y positie
         coordinateBar = new JPanel();
         coordinateBar.setPreferredSize(new Dimension(this.getWidth(), 40));
         coordinateBar.setLayout(new FlowLayout());
@@ -61,12 +59,14 @@ public class WeergavePanel extends JPanel {
         coordinateBar.add(yLabel);
     }
 
+    //deze methode herlaadt de listdata van de jlist en ververst daarna het scherm
     public void refreshPanel() {
         pickOrderList.setListData(pickOrders.toArray());
         pickOrderList.revalidate();
         pickOrderList.repaint();
     }
 
+    //met deze methode kan de positie van de robot in de HMI worden geupdate
     public void updatePos(int x, int y) {
         viewPanel.updatePos(x,y);
         xLabel.setText("X-as: " + viewPanel.getxPos());
@@ -75,11 +75,9 @@ public class WeergavePanel extends JPanel {
         repaint();
     }
 
-    static void addPickOrder(PickOrder pickOrder) {
-        pickOrders.add(pickOrder);
-    }
-
-    static ArrayList<PickOrder> getPickOrdersFromOrder(int orderID) {
-        return new ArrayList<>(pickOrders.stream().filter(p -> p.getOrderNummer() == orderID).collect(Collectors.toList()));
+    //deze methode verwijdert alle pickorders van het meegegeven ordernummer
+    public static void removeOrderFromQueue(int orderNummer) {
+        pickOrders.removeAll(pickOrders.stream().filter(p -> p.getOrderNummer() == orderNummer).collect(Collectors.toList()));
+        pickedOrderNummers.remove(pickedOrderNummers.indexOf(orderNummer));
     }
 }

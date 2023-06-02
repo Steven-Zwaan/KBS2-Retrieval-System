@@ -1,6 +1,4 @@
-import Models.Order;
-import Models.OrderLine;
-import Models.OrderList;
+import Models.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -14,7 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderScreen extends JPanel implements ActionListener {
+public class OrderScreen extends JPanel{
+
     OrderList orderList;
     JButton pakbonPrinten;
     JList orders;
@@ -25,51 +24,50 @@ public class OrderScreen extends JPanel implements ActionListener {
     ArrayList<Order> orderResult;
     JList orderLines;
 
-
-    //    OrderList orderList;
     public OrderScreen() {
-        this.setLayout(new BorderLayout());
 
-        orderList = new OrderList();
+        this.setLayout(new BorderLayout()); // zet de layout van het orderscherm naar een borderlayout
+
+        orderList = new OrderList(); //Er wordt een nieuwe instantie van orderlist aangemaakt en de orders van de database worden in een arraylist van de orderlist gestopt
         orderList.getOrdersFromDatabase();
 
-        orderResult = orderList.getOrderList();
-        orders = new JList(orderResult.toArray());
-        JScrollPane scrollPaneOrderScreen = new JScrollPane(orders);
+        orderResult = orderList.getOrderList(); //om de zoekfunctie te laten werken worden de in de lijst vanuit orderResult geladen. Deze krijgt aan het begin de lijst van orderlist mee
+        orders = new JList(orderResult.toArray()); // de arraylist wordt in een jlist gestopt. Deze zal links in het orderscherm alle orders laten zien
+        JScrollPane scrollPaneOrderScreen = new JScrollPane(orders); //de ljist wordt in een scrollpane gezet om scrollen mogelijk te maken
 
-        scrollPaneOrderScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPaneOrderScreen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); //de scrollpane wordt ingesteld voor gebruik
         scrollPaneOrderScreen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPaneOrderScreen.getVerticalScrollBar().setUnitIncrement(16);
         scrollPaneOrderScreen.setSize(new Dimension(this.getHeight(), 1500));
 
-        this.add(scrollPaneOrderScreen, BorderLayout.WEST);
+        this.add(scrollPaneOrderScreen, BorderLayout.WEST); //de scrollpane wordt links in de borderlayout toegevoegd
 
         //setup orderinfo scherm
-        JPanel ProductView = new JPanel();
-        ProductView.setLayout(new BoxLayout(ProductView, BoxLayout.Y_AXIS));
+        JPanel ProductView = new JPanel(); //in productview zal een lijst komen te staan met alle orderlines met een jlabel met het ordernummer erboven.
+        ProductView.setLayout(new BoxLayout(ProductView, BoxLayout.Y_AXIS)); //hiervoor wordt een boxlayout gebruikt
         this.add(ProductView, BorderLayout.CENTER);
 
-        selectedOrder = orderList.getOrderList().get(0);
+        selectedOrder = orderList.getOrderList().get(0); //om errors te voorkomen wordt voor het object selectedorder eerst het eerste order in de lijst gebruikt als plaatsvervanger om nullpointerexceptions te voorkomen
         JLabel OrderNummer = new JLabel();
         ProductView.add(OrderNummer);
 
-        orderLines = new JList(selectedOrder.getOrderLines().toArray());
+        orderLines = new JList(selectedOrder.getOrderLines().toArray()); //van de geselecteerde order worden de orderlines opgehaald, naar een array omgezet en in een jlist gestopt
         JScrollPane scrollpaneOrderLines = new JScrollPane(orderLines);
         ProductView.add(scrollpaneOrderLines);
 
-        ProductView.setVisible(false);
+        ProductView.setVisible(false); //bij het starten van de code wordt productview onzichtbaar gemaakt, omdat de orderdetails pas op het scherm mogen komen wanneer er op een order wordt geklikt
 
-        JPanel adressLines = new JPanel();
+        JPanel adressLines = new JPanel(); //in de adresslines panel zullen de orderdetails vermeldt worden. hiervoor wordt een gridlayout gebruikt
         adressLines.setLayout(new GridLayout(15, 1));
 
-        JPanel adressLinesPanel = new JPanel();
+        JPanel adressLinesPanel = new JPanel(); //de adresslines worden in een aparte panel met een borderlayout geplaatst met een borderlayout, zodat er onrderin de paneel (borderlayout.SOUTH) een balk met de knoppen kan komen
         adressLinesPanel.setLayout(new BorderLayout());
         adressLinesPanel.add(adressLines, BorderLayout.CENTER);
-        adressLinesPanel.setPreferredSize(new Dimension(350, getHeight()));
+        adressLinesPanel.setPreferredSize(new Dimension(350, getHeight())); //er wordt een vaste grootte meegegeven voor de breedte zodat de paneel breed geneog is voor de tekst
 
         this.add(adressLinesPanel, BorderLayout.EAST);
 
-        JLabel naam = new JLabel();
+        JLabel naam = new JLabel(); //hier owrdne alle jlabels met de ordergegevens aangemaakt. Hier komen nog geen waarden in, omdat deze pas gevuld moeten worden bij het selecteren van een order
         adressLines.add(naam);
 
         JLabel adres = new JLabel();
@@ -84,74 +82,77 @@ public class OrderScreen extends JPanel implements ActionListener {
         JLabel telnr = new JLabel();
         adressLines.add(telnr);
 
-        JPanel adressLinesKnoppen = new JPanel();
+        JPanel adressLinesKnoppen = new JPanel(); //dit is de balk onderaan de ordergegevens met alle knoppen
         adressLinesKnoppen.setLayout(new GridLayout(1, 2));
         adressLinesKnoppen.setPreferredSize(new Dimension(adressLinesPanel.getWidth(), 25));
         adressLinesPanel.add(adressLinesKnoppen, BorderLayout.SOUTH);
 
-        JButton pickOrder = new JButton("Order Picken");
+        JButton pickOrder = new JButton("Order Picken"); //deze knop zorgt voor het popup menu om een pickorder mee toe te voegen
         adressLinesKnoppen.add(pickOrder);
-        pickOrder.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                PickOrderPopup popup = new PickOrderPopup(selectedOrder);
-            }
+        pickOrder.addActionListener(e -> { //deze actionlistener maakt een nieuwe instantie van de pickorderpopup klasse aan wanneer er op de knop wordt gedrukt
+            PickOrderPopup popup = new PickOrderPopup(selectedOrder); // bij het openen van de popup wordt de geselecteerde order meegegeven, zodat de popup de orderlines kan ophalen
         });
 
-        aanpassenOrderLine = new JButton("Product aanpassen");
-        aanpassenOrderLine.setActionCommand("AanpassenOrder");
-        aanpassenOrderLine.addActionListener(this);
+        aanpassenOrderLine = new JButton("Product aanpassen"); // hier wordt een knop aangemaakt voor het aanpasse nvan een orderline
+        aanpassenOrderLine.addActionListener(e -> { //in de actionlistener wordt een try catch gebruikt voor het geval er geen orderline geselecteerd is om aan te passen
+            try { //indien dit er wel is wordt er een popup gemaakt waaraan de geselecteerde orderline, de titel, de voorraad van het product en het orderscreen frame voor het refreshen van de paneel
+                aanpassenOrderLine.setBackground(null);
+                int voorraad = selectedOrderLine.getProduct().getStock();
+                OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrderLine, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId(), voorraad, this);
+                this.orderLines.revalidate();
+            } catch (NullPointerException npe) { //wanneer er geen orderline geselecteerd is wordt de knop rood gemaakt en opent de popup niet
+                aanpassenOrderLine.setBackground(new Color(255, 0, 0));
+            }
+        });
         adressLinesKnoppen.add(aanpassenOrderLine);
 
-        pakbonPrinten = new JButton("Pakbon");
-        pakbonPrinten.setActionCommand("PakbonPrinten");
-        pakbonPrinten.addActionListener(this);
+        pakbonPrinten = new JButton("Pakbon"); //hier wordt de knop aangemaakt voor het printen van de pakbon. Deze opent een popup die de geselecteerde order en de titel meekrijgt
+        pakbonPrinten.addActionListener(e -> {
+            try {
+                PakbonScreenPopup popup = new PakbonScreenPopup(selectedOrder, "Pakbon van ' " + selectedOrder.getId() + " ' ");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            this.revalidate();
+        });
         adressLinesKnoppen.add(pakbonPrinten);
 
 
-        adressLinesPanel.setVisible(false);
+        adressLinesPanel.setVisible(false); //ook adresslinespanel wordt op onzichtbaar gezet, omdat deze pas zichtbaar mag worden wanneer er een order wordt geselecteerd
 
-        orders.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int selectedIndex = orders.getSelectedIndex();
-                if(selectedIndex != 0) {
-                    try {
-                        selectedOrder = orderList.getOrderList().get(selectedIndex);
-                    } catch (IndexOutOfBoundsException exception){
-                        selectedOrder = (Order) orders.getModel().getElementAt(0);
-                    }
-                } else {
+        orders.addListSelectionListener(e -> { //wanneer er een order wordt geselecteerd, krijgt selectedorder de order mee die er op dat moment wordt geselecteerd
+            int selectedIndex = orders.getSelectedIndex();
+            if(selectedIndex != 0) {
+                try {
+                    selectedOrder = orderList.getOrderList().get(selectedIndex);
+                } catch (IndexOutOfBoundsException exception){
                     selectedOrder = (Order) orders.getModel().getElementAt(0);
                 }
-//                orderLines.clearSelection();
-                orderLines.setListData(selectedOrder.getOrderLines().toArray());
-                OrderNummer.setText("Ordernummer: " + selectedOrder.getId());
-                naam.setText("Naam: " + selectedOrder.getCustomer().getName());
-                adres.setText("Adres: " + selectedOrder.getCustomer().getAddressLine2());
-                postcode.setText("Postcode: " + selectedOrder.getCustomer().getPostalCode());
-                woonplaats.setText("Woonplaats: " + selectedOrder.getCustomer().getCity());
-                telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer().getPhoneNumber());
-
-                ProductView.setVisible(true);
-                adressLinesPanel.setVisible(true);
-                revalidate();
-                repaint();
+            } else {
+                selectedOrder = (Order) orders.getModel().getElementAt(0);
             }
+
+            orderLines.setListData(selectedOrder.getOrderLines().toArray()); //daarnaast krijgen alle labels van de orderdetails de jusite waarden mee
+            OrderNummer.setText("Ordernummer: " + selectedOrder.getId());
+            naam.setText("Naam: " + selectedOrder.getCustomer().getName());
+            adres.setText("Adres: " + selectedOrder.getCustomer().getAddressLine2());
+            postcode.setText("Postcode: " + selectedOrder.getCustomer().getPostalCode());
+            woonplaats.setText("Woonplaats: " + selectedOrder.getCustomer().getCity());
+            telnr.setText("Telefoonnummer: " + selectedOrder.getCustomer().getPhoneNumber());
+
+            ProductView.setVisible(true); //vervolgens worden beide panelen zichtbaar gemaakt en opnieuw geladen, zodat deze zichtbaar worden
+            adressLinesPanel.setVisible(true);
+            revalidate();
+            repaint();
         });
 
-        orderLines.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                selectedOrderLine = selectedOrder.getOrderLines().get(orderLines.getSelectedIndex());
-            }
-        });
+        orderLines.addListSelectionListener(e -> selectedOrderLine = selectedOrder.getOrderLines().get(orderLines.getSelectedIndex())); // wanneer er een orderlines wordt geselecteerd, krijgt de selectedorderline de orderline mee die er op dat moment wordt geselecteerd
 
         //setup zoekbalk
-        JButton buttonAanpassenPickDatum = new JButton("Pickdatum aanpassen");
-        buttonAanpassenPickDatum.setActionCommand("AanpassenPickDatum");
-        buttonAanpassenPickDatum.addActionListener(this);
-
+        JButton buttonAanpassenPickDatum = new JButton("Pickdatum aanpassen"); //hier wordt een knop aangemaakt voor het veranderen van de pickdatum
+        buttonAanpassenPickDatum.addActionListener(e -> { //met de methode setpickingpopup wordt de pickdatum aangepast. Deze returnt true als dit is gelukt of false als dit niet het geval is
+            SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId()); //er wordt een nieuwe popup gemaakt die een confirmatie of error geeft na het veranderen van de pickdatum
+        });
 
         zoekenOrder = new JTextField(10);
         zoekenOrder.setText("Zoeken...");
@@ -238,28 +239,5 @@ public class OrderScreen extends JPanel implements ActionListener {
         orderLines.repaint();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("AanpassenOrder")) {
-            try {
-                aanpassenOrderLine.setBackground(null);
-                int voorraad = selectedOrderLine.getProduct().getStock();
-                OrderScreenEditPopup popup = new OrderScreenEditPopup(selectedOrderLine, "Change order " + selectedOrder.getId() + ", orderline " + selectedOrderLine.getId(), voorraad, this);
-                this.orderLines.revalidate();
-            } catch (NullPointerException npe) {
-                aanpassenOrderLine.setBackground(new Color(255, 0, 0));
-            }
-        } else if (e.getActionCommand().equals("AanpassenPickDatum")) {
-            SetPickingPopup popup = new SetPickingPopup(selectedOrder.setPickingCompletedWhen(), selectedOrder.getId());
-
-        } else if (e.getActionCommand().equals("PakbonPrinten")) {
-            try {
-                PakbonScreenPopup popup = new PakbonScreenPopup(selectedOrder, "Pakbon van ' " + selectedOrder.getId() + " ' ");
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            this.revalidate();
-        }
-    }
 }
 

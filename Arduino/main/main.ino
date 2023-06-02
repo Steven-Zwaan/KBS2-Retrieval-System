@@ -221,13 +221,13 @@ void ReceiveEvent(int howMany){
 }
 
 void communcationHandler() {
-  if (Serial.available()) {
-    Serial.println(100); 
+  if (Serial.available()) { // kijk of er iets in de serial staat
+    Serial.println(100); // verstuur response ontvangen
 
     Serial.readBytes(buf, BUFFER_SIZE);
-    hmi_action = (int)buf[0];
-    hmi_var1 = (int)buf[1];
-    hmi_var2 = (int)buf[2];
+    hmi_action = (int)buf[0]; // zet 1e waarde in variabele 
+    hmi_var1 = (int)buf[1]; // zet 2e waarde in variabele 
+    hmi_var2 = (int)buf[2]; // zet 3e waarde in variabele 
   
     messageSent = false;
     actionXCompleted = false;
@@ -236,13 +236,13 @@ void communcationHandler() {
 
     switch(hmi_action){
       case 1: // Bewegen naar vakje (x,y)
-        sendTransmission("M" + (String)hmi_var2);
+        sendTransmission("M" + (String)hmi_var2); // verstuur naar arduino B
         break;
       case 2: // oppakken product op huidige locatie (z)
-        sendTransmission("G" + (String) hmi_var1);
+        sendTransmission("G" + (String) hmi_var1); // verstuur naar arduino B
         break;
       case 3: // bewegen naar vakje (x,y) en dan oppakken product op huidige locatie (z)
-        sendTransmission("T" + (String)hmi_var2);
+        sendTransmission("T" + (String)hmi_var2); // verstuur naar arduino B
         break;
       default:
 
