@@ -149,8 +149,10 @@ public class PickOrderPopup extends JDialog{ //deze popup dient ervoor orders to
 
     //deze methode deelt de pickorders in dozen op doormiddel van het best-fit algoritme
     public void allocateItems(ArrayList<PickOrder> pickOrders) {
+        //Doos objecten
         Doos doos1 = new Doos();
         Doos doos2 = new Doos();
+        //toevoegen van een orderline aan een doos
         for (PickOrder pickOrder : pickOrders) {
             boolean isAllocated = false;
 

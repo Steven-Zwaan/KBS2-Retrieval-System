@@ -13,6 +13,7 @@ public class Doos {
     }
 
     public boolean addPickOrder(PickOrder pickOrder) {
+        //gewicht van de doos vergelijken met gewicht van de item
         if (gewicht >= pickOrder.getWeight()) {
             pickOrders.add(pickOrder);
             gewicht -= pickOrder.getWeight();
