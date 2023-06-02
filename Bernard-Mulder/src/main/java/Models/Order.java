@@ -35,6 +35,7 @@ public class Order {
         return pickingCompletedWhen;
     }
 
+    // functie om alle orderlines van een order optehalen en dit te stoppen in de orderLines ArrayList
     public ArrayList<OrderLine> getOrderLines(){
         ArrayList<OrderLine> orderLines = new ArrayList<>();
         String sql = "SELECT * FROM `orderlines` JOIN `stockitems` ON orderlines.StockItemID = stockitems.StockItemID JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID WHERE OrderID = ? ";
@@ -54,6 +55,8 @@ public class Order {
         return orderLines;
     }
 
+    // functie om de pickingcompletedwhen in de database te veranderen naar het huidige moment
+    // hier word gecontroleerd of alle onderliggende orderlines ook voltooid zijn, anders kan dit niet gedaan worden
     public boolean setPickingCompletedWhen() {
         String sql = "UPDATE orders SET PickingCompletedWhen = ? WHERE OrderID = ?";
         int pickingCompletedWhenNullCount = 0;
@@ -62,6 +65,7 @@ public class Order {
                 pickingCompletedWhenNullCount++;
             }
         }
+        // controlleer of de orderlines pickingwhen is null gelijk is aan 0
         if (pickingCompletedWhenNullCount == 0) {
             try {
                 PreparedStatement statement = databaseConnector.connect().prepareStatement(sql);

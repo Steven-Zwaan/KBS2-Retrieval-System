@@ -11,6 +11,7 @@ public class ProductList {
     private ArrayList<Product> productList = new ArrayList<>();
     private DatabaseConnector databaseConnector = new DatabaseConnector();
 
+    // Functie om alle producten uit de database te halen, het resultaat vult de productList ArrayList
     public void getProductsFromDatabase(){
         String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID ORDER BY stockitems.StockItemID";
         try {
@@ -26,6 +27,7 @@ public class ProductList {
             databaseConnector.disconnect();
         }
     }
+    // Functie om één product uit de database te halen op basis van het input id, het resultaat vult de productList ArrayList
     public void getProductFromDatabase(int id){
         String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID WHERE stockitems.StockItemID = ? ";
         try {
@@ -42,6 +44,7 @@ public class ProductList {
             databaseConnector.disconnect();
         }
     }
+    // Functie om meerdere producten uit de database te halen op basis van de input name, het resultaat vult de productList ArrayList
     public void getProductFromDatabase(String name) {
         String sql = "SELECT * FROM `stockitems` LEFT JOIN `stockitemholdings` ON stockitems.StockItemID = stockitemholdings.StockItemID WHERE stockitems.StockItemName LIKE ? ";
         try {

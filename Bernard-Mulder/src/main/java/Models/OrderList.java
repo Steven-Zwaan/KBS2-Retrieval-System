@@ -11,6 +11,7 @@ public class OrderList {
     private ArrayList<Order> orderList = new ArrayList<>();
     private DatabaseConnector databaseConnector = new DatabaseConnector();
 
+    // Functie om alle orders uit de database te halen, het resultaat vult de orderList ArrayList
     public void getOrdersFromDatabase(){
         String sql = "SELECT orders.OrderID , orders.OrderDate, orders.PickingCompletedWhen, customers.CustomerID, customers.CustomerName, " +
                 "cities.CityName, stateprovinces.StateProvinceName, customers.DeliveryAddressLine1, customers.DeliveryAddressLine2, customers.DeliveryPostalCode, customers.PhoneNumber " +
@@ -33,6 +34,7 @@ public class OrderList {
         }
     }
 
+    // Functie om één order uit de database te halen op basis van het input id, het resultaat vult de orderList ArrayList
     public void getOrderFromDatabase(int id){
         String sql = "SELECT orders.OrderID, orders.OrderDate, orders.PickingCompletedWhen, customers.CustomerID, customers.CustomerName, " +
                 "cities.CityName, stateprovinces.StateProvinceName, customers.DeliveryAddressLine1, customers.DeliveryAddressLine2, " +

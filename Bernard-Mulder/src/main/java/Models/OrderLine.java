@@ -33,8 +33,11 @@ public class OrderLine {
         return quantity;
     }
 
+    // functie om de hoeveelheid van een product binnen een orderline te updaten in de database, op basis van input quantity
     public void setQuantity(int quantity) {
+        // controlleer of de nieuwe quanitity groter is dan de huidige; de quantity wordt groter
         if (quantity > this.quantity){
+            // controlleer of de voorraad - het bijkomende quantity groter of gelijk is aan 0; anders is er niet genoeg voorraad
             if (this.product.getStock() - (quantity - this.quantity) >= 0 )
             {
                 String sql = "UPDATE orderlines SET Quantity = ? WHERE StockItemID = ? AND OrderLineID = ?";
@@ -54,6 +57,7 @@ public class OrderLine {
                     databaseConnector.disconnect();
                 }
             }
+            // anders wordt de quantity kleiner
         } else {
             String sql = "UPDATE orderlines SET Quantity = ? WHERE StockItemID = ? AND OrderLineID = ?";
             try {
@@ -78,6 +82,7 @@ public class OrderLine {
         return pickedQuantity;
     }
 
+    // functie om de pickedquantity te veranderen, als de picked quantity groter of gelijk is aan de quanity dan wordt de setPickingCompletedWhen uitgevoerd
     public void setPickedQuantity(int pickedQuantity) {
         String sql = "UPDATE orderlines SET PickedQuantity = ? WHERE StockItemID = ? AND OrderLineID = ?";
         try {
@@ -88,7 +93,7 @@ public class OrderLine {
             int resultSet = statement.executeUpdate();
             if(resultSet > 0){
                 this.pickedQuantity = pickedQuantity;
-                if (this.pickedQuantity == this.quantity){
+                if (this.pickedQuantity >= this.quantity){
                     setPickingCompletedWhen();
                 }
             }
@@ -99,6 +104,7 @@ public class OrderLine {
         }
     }
 
+    // functie om de pickedquanitity te verhogen met 1, als de picked quantity groter of gelijk is aan de quanity dan wordt de setPickingCompletedWhen uitgevoerd
     public void increasePickedQuantity() {
         String sql = "UPDATE orderlines SET PickedQuantity = ? WHERE StockItemID = ? AND OrderLineID = ?";
         try {
@@ -109,7 +115,7 @@ public class OrderLine {
             int resultSet = statement.executeUpdate();
             if(resultSet > 0){
                 this.pickedQuantity = this.pickedQuantity + 1;
-                if (this.pickedQuantity == this.quantity){
+                if (this.pickedQuantity >= this.quantity){
                     setPickingCompletedWhen();
                 }
             }
@@ -124,6 +130,7 @@ public class OrderLine {
         return pickingCompletedWhen;
     }
 
+    // functie om de pickingcompletedwhen in de database te veranderen naar het huidige moment
     public void setPickingCompletedWhen() {
         String sql = "UPDATE orderlines SET PickingCompletedWhen = ? WHERE StockItemID = ? AND OrderLineID = ?";
         try {

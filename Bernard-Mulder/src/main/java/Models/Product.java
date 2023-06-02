@@ -25,6 +25,7 @@ public class Product {
     public int getStock() {
         return stock;
     }
+    // FUnctie om de stock te updated in de database, met de input stock
     public void setStock(int stock) {
         String sql = "UPDATE stockitemholdings SET QuantityOnHand = ? WHERE StockItemID = ?";
         try {
@@ -41,6 +42,7 @@ public class Product {
             databaseConnector.disconnect();
         }
     }
+    // functie om het object voorraad te updaten met de laatste data van de database
     public void setStockFromDatabase() {
         String sql = "GET QuantityOnHand FROM stockitemholdings WHERE StockItemID = ?";
         try {
